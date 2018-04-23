@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="signs_questions">
+  <Questions>
+    <InfoScreen Name="signs_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Signs questionnaire</size></b>
+
+Perception of signs in the neighborhood]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_44" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Does this neighborhood contain signs?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_45" NColumns="2" NRows="5" Choice="Single">
+      <Text><![CDATA[Are any of the following types of signs related to residential units visible? (answer yes or no for each type):]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Neighborhood crime watch signs]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Alarm system/Security warning signs]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Beware of dog]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Thanks for driving slowly/Children at play]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Thanks for not littering]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_46" NColumns="2" NRows="6" Choice="Single">
+      <Text><![CDATA[What types of signs are visible in this neighborhood? (answer yes or no for each type):]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Sign advertising beer, whiskey, or other alcohol (not labeling for business)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Sign advertising gambling]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Sign advertising fast food (not labeling for business)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Signs in multiple languages]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Inspirational/education sayings]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Drug Free Zone]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_47" NColumns="2" NRows="3" Choice="Single">
+      <Text><![CDATA[Are any signs related to open lots visible? (answer yes or no for each type):]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[No ball games or signs restricting children from playing]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Play Priority Area or signs that encourage use of vacant space]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Pick up your pet litter]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_48" NColumns="1" NRows="3" Choice="Single">
+      <Jumps>
+        <Jump Destination="sso_50" Activator="FTF" />
+        <Jump Destination="sso_50" Activator="FFT" />
+      </Jumps>
+      <Text><![CDATA[Are there any signs for promoting organized community activities?]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No signs visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="sso_49" NColumns="1" NRows="1">
+      <Text><![CDATA[What do the signs say that are promoting community activities?]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="sso_50" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[This neighborhood contains visible signs, but they are unable to be identified due to unreadable or blurry text.]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No signs visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_51" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[This neighborhood contains visible signs, but they are unable to be identified due to vandalism.]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No signs visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

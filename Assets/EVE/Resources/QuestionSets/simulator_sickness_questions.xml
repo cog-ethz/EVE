@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="simulator_sickness_questions">
+  <Questions>
+    <InfoScreen Name="simulator_sickness_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Simulator sickness Questionnaire</size></b> 
+ 
+You will now be asked a series of questions about how much you were affected by different symptoms of simulator sickness]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sim_sick_1" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much general discomfort are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_2" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much fatigue are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_3" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much headache are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_4" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much eye strain are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_5" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much difficulty focussing are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_6" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much increased salivation are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_7" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much sweating are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_8" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much nausea are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_9" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much difficulty concentrating are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_10" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much "Fullness of the head" are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_11" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much blurred vision are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_12" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much dizziness with eyes OPEN are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_13" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much dizziness with eyes CLOSED are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_14" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much vertigo are you currently experiencing? (Vertigo is experienced as loss of orientation with respect to vertical upright)]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_15" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much stomach awareness are you currently experiencing? (Stomach awareness is usually used to indicate a feeling of discomfort which is just short of nausea)]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sim_sick_16" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How much burping are you currently experiencing?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slight]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Severe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

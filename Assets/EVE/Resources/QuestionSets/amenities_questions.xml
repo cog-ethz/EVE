@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="amenities_questions">
+  <Questions>
+    <InfoScreen Name="amenities_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Amenities questionnaire</size></b>
+
+Perception of public goods in the environment]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_15" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Are there any amenities (desirable or useful features) in this neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_16" NColumns="2" NRows="6" Choice="Single">
+      <Text><![CDATA[Are any of the following public amenities present in the neighborhood ? (answer yes or no for each amenity):]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Trash cans (non-residential)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Recycling bins (non-residential)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Public phones]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Newspaper dispenser]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Restrooms]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Vending machines]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_17" NColumns="2" NRows="3" Choice="Single">
+      <Text><![CDATA[Furniture that is present on the streets (answer yes or no for each furniture type):]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Benches (not a bus stop), chairs and/or ledges for sitting]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Bus stops with seating]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Bike racks]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_18" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Is a bike path or sign indicating a bike path visible?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_19" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Is there a subway/metro entrance or a train station in the neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_20" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[In general, how would you rate the condition of the subway/metro entrances and/or train stations in the neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[The subway/metro entrances and/or train stations are in well kept/good condition.]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[The subway/metro entrances and/or train stations are in fair condition.]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[The subway/metro entrances and/or train stations are in poor/badly deteriorated condition.]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No subway/metro entrances and/or train stations present]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

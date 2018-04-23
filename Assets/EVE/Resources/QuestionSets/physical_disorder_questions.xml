@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="physical_disorder_questions">
+  <Questions>
+    <InfoScreen Name="physical_disorder_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Physical disorder questionnaire</size></b>
+
+Perception of the tidiness and (dis-)order of the environment.]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_10" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[Is there scattered garbage, litter, broken glass, clothes or papers in
+the neighborhood on the street/sidewalk/or public space?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[Heavy]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Light]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Can't evaluate]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_11" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there abandoned cars, cars with broken windows, and/or run down cars?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Can't evaluate]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_12" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Is there graffiti on buildings, signs or walls?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Can't evaluate]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_13" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Is there evidence of graffiti that has been painted over?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Can't evaluate]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_14" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Do any of the street signs appear to be almost unreadable due to being badly faded or vandalized?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Can't evaluate]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

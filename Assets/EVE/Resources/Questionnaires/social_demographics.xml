@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Questionnaire xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="social_demographics">
+  <QuestionSets>
+    <QuestionSet>video_game_questions</QuestionSet>
+    <QuestionSet>blood_pressure_questions</QuestionSet>
+    <QuestionSet>personal_information_questions</QuestionSet>
+    <QuestionSet>education_questions</QuestionSet>
+    <QuestionSet>employment_questions</QuestionSet>
+    <QuestionSet>social_status_questions</QuestionSet>
+    <QuestionSet>family_background_questions</QuestionSet>
+    <QuestionSet>spouse_partner_questions</QuestionSet>
+    <QuestionSet>own_neighborhood_questions</QuestionSet>
+  </QuestionSets>
+</Questionnaire>

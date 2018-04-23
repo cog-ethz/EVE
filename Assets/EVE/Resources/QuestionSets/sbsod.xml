@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="sbsod">
+  <Questions>    
+    <InfoScreen Name="sbsodinfo" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Santa Barbara Sense-of-direction scale</size></b>
+			
+
+You will be shown 15 questions regarding your spatial and navigational abilities. Please answer them as truthful as possible.]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sbsod_p1" NColumns="7" NRows="5" Choice="Single">
+      <Text><![CDATA[This questionnaire consists of several statements about your spatial and navigational abilities, preferences, and experiences. After each statement, you should circle a number to indicate your level of agreement with the statement. Circle "1" if you strongly agree that the statement applies to you, "7" if you strongly disagree, or some number in between if your agreement is intermediate. Circle "4" if you neither agree nor disagree."1+ to 3"]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[1]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[2]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[3]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[4]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[5]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[6]]></Text>
+        </Label>
+        <Label Output="7">
+          <Text><![CDATA[7]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[1. I am very good at giving directions.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[2. I have a poor memory for where I left things.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[3. I am very good at judging distances.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[4. My "sense of direction" is very good.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[5. I tend to think of my environment in terms of cardinal directions (N, S, E, W).]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sbsod_p2" NColumns="7" NRows="5" Choice="Single">
+      <Text><![CDATA[This questionnaire consists of several statements about your spatial and navigational abilities, preferences, and experiences. After each statement, you should circle a number to indicate your level of agreement with the statement. Circle "1" if you strongly agree that the statement applies to you, "7" if you strongly disagree, or some number in between if your agreement is intermediate. Circle "4" if you neither agree nor disagree."1+ to 3"]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[1]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[2]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[3]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[4]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[5]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[6]]></Text>
+        </Label>
+        <Label Output="7">
+          <Text><![CDATA[7]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[6. I very easily get lost in a new city.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[7. I enjoy reading maps.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[8. I have trouble understanding directions.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[9. I am very good at reading maps.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[10. I don't remember routes very well while riding as a passenger in a car.]]></Text>
+        </Label>        
+      </RowLabels>
+    </ChoiceQuestion>
+	<ChoiceQuestion Name="sbsod_p3" NColumns="7" NRows="5" Choice="Single">
+      <Text><![CDATA[This questionnaire consists of several statements about your spatial and navigational abilities, preferences, and experiences. After each statement, you should circle a number to indicate your level of agreement with the statement. Circle "1" if you strongly agree that the statement applies to you, "7" if you strongly disagree, or some number in between if your agreement is intermediate. Circle "4" if you neither agree nor disagree."1+ to 3"]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[1]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[2]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[3]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[4]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[5]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[6]]></Text>
+        </Label>
+        <Label Output="7">
+          <Text><![CDATA[7]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[11. I don't enjoy giving directions.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[12. It's not important to me to know where I am.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[13. I usually let someone else do the navigational planning for long trips.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[14. I can usually remember a new route after I have traveled it only once.]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[15. I don't have a very good "mental map" of my environment.]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

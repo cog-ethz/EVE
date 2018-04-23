@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="virtual_environment_questions">
+  <Questions>
+    <InfoScreen Name="virtual_environment_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Virtual environment questionnaire</size></b>
+
+Perception of the virtual environment]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_64" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[The weather conditions in the virtual neighborhood appeared to be:]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Clear and Sunny]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Sunny with Clouds]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Clouds without visible Sun]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Unable to evaluate]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_65" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[The walk in the virtual neighborhood appeared to happen at the following time of day:]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Morning]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Afternoon]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Evening]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Unable to evaluate]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_66" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Did you notice any inconsistencies in the virtual neighborhood? (e.g., missing textures, unrealistic features)]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="sso_67" NColumns="1" NRows="1">
+      <Text><![CDATA[Please include any comments regarding the overall quality of the virtual neighborhood?]]></Text>
+    </TextQuestion>
+  </Questions>
+</QuestionSet>

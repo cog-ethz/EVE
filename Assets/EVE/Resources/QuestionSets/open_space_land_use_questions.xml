@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="open_space_land_use_questions">
+  <Questions>
+    <InfoScreen Name="open_space_land_use_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Open space land use questionnaire</size></b>
+
+Perception of vacant lots and open spaces land use]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_43" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[In general, how would you rate the condition of vacant lots and/or open spaces in this neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[Well kept/good condition]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Fair condition]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Poor condition or badly deteriorated]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No recreational facilities visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

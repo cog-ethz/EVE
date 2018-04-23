@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="social_status_questions">
+  <Questions>
+    <InfoScreen Name="social_status_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Social status questionnaire</size></b>
+
+Background questions about your social status and the social status of your family.]]></Text>
+    </InfoScreen>
+    <LadderQuestion Name="socDem21" NColumns="1" NRows="1">
+      <Text><![CDATA[<i><b>Swiss comparison</b> of social status</i>]]></Text>
+      <LadderText><![CDATA[At the TOP of the ladder are the people who are the best off -- those who have the most money, the most education, and the most respected jobs. At the BOTTOM are the people who are the worst off -- those who have the least money, least education, and the least respected jobs or no job. The higher up you are on this ladder, the closer you are to the people at the very top. The lower you are, the closer you are to the people at the very bottom. 
+
+<b>Where would you place yourself on this ladder, compared to all the other people in Switzerland?</b> Please click the radio button (on the ladder) where you think you stand]]></LadderText>
+    </LadderQuestion>
+    <LadderQuestion Name="socDem22" NColumns="1" NRows="1">
+      <Text><![CDATA[<i><b>Community</b> comparison of social standing</i>]]></Text>
+      <LadderText><![CDATA[Think of this ladder as representing where people stand in your community.  People define community in different ways; please define it in whatever way is most meaningful to you.  Imagine everyone in your community is standing somewhere on this ladder. At the TOP of the ladder are the people who have the highest standing in your community. At the BOTTOM are the people who have the lowest standing in your community. The higher up you are on this ladder, the closer you are to those at the very top. The lower you are, the closer you are to those at the very bottom.
+
+<b>Where would you place yourself on this ladder, compared to others in your community? </b> Please click the radio button (on the ladder) where you think you stand.]]></LadderText>
+    </LadderQuestion>
+    <LadderQuestion Name="socDem23_1" NColumns="1" NRows="1">
+      <Text><![CDATA[<i><b>Country you grew up in:</b> comparison of FATHER' social status</i>]]></Text>
+      <LadderText><![CDATA[At the top of the ladder are the people who have the most money, most education, and most respected jobs. At the bottom are the people who have the least money, least education, and least respected jobs or no job. The higher up you are on this ladder, the closer you are to the people at the very top, and the lower you are, the closer you are to the people at the very bottom.
+
+<b>Where, during your childhood and adolescence, would you have placed your FATHER on this ladder relative to other people in the country you grew up in?</b> Please click the radio button (on the ladder) where you think your FATHER stood during your childhood and adolescence, relative to other people in the country you grew up.]]></LadderText>
+    </LadderQuestion>
+    <LadderQuestion Name="socDem23_2" NColumns="1" NRows="1">
+      <Text><![CDATA[<i><b>Country you grew up in:</b> comparison of MOTHER' social status</i>]]></Text>
+      <LadderText><![CDATA[Think of this ladder as representing where people stand in the <b>country you grew up in.</b> At the top of the ladder are the people who have the most money, most education, and most respected jobs. At the bottom are the people who have the least money, least education, and least respected jobs or no job. The higher up you are on this ladder, the closer you are to the people at the very top, and the lower you are, the closer you are to the people at the very bottom.
+
+<b>Where, during your childhood and adolescence, would you have placed your MOTHER on this ladder relative to other people in the country you grew up in?</b> Please click the radio button (on the ladder) where you think your MOTHER stood during your childhood and adolescence, relative to other people in the country you grew up.]]></LadderText>
+    </LadderQuestion>
+    <LadderQuestion Name="socDem24_1" NColumns="1" NRows="1">
+      <Text><![CDATA[<i><b>Community:</b> comparison of FATHER' social standing</i>]]></Text>
+      <LadderText><![CDATA[Think of this ladder as representing a person's status within his or her community. By community we mean friends, family, neighbors, and coworkers. At the top of this ladder are the people who have the highest standing in their community and are best thought of by other community members. At the bottom are the people who have the lowest standing in their community. The higher up you are on this ladder, the closer you are to the people at the very top and the lower you are, the closer you are to the people at the very bottom.
+
+<b>Where, <i>during your childhood and adolescence</i>, would you have placed your FATHER on this ladder relative to other people in your parents' community?</b> Please click the radio button (on the ladder) where you think your FATHER stood during your childhood and adolescence, relative to other people in your community.]]></LadderText>
+    </LadderQuestion>
+    <LadderQuestion Name="socDem24_2" NColumns="1" NRows="1">
+      <Text><![CDATA[<i><b>Community:</b> comparison of MOTHER' social standing</i>]]></Text>
+      <LadderText><![CDATA[Think of this ladder as representing a person's status within his or her community. By community we mean friends, family, neighbors, and coworkers. At the top of this ladder are the people who have the highest standing in their community and are best thought of by other community members. At the bottom are the people who have the lowest standing in their community. The higher up you are on this ladder, the closer you are to the people at the very top and the lower you are, the closer you are to the people at the very bottom.
+
+<b>Where, <i>during your childhood and adolescence</i>, would you have placed your MOTHER on this ladder relative to other people in your parents' community?</b> Please click the radio button (on the ladder) where you think your MOTHER stood during your childhood and adolescence, relative to other people in your community.]]></LadderText>
+    </LadderQuestion>
+  </Questions>
+</QuestionSet>

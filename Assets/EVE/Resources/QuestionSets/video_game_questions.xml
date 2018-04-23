@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="video_game_questions">
+  <Questions>
+    <InfoScreen Name="video_game_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Video game questionnaire</size></b>
+
+The following questions are about video games you have played during the past year.]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="video_games" NColumns="6" NRows="6" Choice="Single">
+      <Text><![CDATA[Over the last 12 months, how many hours a week have you played games in each of the following categories? 
+Example: If you play 1.5 hrs/week, mark "1+ to 3"]]></Text>
+      <ColumnLabels>
+        <Label Output="0">
+          <Text><![CDATA[Never]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[0+ to 1]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[1+ to 3]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[3+ to 5]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[5+ to 10]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[10+]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[<b>FIRST PERSON SHOOTERS</b> 
+(Halo, Call of Duty, Gears of War, GTA, Half-Life, Unreal etc)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[<b>ACTION/ACTION-SPORTS GAMES</b> 
+(God of War, Mario Kart, Burnout, Madden, FIFA, etc)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[<b>REAL TIME STRATEGY GAMES</b> 
+(Warcraft, Starcraft, Command & Conquer, Age of Empires, etc)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[<b>TURN-BASED STRATEGY/PUZZLE GAMES</b> 
+(Civilization, Sims, Puzzle Quest, Bejewled, Solitaire, etc)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[<b>ROLE-PLAYING/FANTASY GAMES</b> 
+(World of Warcraft, Final Fantasy, Fable, Oblivion, etc)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[<b>MUSIC GAMES</b> 
+(Guitar Hero, Dance Dance Revolution, Rock Band, etc)]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>
