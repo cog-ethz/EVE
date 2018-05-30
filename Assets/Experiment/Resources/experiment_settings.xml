@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="QuestionnaireTest">
+  <DatabaseSettings>
+    <Server>localhost</Server>
+    <Schema>eve</Schema>
+    <User>user_replace_me</User>
+    <Password>user_password_replace_me</Password>
+  </DatabaseSettings>
+  <SensorSettings Labchart="false" H7Server="false">
+    <Sensors />
+  </SensorSettings>
+  <ParameterSettings>
+    <Parameters />
+  </ParameterSettings>
+  <QuestionnaireSettings>
+    <Questionnaires />
+  </QuestionnaireSettings>
+  <SceneSettings>
+    <Scenes />
+  </SceneSettings>
+  <LabchartSettings>
+    <StarterPath>\\Labchart\\StreamDebug\\Debug\\DriveChart.exe</StarterPath>
+    <CommentWriterPath>\\Labchart\\AddCommentsDebug\\Debug\\DriveChart.exe</CommentWriterPath>
+    <ParticipantsPath>path_to_labchart_files</ParticipantsPath>
+  </LabchartSettings>
+</ExperimentSettings>
