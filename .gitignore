@@ -58,3 +58,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+Assets/EVE/Plugins/
+Assets/EVE/Resources/Textures/
+Assets/MiddleVR/
