@@ -1,143 +1,227 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="TestSet">
   <Questions>
     <InfoScreen Name="example_info" NColumns="1" NRows="1">
-      <Text>People questionnaire:Perception of people in the neighborhood</Text>
+      <Text><![CDATA[People questionnaire:Perception of people in the neighborhood]]></Text>
     </InfoScreen>
     <TextQuestion Name="exercise" NColumns="1" NRows="1">
-      <Text>What type of exercise have you done recently?</Text>
+      <Text><![CDATA[What type of exercise have you done recently?]]></Text>
     </TextQuestion>
     <TextQuestion Name="born_in" NColumns="1" NRows="2">
-      <Text>Where were you born?</Text>
+      <Text><![CDATA[Where were you born?]]></Text>
       <RowLabels>
-        <Label Text="Country:" />
-        <Label Text="City:" />
+        <Label>
+          <Text><![CDATA[Country:]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[City:]]></Text>
+        </Label>
       </RowLabels>
     </TextQuestion>
     <ChoiceQuestion Name="yes_no" NColumns="1" NRows="2" Choice="Single">
-      <Text>Is this a Yes/No Question?</Text>
+      <Text><![CDATA[Is this a Yes/No Question?]]></Text>
       <RowLabels>
-        <Label Text="Yes" Output="1" />
-        <Label Text="No" Output="0" />
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
       </RowLabels>
     </ChoiceQuestion>
     <ChoiceQuestion Name="multiple_yes_no" NColumns="2" NRows="5" Choice="Single">
-      <Text>Answer quickly without thinking:</Text>
+      <Text><![CDATA[Answer quickly without thinking:]]></Text>
       <ColumnLabels>
-        <Label Text="Yes" Output="1" />
-        <Label Text="No" Output="0" />
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
       </ColumnLabels>
       <RowLabels>
-        <Label Text="Do you like questionnaires?" />
-        <Label Text="Have you ever been to New York?" />
-        <Label Text="Coffee with Milk?" />
-        <Label Text="Coffee with Sugar?" />
-        <Label Text="Black Coffee?" />
+        <Label>
+          <Text><![CDATA[Do you like questionnaires?]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Have you ever been to New York?]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Coffee with Milk?]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Coffee with Sugar?]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Black Coffee?]]></Text>
+        </Label>
       </RowLabels>
     </ChoiceQuestion>
     <ChoiceQuestion Name="coffe_consumption" NColumns="1" NRows="2" Choice="Single">
-      <Text>Did you have coffee, espresso, or another beverage containing caffeine in the past 24 hours?</Text>
+      <Text><![CDATA[Did you have coffee, espresso, or another beverage containing caffeine in the past 24 hours?]]></Text>
       <RowLabels>
-        <Label Text="If yes, how many hours ago" Output="1" Answerable="true" />
-        <Label Text="No, I did not have any caffeine" Output="0" />
+        <Label Output="1" Answerable="true">
+          <Text><![CDATA[If yes, how many hours ago]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No, I did not have any caffeine]]></Text>
+        </Label>
       </RowLabels>
     </ChoiceQuestion>
     <ChoiceQuestion Name="band_judgement" NColumns="3" NRows="4" Choice="Multiple">
-      <Text>Please check with which assessment you agree most about the bands:</Text>
+      <Text><![CDATA[Please check with which assessment you agree most about the bands:]]></Text>
       <ColumnLabels>
-        <Label Text="Mainstream" Output="0" />
-        <Label Text="Best of their Genre" Output="1" />
-        <Label Text="Original" Output="2" />
+        <Label Output="0">
+          <Text><![CDATA[Mainstream]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Best of their Genre]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Original]]></Text>
+        </Label>
       </ColumnLabels>
       <RowLabels>
-        <Label Text="Coldplay" />
-        <Label Text="Maroon5" />
-        <Label Text="Nsync" />
-        <Label Text="Red Hot Chili Peppers" />
+        <Label>
+          <Text><![CDATA[Coldplay]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Maroon5]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Nsync]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Red Hot Chili Peppers]]></Text>
+        </Label>
       </RowLabels>
     </ChoiceQuestion>
     <ChoiceQuestion Name="likert_scale" NColumns="7" NRows="1" Choice="Single">
-      <Text>Is this a good question?</Text>
+      <Text><![CDATA[Is this a good question?]]></Text>
       <ColumnLabels>
-        <Label Text="Not at all" Output="0" />
-        <Label Text="" Output="1" />
-        <Label Text="" Output="2" />
-        <Label Text="It is okay" Output="3" />
-        <Label Text="" Output="4" />
-        <Label Text="" Output="5" />
-        <Label Text="Very good" Output="6" />
+        <Label Output="0">
+          <Text><![CDATA[Not at all]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[It is okay]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Very Good]]></Text>
+        </Label>
       </ColumnLabels>
     </ChoiceQuestion>
     <ChoiceQuestion Name="multi_c_text" NColumns="1" NRows="8" Choice="Multiple">
-      <Text>Which animals do you like:</Text>
+      <Text><![CDATA[Which animals do you like:]]></Text>
       <RowLabels>
-        <Label Text="Bears" Output="0" />
-        <Label Text="Lions" Output="1" />
-        <Label Text="Frogs" Output="2" />
-        <Label Text="Axolotls" Output="2" />
-        <Label Text="Humans" Output="2" />
-        <Label Text="Bats" Output="2" />
-        <Label Text="None" Output="2" />
-        <Label Text="Other:" Output="2" Answerable="true" />
+        <Label Output="0">
+          <Text><![CDATA[Bears]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Lions]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Frogs]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Axolotls]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Humans]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Bats]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[None]]></Text>
+        </Label>
+        <Label Output="7" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
       </RowLabels>
     </ChoiceQuestion>
     <ChoiceQuestion Name="image_example" NColumns="1" NRows="3" Choice="Single">
-      <Text>Which image looks the best?</Text>
+      <Text><![CDATA[Which image looks the best?]]></Text>
       <RowLabels>
-        <Label Text="This" Output="0" Image="Images/test_image" />
-        <Label Text="This" Output="1" Image="Images/test_image" />
-        <Label Text="This" Output="2" Image="Images/test_image" />
+        <Label Output="0" Image="Images/test_image">
+          <Text><![CDATA[This]]></Text>
+        </Label>
+        <Label Output="1" Image="Images/test_image">
+          <Text><![CDATA[This]]></Text>
+        </Label>
+        <Label Output="2" Image="Images/test_image">
+          <Text><![CDATA[This]]></Text>
+        </Label>
       </RowLabels>
     </ChoiceQuestion>
     <ScaleQuestion Name="amuesment_scale" NColumns="9" NRows="1" Scale="Line">
-      <Text>How much did you feel AMUSEMENT?</Text>
+      <Text><![CDATA[How much did you feel AMUSEMENT?]]></Text>
       <LeftLabel>Did not experience at all</LeftLabel>
       <RightLabel>Strongest experience ever felt</RightLabel>
     </ScaleQuestion>
-    <ScaleQuestion Name="SAM1_pleasure" NColumns="9" NRows="1" Scale="Pleasure">
-      <Text>Please rate how happy-unhappy you actually felt</Text>
+    <ScaleQuestion Name="SAM_pleasure" NColumns="9" NRows="1" Scale="Pleasure">
+      <Text><![CDATA[Please rate how happy-unhappy you actually felt]]></Text>
       <LeftLabel>SAD</LeftLabel>
       <RightLabel>CHEERFUL</RightLabel>
     </ScaleQuestion>
-    <ScaleQuestion Name="SAM1_arousal" NColumns="9" NRows="1" Scale="Arousal">
-      <Text>Please rate how excited - calm you actually felt</Text>
+    <ScaleQuestion Name="SAM_arousal" NColumns="9" NRows="1" Scale="Arousal">
+      <Text><![CDATA[Please rate how excited - calm you actually felt]]></Text>
       <LeftLabel>QUIET</LeftLabel>
       <RightLabel>ACTIVE</RightLabel>
     </ScaleQuestion>
-    <ScaleQuestion Name="SAM1_dominance" NColumns="9" NRows="1" Scale="Dominance">
-      <Text>Please rate how controlled vs. in-control you actually felt</Text>
+    <ScaleQuestion Name="SAM_dominance" NColumns="9" NRows="1" Scale="Dominance">
+      <Text><![CDATA[Please rate how controlled vs. in-control you actually felt]]></Text>
       <LeftLabel>DEPENDENT</LeftLabel>
       <RightLabel>INDEPENDENT</RightLabel>
     </ScaleQuestion>
     <LadderQuestion Name="swiss_status" NColumns="1" NRows="1">
-      <Text>Swiss comparison of social status</Text>
-      <LadderText>At the TOP of the ladder are the people who are the best off. The lower you are, the closer you are to the people at the very bottom. Where would you place yourself on this ladder, compared to all the other people in Switzerland?</LadderText>
+      <Text><![CDATA[Swiss comparison of social status]]></Text>
+      <LadderText><![CDATA[At the TOP of the ladder are the people who are the best off. The lower you are, the closer you are to the people at the very bottom. Where would you place yourself on this ladder, compared to all the other people in Switzerland?]]></LadderText>
     </LadderQuestion>
     <ChoiceQuestion Name="flu_med" NColumns="1" NRows="2" Choice="Single">
-      <Text>Have you taken any medication for cold or flu symptoms today?</Text>
       <Jumps>
         <Jump Destination="inflam_med" Activator="FT" />
       </Jumps>
+      <Text><![CDATA[Have you taken any medication for cold or flu symptoms today?]]></Text>
       <RowLabels>
-        <Label Text="Yes" Output="1" />
-        <Label Text="No" Output="0" />
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
       </RowLabels>
     </ChoiceQuestion>
     <TextQuestion Name="flu_med_name" NColumns="1" NRows="1">
-      <Text>Which medication(s)?</Text>
+      <Text><![CDATA[Which medication(s)?]]></Text>
     </TextQuestion>
     <ChoiceQuestion Name="inflam_med" NColumns="1" NRows="2" Choice="Single">
-      <Text>Have you taken any anti-inflammatory medication today?</Text>
       <Jumps>
         <Jump Destination="*" Activator="FT" />
       </Jumps>
+      <Text><![CDATA[Have you taken any anti-inflammatory medication today?]]></Text>
       <RowLabels>
-        <Label Text="Yes" Output="1" />
-        <Label Text="No" Output="0" />
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
       </RowLabels>
     </ChoiceQuestion>
     <TextQuestion Name="inflam_med_name" NColumns="1" NRows="1">
-      <Text>Which medication(s)?</Text>
+      <Text><![CDATA[Which medication(s)?]]></Text>
     </TextQuestion>
   </Questions>
 </QuestionSet>
