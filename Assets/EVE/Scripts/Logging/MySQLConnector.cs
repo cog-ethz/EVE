@@ -1114,7 +1114,7 @@ public class MySQLConnector : DatabaseConnector
         {
             query = "SELECT name FROM (SELECT * FROM questionnaire_question_sets  WHERE questionnaire_id =" +
                 "(SELECT id FROM questionnaires WHERE name = ?name) GROUP BY id ASC)" +
-                "AS qsi INNER JOIN question_sets ON qsi.question_set_id = question_sets.id";
+                "AS qsi INNER JOIN question_sets ON qsi.question_set_id = question_sets.id ORDER BY question_sets.id";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
