@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.EVE.Scripts.Questionnaire;
 using UnityEngine;
 
 public class AddQuestionsButtonScript : MonoBehaviour {
@@ -12,7 +11,7 @@ public class AddQuestionsButtonScript : MonoBehaviour {
 
         LaunchManager launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
         LoggingManager log = launchManager.GetLoggingManager();
-        Assets.EVE.Scripts.Questionnaire2.QuestionnaireFactory  qf = new Assets.EVE.Scripts.Questionnaire2.QuestionnaireFactory(log,launchManager.ExperimentSettings);
+        Assets.EVE.Scripts.Questionnaire.QuestionnaireFactory  qf = new QuestionnaireFactory(log,launchManager.ExperimentSettings);
         qf.ImportAllQuestionnairesFromXml();
         //QuestionnaireBuilder b = new QuestionnaireBuilder(log);
         //b.saveAllQuestionsToDatabase("Assets/EVE/Resources/");

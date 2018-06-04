@@ -19,7 +19,6 @@ public class UpdateEvaluationList : MonoBehaviour {
     private Vector2 windowScrollPosition;
 
     //answer vars
-    private QuestionCollection questionCollection;
     private LoggingManager log;
     private PopUpEvaluationMap map;
 
