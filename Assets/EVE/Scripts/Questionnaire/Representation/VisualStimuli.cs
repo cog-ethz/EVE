@@ -67,9 +67,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
                     }
                     if (!Question.IsAnswered())
                     {
-                        StartCoroutine(Question.SeparatorFirst
-                            ? SwitchToNext(Question.ExpositionTime)
-                            : SwitchToFixation(Question.FixationTime));
+                        StartCoroutine(Question.Configuration.SeparatorFirst
+                            ? SwitchToNext(Question.Times.Exposition)
+                            : SwitchToFixation(Question.Times.Fixation));
                     }
                 }
             }
@@ -83,7 +83,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
             _currentIndex = 0;
             _randomisationOrder = Question.RandomisationOrder(_experimentParameters).ToArray();
 
-            if (Question.Type == Type.Image)
+            if (Question.Configuration.Type == Type.Image)
             {
                 _imgLocs = new Sprite[Question.Stimuli.Count];
                 for (var i = 0; i< Question.Stimuli.Count; i++)
@@ -100,9 +100,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
                 }
             }
 
-            StartCoroutine(Question.SeparatorFirst
-                ? SwitchToFixation(Question.FixationTime)
-                : SwitchToNext(Question.ExpositionTime));
+            StartCoroutine(Question.Configuration.SeparatorFirst
+                ? SwitchToFixation(Question.Times.Fixation)
+                : SwitchToNext(Question.Times.Exposition));
         }
 
 
@@ -118,13 +118,13 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
 
             _secondStimuli = true;
             _fixation = false;
-            StartCoroutine(SwitchToNext(Question.ExpositionTime));
+            StartCoroutine(SwitchToNext(Question.Times.Exposition));
         }
 
         private IEnumerator SwitchToNext(float time)
         {
             UpdateVisibility();
-            if (Question.Type == Type.Image)
+            if (Question.Configuration.Type == Type.Image)
             {
                 _rawImage.texture = _imgLocs[_randomisationOrder[_currentIndex]].texture;
             }
@@ -140,8 +140,8 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
 
 
             StartCoroutine(_secondStimuli
-                ? SwitchToDecision(Question.DecisionTime)
-                : SwitchToFixation(Question.FixationTime));
+                ? SwitchToDecision(Question.Times.Decision)
+                : SwitchToFixation(Question.Times.Fixation));
         }
 
         private IEnumerator SwitchToDecision(float time)
@@ -165,9 +165,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
                 }
                 if (!Question.IsAnswered())
                 {
-                    StartCoroutine(Question.SeparatorFirst
-                        ? SwitchToNext(Question.ExpositionTime)
-                        : SwitchToFixation(Question.FixationTime));
+                    StartCoroutine(Question.Configuration.SeparatorFirst
+                        ? SwitchToFixation(Question.Times.Fixation)
+                        : SwitchToNext(Question.Times.Exposition));
                 }
             }
             else

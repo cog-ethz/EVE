@@ -6,6 +6,7 @@
         Text,
         Choice,
         Scale,
-        Ladder
+        Ladder,
+        Stimuli
     }
 }

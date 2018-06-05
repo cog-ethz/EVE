@@ -11,7 +11,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Debug = System.Diagnostics.Debug;
 using Question = Assets.EVE.Scripts.Questionnaire.Questions.Question;
-using VisualStimuli = Assets.EVE.Scripts.Questionnaire.Representation.VisualStimuli;
 
 namespace Assets.EVE.Scripts.Questionnaire
 {
@@ -654,7 +653,8 @@ namespace Assets.EVE.Scripts.Questionnaire
                 }
             }
         }
-        public void Visit(Questions.VisualStimuli q)
+
+        public void Visit(VisualStimuli q)
         {
             _lastValidQuestion = _currentQuestion + 1;
             _menuManager.CurrentMenu

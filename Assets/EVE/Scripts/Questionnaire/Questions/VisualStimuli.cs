@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using System.Linq;
 using Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli;
 using Assets.EVE.Scripts.Questionnaire.Visitor;
+using Assets.EVE.Scripts.Questionnaire.XMLHelper.VisualStimuli;
 
 namespace Assets.EVE.Scripts.Questionnaire.Questions
 {
@@ -13,30 +14,23 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         [XmlArrayItem("Stimulus")]
         public List<string> Stimuli;
 
-        [XmlAttribute]
-        public Separator Separator;
-
-        [XmlAttribute]
-        public Enums.VisualStimuli.Choice Choice;
-
-        [XmlAttribute]
-        public Randomisation Randomisation;
-
-        [XmlAttribute]
-        public Enums.VisualStimuli.Type Type;
-
-        [XmlAttribute]
+        [XmlElement]
+        public Configuration Configuration;
+        
+        [XmlElement]
         public string ExternalRandomisation;
         
-        [XmlAttribute]
-        public bool SeparatorFirst;
+        [XmlElement]
+        public Times Times;
 
-        [XmlAttribute]
-        public float FixationTime, DecisionTime, ExpositionTime;
-
-        [XmlIgnore] private List<KeyValuePair<int, string>> _answers;
+        [XmlIgnore] private readonly List<KeyValuePair<int, string>> _answers;
 
         [XmlIgnore] private bool answersCompleted;
+
+        public VisualStimuli()
+        {
+            _answers = new List<KeyValuePair<int, string>>();
+        }
 
         public VisualStimuli(QuestionData questionData)
         {
@@ -44,19 +38,25 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             FromDatabaseQuestion(questionData);
         }
 
-        public VisualStimuli(string name, string text, Separator separator, Enums.VisualStimuli.Choice choice, Randomisation randomisation, Enums.VisualStimuli.Type type, string externalRandomisation, bool separatorFirst, float fixationTime, float decisionTime, float expositionTime, List<string> stimuli)
+        public VisualStimuli(string name, string text, Separator separator, Choice choice, Randomisation randomisation, Type type, string externalRandomisation, bool separatorFirst, float fixationTime, float decisionTime, float expositionTime, List<string> stimuli)
         {
             Name = name;
             Text = text;
-            Separator = separator;
-            Choice = choice;
-            Randomisation = randomisation;
-            Type = type;
+            Configuration = new Configuration
+            {
+                Separator = separator,
+                Choice = choice,
+                Randomisation = randomisation,
+                Type = type,
+                SeparatorFirst = separatorFirst
+            };
             ExternalRandomisation = externalRandomisation;
-            SeparatorFirst = separatorFirst;
-            FixationTime = fixationTime;
-            DecisionTime = decisionTime;
-            ExpositionTime = expositionTime;
+            Times = new Times
+            {
+                Fixation = fixationTime,
+                Exposition = expositionTime,
+                Decision = decisionTime
+            };
             Stimuli = stimuli;
 
             _answers = new List<KeyValuePair<int, string>>();
@@ -73,15 +73,20 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Text = q.QuestionText;
             NRows = q.Vals[0];
             NColumns = q.Vals[1];
-            Separator = (Separator)q.Vals[2];
-            Choice = (Enums.VisualStimuli.Choice)q.Vals[3];
-            Randomisation = (Randomisation)q.Vals[4];
-            Type = (Enums.VisualStimuli.Type)q.Vals[5];
-            FixationTime = q.Vals[6]/1000.0f;
-            DecisionTime = q.Vals[7]/1000.0f;
-            ExpositionTime = q.Vals[8]/100.0f;
-            SeparatorFirst = q.Vals[9] > 0;
-
+            Configuration = new Configuration
+            {
+                Separator = (Separator) q.Vals[2],
+                Choice = (Choice) q.Vals[3],
+                Randomisation = (Randomisation) q.Vals[4],
+                Type = (Type) q.Vals[5],
+                SeparatorFirst = q.Vals[6] > 0
+        };
+            Times = new Times
+            {
+                Fixation = q.Vals[7]/1000.0f,
+                Exposition = q.Vals[8]/1000.0f,
+                Decision = q.Vals[9]/1000.0f
+            };
             ExternalRandomisation = q.Labels[0];
             Stimuli = q.Labels.Skip(1).ToList();
         }
@@ -90,8 +95,16 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         {
             var vals = new int[10]
             {
-                NRows, NColumns, (int) Separator, (int) Choice, (int) Randomisation, (int) Type, (int) (1000*FixationTime),
-                (int) (1000*DecisionTime), (int) (1000*ExpositionTime), SeparatorFirst?1:0
+                NRows,
+                NColumns,
+                (int) Configuration.Separator,
+                (int) Configuration.Choice,
+                (int) Configuration.Randomisation,
+                (int) Configuration.Type,
+                Configuration.SeparatorFirst?1:0,
+                (int) (1000*Times.Fixation),
+                (int) (1000*Times.Exposition),
+                (int) (1000*Times.Decision),
             };
             var labels = new string[1]
             {
@@ -103,7 +116,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             return new QuestionData(Name,
                 Text,
                 questionSet,
-                (int)Enums.Question.Choice,
+                (int)Enums.Question.Stimuli,
                 vals.ToArray(),
                 labels.ToArray(),
                 output.ToArray());
@@ -134,7 +147,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         public List<int> RandomisationOrder(Dictionary<string, string> experimentParameters)
         {
 
-            if (Randomisation == Randomisation.ExperimentParameter)
+            if (Configuration.Randomisation == Randomisation.ExperimentParameter)
             {
                 return experimentParameters[ExternalRandomisation].Split(',').Select(int.Parse).ToList();
             }

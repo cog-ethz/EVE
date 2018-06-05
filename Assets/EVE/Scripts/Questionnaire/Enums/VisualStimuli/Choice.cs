@@ -3,6 +3,6 @@
     public enum Choice
     {
         ArrowKeys,
-        MultipleChoice
+        None
     }
 }
