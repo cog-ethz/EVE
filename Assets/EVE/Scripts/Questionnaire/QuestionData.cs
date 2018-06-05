@@ -1,4 +1,4 @@
-﻿namespace Assets.EVE.Scripts.Questionnaire2
+﻿namespace Assets.EVE.Scripts.Questionnaire
 {
     public struct QuestionData {
         public string QuestionName;

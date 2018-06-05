@@ -4,8 +4,6 @@ using System.Xml.Serialization;
 using System.Linq;
 using Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli;
 using Assets.EVE.Scripts.Questionnaire.Visitor;
-using Choice = Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli.Choice;
-using Type = Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli.Type;
 
 namespace Assets.EVE.Scripts.Questionnaire.Questions
 {
@@ -136,7 +134,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         public List<int> RandomisationOrder(Dictionary<string, string> experimentParameters)
         {
 
-            if (Randomisation == this.Randomisation.ExperimentParameter)
+            if (Randomisation == Randomisation.ExperimentParameter)
             {
                 return experimentParameters[ExternalRandomisation].Split(',').Select(int.Parse).ToList();
             }

@@ -292,7 +292,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
 
         public override void RetainAnswer(int internalnumber)
         {
-            if (Choice == this.Choice.Single )
+            if (Choice == Choice.Single )
             {
                 if (NColumns == 1)
                 {
