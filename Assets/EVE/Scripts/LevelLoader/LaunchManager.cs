@@ -121,7 +121,7 @@ public class LaunchManager : MonoBehaviour
 
         qs_sti.Questions.Add(new VisualStimuli("test_stimuli",
             "A",Separator.FixationCross, Choice.ArrowKeys, Randomisation.ExperimentParameter,
-            Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli.Type.Video, "0,3,5,8,10,11",false,20,10,30,
+            Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli.Type.Video, "test_stimuli_order", false,20,10,30,
             new List<string>
             {
                 "Videos/h_1", "Videos/h_2", "Videos/h_3", "Videos/h_4", "Videos/h_5", "Videos/h_6", "Videos/h_7",

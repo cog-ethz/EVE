@@ -32,7 +32,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
         private VideoPlayer _videoPlayer;
 
         // Use this for initialization
-        void Start ()
+        void Awake ()
         {
             _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
             _log = _launchManager.GetLoggingManager();

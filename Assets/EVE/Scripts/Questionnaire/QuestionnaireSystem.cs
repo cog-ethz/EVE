@@ -657,21 +657,34 @@ namespace Assets.EVE.Scripts.Questionnaire
         public void Visit(VisualStimuli q)
         {
             _lastValidQuestion = _currentQuestion + 1;
-            _menuManager.CurrentMenu
-                        .getDynamicFields("BackButton")
+            _questionPlaceholder.transform
+                    .Find("Panel")
+                    .Find("QuestionControlButtons")
+                    .Find("BackButton")
                         .gameObject
-                        .GetComponent<Button>()
-                        .interactable = false;
-            _menuManager.CurrentMenu
-                        .getDynamicFields("NextButton")
+                        .SetActive(false);
+            _questionPlaceholder.transform
+                    .Find("Panel")
+                    .Find("QuestionControlButtons")
+                    .Find("NextButton")
                         .gameObject
-                        .GetComponent<Button>()
-                        .interactable = false;
-            _questionContent.GetComponentInChildren<Transform>().gameObject.SetActive(false);
+                        .SetActive(false);
+            _questionPlaceholder.transform
+                    .Find("Panel")
+                    .Find("questionName").gameObject
+                    .SetActive(false);
+            var test = _questionContent.GetComponentsInChildren<Transform>();
+            foreach (var t in test)
+            {
+                t.gameObject.SetActive(false);
+            }
 
             var rep =_questionContent.gameObject.AddComponent<Representation.VisualStimuli>();
             rep.Question = q;
 
+            _questionContent.GetComponent<RectTransform>().sizeDelta = new Vector2(5760, 1080);
+            _questionContent.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
+            
             var fixationScreen = Instantiate(Resources.Load("Prefabs/Questionnaire/VisualStimuli/FixationCross")) as GameObject;
             PlaceQuestionElement(fixationScreen, _questionContent);
             fixationScreen.SetActive(false);
@@ -685,6 +698,10 @@ namespace Assets.EVE.Scripts.Questionnaire
             PlaceQuestionElement(expositionScreen, _questionContent);
             expositionScreen.SetActive(false);
             rep.ExpositionScreen = expositionScreen;
+
+            expositionScreen.GetComponent<RectTransform>().sizeDelta = new Vector2(5760,1080);
+
+            _questionContent.gameObject.SetActive(true);
 
             rep.StartStimuli();
 
