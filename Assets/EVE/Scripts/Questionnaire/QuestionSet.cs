@@ -18,7 +18,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         [XmlArrayItem("TextQuestion", typeof(TextQuestion))]
         [XmlArrayItem("ScaleQuestion", typeof(ScaleQuestion))]
         [XmlArrayItem("LadderQuestion", typeof(LadderQuestion))]
-        [XmlArrayItem("LadderQuestion", typeof(VisualStimuli))]
+        [XmlArrayItem("VisualStimuli", typeof(VisualStimuli))]
         public List<Question> Questions;
 
         public QuestionSet() { }

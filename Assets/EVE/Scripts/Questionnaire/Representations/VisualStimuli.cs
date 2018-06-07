@@ -1,14 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli;
-using Assets.EVE.Scripts.Questionnaire.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-namespace Assets.EVE.Scripts.Questionnaire.Representation
+namespace Assets.EVE.Scripts.Questionnaire.Representations
 {
-    public class VisualStimuli : MonoBehaviour
+    public class VisualStimuli : Representation
     {
         public Questions.VisualStimuli Question;
         
@@ -30,11 +29,15 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
         private Sprite[] _imgLocs;
         private RawImage _rawImage;
         private VideoPlayer _videoPlayer;
+        private QuestionnaireSystem _qSystem;
+        private int _currentDecision;
 
         // Use this for initialization
         void Awake ()
         {
-            _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+            _launchManager = GameObject
+                .FindGameObjectWithTag("LaunchManager")
+                .GetComponent<LaunchManager>();
             _log = _launchManager.GetLoggingManager();
             _experimentParameters = _launchManager.SessionParameters;
         }
@@ -60,27 +63,31 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
 
                 if (_decided)
                 {
-                    _currentIndex++;
                     if (_currentIndex == _randomisationOrder.Length)
                     {
                         Question.SetIsAnswered(true);
+                        _qSystem.GoToNextQuestion();
                     }
                     if (!Question.IsAnswered())
                     {
+                        _decide = false;
                         StartCoroutine(Question.Configuration.SeparatorFirst
-                            ? SwitchToNext(Question.Times.Exposition)
-                            : SwitchToFixation(Question.Times.Fixation));
+                            ? SwitchToFixation(Question.Times.Fixation)
+                            : SwitchToNext(Question.Times.Exposition));
                     }
+                    _inDecision = false;
                 }
             }
         }
 
-        public void StartStimuli()
+        public override void InitialiseRepresentation(QuestionnaireSystem qSystem)
         {
+            _qSystem = qSystem;
             _rawImage = ExpositionScreen.GetComponentInChildren<RawImage>();
             _videoPlayer = ExpositionScreen.GetComponentInChildren<VideoPlayer>();
 
             _currentIndex = 0;
+            _currentDecision = 0;
             _randomisationOrder = Question.RandomisationOrder(_experimentParameters).ToArray();
 
             if (Question.Configuration.Type == Type.Image)
@@ -108,15 +115,18 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
 
         private IEnumerator SwitchToFixation(float time)
         {
-
             _fixation = true;
             UpdateVisibility();
-            _log.insertLiveMeasurement("Fixation", "Event", null, "Start " + _currentIndex);
+            _log.insertLiveMeasurement("Fixation"
+                , "Event"
+                , null
+                , "Start " + _currentDecision);
 
             Debug.Log("Remain in Fixation for " + time + " sec");
             yield return new WaitForSeconds(time);
 
             _secondStimuli = true;
+            _currentIndex++;
             _fixation = false;
             StartCoroutine(SwitchToNext(Question.Times.Exposition));
         }
@@ -138,19 +148,30 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
             Debug.Log("Remain in next scene for " + time + " sec");
             yield return new WaitForSeconds(time);
 
-
-            StartCoroutine(_secondStimuli
-                ? SwitchToDecision(Question.Times.Decision)
-                : SwitchToFixation(Question.Times.Fixation));
+            if (Question.Configuration.Choice == Choice.None
+                && Question.Configuration.Separator == Separator.None
+                && Question.Configuration.Randomisation == Randomisation.None)
+            {
+                Question.SetIsAnswered(true);
+                _qSystem.GoToNextQuestion();
+            }
+            else
+            {
+                StartCoroutine(_secondStimuli
+                    ? SwitchToDecision(Question.Times.Decision)
+                    : SwitchToFixation(Question.Times.Fixation));
+            }
         }
 
         private IEnumerator SwitchToDecision(float time)
         {
             _secondStimuli = false;
-            _log.insertLiveMeasurement("Decision", "Event", null, "Start " + Question.Stimuli[_currentIndex]);
+            _log.insertLiveMeasurement("Decision", "Event", null, "Start " + _currentDecision);
             _decide = true;
             UpdateVisibility();
 
+            _currentIndex++;
+            _currentDecision++;
             Debug.Log("Remain in Decision for " + time + " sec");
             yield return new WaitForSeconds(time);
 
@@ -158,10 +179,10 @@ namespace Assets.EVE.Scripts.Questionnaire.Representation
             {
                 _decide = false;
                 Question.RetainAnswer(_currentIndex, "-1");
-                _currentIndex++;
                 if (_currentIndex == _randomisationOrder.Length)
                 {
                     Question.SetIsAnswered(true);
+                    _qSystem.GoToNextQuestion();
                 }
                 if (!Question.IsAnswered())
                 {

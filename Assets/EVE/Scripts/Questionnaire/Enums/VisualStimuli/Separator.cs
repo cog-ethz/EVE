@@ -3,6 +3,7 @@
     public enum Separator
     {
         FixationCross,
-        BlankScreen
+        BlankScreen,
+        None
     }
 }

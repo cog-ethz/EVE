@@ -679,13 +679,15 @@ namespace Assets.EVE.Scripts.Questionnaire
                 t.gameObject.SetActive(false);
             }
 
-            var rep =_questionContent.gameObject.AddComponent<Representation.VisualStimuli>();
+            var rep =_questionContent.
+                gameObject.
+                AddComponent<Representations.VisualStimuli>();
             rep.Question = q;
 
             _questionContent.GetComponent<RectTransform>().sizeDelta = new Vector2(5760, 1080);
             _questionContent.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
             
-            var fixationScreen = Instantiate(Resources.Load("Prefabs/Questionnaire/VisualStimuli/FixationCross")) as GameObject;
+            var fixationScreen = Instantiate(Resources.Load("Prefabs/Questionnaire/VisualStimuli/Fixation")) as GameObject;
             PlaceQuestionElement(fixationScreen, _questionContent);
             fixationScreen.SetActive(false);
             rep.FixationSceen = fixationScreen;
@@ -703,11 +705,10 @@ namespace Assets.EVE.Scripts.Questionnaire
 
             _questionContent.gameObject.SetActive(true);
 
-            rep.StartStimuli();
+            _questionContent.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.MiddleCenter;
 
-
+            rep.InitialiseRepresentation(this);
         }
-
     }
 }
 

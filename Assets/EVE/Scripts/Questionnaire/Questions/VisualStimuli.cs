@@ -38,7 +38,18 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             FromDatabaseQuestion(questionData);
         }
 
-        public VisualStimuli(string name, string text, Separator separator, Choice choice, Randomisation randomisation, Type type, string externalRandomisation, bool separatorFirst, float fixationTime, float decisionTime, float expositionTime, List<string> stimuli)
+        public VisualStimuli(string name, 
+            string text, 
+            Separator separator, 
+            Choice choice, 
+            Randomisation randomisation, 
+            Type type, 
+            string externalRandomisation, 
+            bool separatorFirst, 
+            float fixationTime, 
+            float decisionTime, 
+            float expositionTime, 
+            List<string> stimuli)
         {
             Name = name;
             Text = text;
@@ -141,6 +152,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         public override void RetainAnswer(int number, string internalAnswer)
         {
             _answers.Add(new KeyValuePair<int, string>(number,internalAnswer));
+        }
+
+        public override string GetJumpDestination()
+        {
+            return null;
         }
 
 

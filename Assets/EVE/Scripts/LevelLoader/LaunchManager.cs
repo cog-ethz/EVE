@@ -135,7 +135,7 @@ public class LaunchManager : MonoBehaviour
         //qn.QuestionSets.Add(qs_his.Name);
 
         var qf = new QuestionnaireFactory(_log,ExperimentSettings);
-        //qf.WriteQuestionSetToXml(qs_sti, "TestSet.xml");
+        qf.WriteQuestionSetToXml(qs_sti, "TestSet.xml");
         //qf.WriteQuestionnaireToXml(qn,"energyscape_pre");
     }
 
@@ -156,7 +156,7 @@ public class LaunchManager : MonoBehaviour
         var sceneList = ExperimentSettings.SceneSettings.Scenes;
         if (activeSceneName == "Loader" && previousSceneName != "Evaluation" && sceneList != null)
         { //coming back from a scene
-            Cursor.lockState = UnityEngine.CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             FPC.SetActive(false);
             _log.LogSceneEnd(sceneList[currentScene]);
