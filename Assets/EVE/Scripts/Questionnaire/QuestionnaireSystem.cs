@@ -442,8 +442,6 @@ namespace Assets.EVE.Scripts.Questionnaire
             if (nColumns > 1)
             {
                 var cLabels = q.ColumnLabels.Select(l => l.Text).ToList();
-                var rLabels = q.RowLabels.Select(l => l.Text).ToList();
-                float length = GetMaxTextLength(rLabels);
 
                 var topRow = Instantiate(Resources.Load("Prefabs/Menus/TopRow")) as GameObject;
                 
@@ -472,7 +470,8 @@ namespace Assets.EVE.Scripts.Questionnaire
                     var newParent = multiColObject.transform.Find("ResponseRows");
                     PlaceQuestionElement(oneRow, newParent);
 
-                    var filenameObj = AddLabelText("ToggleSidelabel", q.RowLabels[i].Text, oneRow.transform);
+                    var text = q.RowLabels!=null?q.RowLabels[i].Text:"";
+                    var filenameObj = AddLabelText("ToggleSidelabel", text, oneRow.transform);
                     var tex = filenameObj.GetComponent<Text>();
 
                     var count = Regex.Split(tex.text, "\n").Length - 1;

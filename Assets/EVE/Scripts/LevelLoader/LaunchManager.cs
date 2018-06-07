@@ -135,7 +135,7 @@ public class LaunchManager : MonoBehaviour
         //qn.QuestionSets.Add(qs_his.Name);
 
         var qf = new QuestionnaireFactory(_log,ExperimentSettings);
-        qf.WriteQuestionSetToXml(qs_sti, "TestSet.xml");
+        //qf.WriteQuestionSetToXml(qs_sti, "TestSet.xml");
         //qf.WriteQuestionnaireToXml(qn,"energyscape_pre");
     }
 

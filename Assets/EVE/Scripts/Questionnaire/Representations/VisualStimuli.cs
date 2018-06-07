@@ -14,7 +14,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         public GameObject FixationSceen, DecisionScreen, ExpositionScreen;
 
 
-        private bool _fixation, _decide, _inDecision, _decided, _secondStimuli;
+        private bool _fixation, _decide, _inDecision, _decided, _firstStimulus, _secondStimulus;
 
         private int[] _randomisationOrder;
         private int _currentIndex;
@@ -65,6 +65,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
                 if (_decided)
                 {
+                    _decide = false;
                     if (_currentIndex == _randomisationOrder.Length)
                     {
                         Question.SetIsAnswered(true);
@@ -109,6 +110,15 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                 }
             }
 
+            if (Question.Configuration.Type == Type.Image)
+            {
+                _rawImage.texture = _imgLocs[_randomisationOrder[_currentIndex]].texture;
+            }
+            else
+            {
+                _videoPlayer.clip = _vidLocs[_randomisationOrder[_currentIndex]];
+            }
+
             StartCoroutine(Question.Configuration.SeparatorFirst
                 ? SwitchToFixation(Question.Times.Fixation)
                 : SwitchToNext(Question.Times.Exposition));
@@ -119,17 +129,37 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         {
             _fixation = true;
             UpdateVisibility();
+
+            var index = Question.Configuration.SeparatorFirst ? _currentIndex : _currentDecision;
             _log.insertLiveMeasurement("Fixation"
                 , "Event"
                 , null
-                , "Start " + _currentDecision);
+                , "Start " + index);
 
             Debug.Log("Remain in Fixation for " + time + " sec");
-            _log.insertLiveMeasurement("LabChart", "Event", null, "Fixation: " + _currentDecision);
-            yield return new WaitForSeconds(time);
+            _log.insertLiveMeasurement("LabChart", "Event", null, "Fixation: " + index);
 
-            _secondStimuli = true;
-            _currentIndex++;
+            yield return new WaitForSeconds(time);
+            if (Question.Configuration.SeparatorFirst && !_firstStimulus)
+            {
+                _firstStimulus = true;
+            }
+            else
+            {
+                _secondStimulus = true;
+                _firstStimulus = false;
+
+                _currentIndex++;
+
+                if (Question.Configuration.Type == Type.Image)
+                {
+                    _rawImage.texture = _imgLocs[_randomisationOrder[_currentIndex]].texture;
+                }
+                else
+                {
+                    _videoPlayer.clip = _vidLocs[_randomisationOrder[_currentIndex]];
+                }
+            }
             _fixation = false;
             StartCoroutine(SwitchToNext(Question.Times.Exposition));
         }
@@ -137,14 +167,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         private IEnumerator SwitchToNext(float time)
         {
             UpdateVisibility();
-            if (Question.Configuration.Type == Type.Image)
+            if (Question.Configuration.Type == Type.Video)
             {
-                _rawImage.texture = _imgLocs[_randomisationOrder[_currentIndex]].texture;
-            }
-            else
-            {
-                _videoPlayer.clip = _vidLocs[_randomisationOrder[_currentIndex]];
-                _videoPlayer.Play();
+                //_videoPlayer.Play();
             }
 
             _log.insertLiveMeasurement("Video", "Event", null, "Start " + Question.Stimuli[_currentIndex]);
@@ -161,7 +186,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             }
             else
             {
-                StartCoroutine(_secondStimuli
+                StartCoroutine(_secondStimulus
                     ? SwitchToDecision(Question.Times.Decision)
                     : SwitchToFixation(Question.Times.Fixation));
             }
@@ -169,13 +194,26 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
         private IEnumerator SwitchToDecision(float time)
         {
-            _secondStimuli = false;
+            _secondStimulus = false;
             _log.insertLiveMeasurement("Decision", "Event", null, "Start " + _currentDecision);
             _log.insertLiveMeasurement("LabChart", "Event", null, "Decision: " + _currentDecision);
             _decide = true;
             UpdateVisibility();
 
+
+            
             _currentIndex++;
+            if (_currentIndex < _randomisationOrder.Length)
+            {
+                if (Question.Configuration.Type == Type.Image)
+                {
+                    _rawImage.texture = _imgLocs[_randomisationOrder[_currentIndex]].texture;
+                }
+                else
+                {
+                    _videoPlayer.clip = _vidLocs[_randomisationOrder[_currentIndex]];
+                }
+            }
             _currentDecision++;
             Debug.Log("Remain in Decision for " + time + " sec");
             yield return new WaitForSeconds(time);
