@@ -51,6 +51,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                     Debug.Log("1 key was pressed.");
                     Question.RetainAnswer(_currentIndex,"1");
                     _log.insertLiveMeasurement("User_Choice", "User Choice", null, "1");
+                    _log.insertLiveMeasurement("LabChart", "Event", null, "User Choice: 1");
                     _decided = true;
                 }
                 else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -58,6 +59,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                     Debug.Log("2 key was pressed.");
                     Question.RetainAnswer(_currentIndex,"2");
                     _log.insertLiveMeasurement("User_Choice", "User Choice", null, "2");
+                    _log.insertLiveMeasurement("LabChart", "Event", null, "User Choice: 2");
                     _decided = true;
                 }
 
@@ -123,6 +125,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                 , "Start " + _currentDecision);
 
             Debug.Log("Remain in Fixation for " + time + " sec");
+            _log.insertLiveMeasurement("LabChart", "Event", null, "Fixation: " + _currentDecision);
             yield return new WaitForSeconds(time);
 
             _secondStimuli = true;
@@ -145,6 +148,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             }
 
             _log.insertLiveMeasurement("Video", "Event", null, "Start " + Question.Stimuli[_currentIndex]);
+            _log.insertLiveMeasurement("LabChart", "Event", null, "Video: " + Question.Stimuli[_currentIndex]);
             Debug.Log("Remain in next scene for " + time + " sec");
             yield return new WaitForSeconds(time);
 
@@ -167,6 +171,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         {
             _secondStimuli = false;
             _log.insertLiveMeasurement("Decision", "Event", null, "Start " + _currentDecision);
+            _log.insertLiveMeasurement("LabChart", "Event", null, "Decision: " + _currentDecision);
             _decide = true;
             UpdateVisibility();
 
