@@ -140,8 +140,9 @@ namespace Assets.EVE.Scripts.Questionnaire
                         .GetComponent<Button>()
                         .interactable = false;
 
-                StartCoroutine(RemoveOldQuestionPlaceholder(_oldQuestionPlaceholder));
-                _oldQuestionPlaceholder = _questionPlaceholder;
+                //StartCoroutine(RemoveOldQuestionPlaceholder(_oldQuestionPlaceholder));
+				Destroy(_oldQuestionPlaceholder);
+				_oldQuestionPlaceholder = _questionPlaceholder;
             }
             else if (_currentQuestion == _totalQuestions)
             {
@@ -325,6 +326,9 @@ namespace Assets.EVE.Scripts.Questionnaire
             //make sure that the question-window gave the information about the answers to the questionObject before saving answers!!!
             if (_question.IsAnswered())
             {
+
+				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
                 var answer= _question.GetAnswer();
                 if (answer != null) _log.InsertAnswer(_question.Name, _currentQuestionSet.Name, answer);
 
@@ -655,6 +659,10 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         public void Visit(VisualStimuli q)
         {
+
+
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
             _lastValidQuestion = _currentQuestion + 1;
             _questionPlaceholder.transform
                     .Find("Panel")

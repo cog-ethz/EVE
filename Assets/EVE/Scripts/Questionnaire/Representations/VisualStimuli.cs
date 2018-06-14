@@ -65,6 +65,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
                 if (_decided)
                 {
+                    _decided = false;
                     _decide = false;
                     if (_currentIndex == _randomisationOrder.Length)
                     {
@@ -130,6 +131,27 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             _fixation = true;
             UpdateVisibility();
 
+			if (Question.Configuration.SeparatorFirst && !_firstStimulus)
+			{
+				_firstStimulus = true;
+			}
+			else
+			{
+				_secondStimulus = true;
+				_firstStimulus = false;
+
+				_currentIndex++;
+
+				if (Question.Configuration.Type == Type.Image)
+				{
+					_rawImage.texture = _imgLocs[_randomisationOrder[_currentIndex]].texture;
+				}
+				else
+				{
+					_videoPlayer.clip = _vidLocs[_randomisationOrder[_currentIndex]];
+				}
+			}
+
             var index = Question.Configuration.SeparatorFirst ? _currentIndex : _currentDecision;
             _log.insertLiveMeasurement("Fixation"
                 , "Event"
@@ -138,28 +160,8 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
             Debug.Log("Remain in Fixation for " + time + " sec");
             _log.insertLiveMeasurement("LabChart", "Event", null, "Fixation: " + index);
-
             yield return new WaitForSeconds(time);
-            if (Question.Configuration.SeparatorFirst && !_firstStimulus)
-            {
-                _firstStimulus = true;
-            }
-            else
-            {
-                _secondStimulus = true;
-                _firstStimulus = false;
-
-                _currentIndex++;
-
-                if (Question.Configuration.Type == Type.Image)
-                {
-                    _rawImage.texture = _imgLocs[_randomisationOrder[_currentIndex]].texture;
-                }
-                else
-                {
-                    _videoPlayer.clip = _vidLocs[_randomisationOrder[_currentIndex]];
-                }
-            }
+            
             _fixation = false;
             StartCoroutine(SwitchToNext(Question.Times.Exposition));
         }
@@ -167,13 +169,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         private IEnumerator SwitchToNext(float time)
         {
             UpdateVisibility();
-            if (Question.Configuration.Type == Type.Video)
-            {
-                //_videoPlayer.Play();
-            }
 
-            _log.insertLiveMeasurement("Video", "Event", null, "Start " + Question.Stimuli[_currentIndex]);
-            _log.insertLiveMeasurement("LabChart", "Event", null, "Video: " + Question.Stimuli[_currentIndex]);
+			_log.insertLiveMeasurement("Video", "Event", null, "Start " + Question.Stimuli[_randomisationOrder[_currentIndex]]);
+			_log.insertLiveMeasurement("LabChart", "Event", null, "Video: " + Question.Stimuli[_randomisationOrder[_currentIndex]]);
             Debug.Log("Remain in next scene for " + time + " sec");
             yield return new WaitForSeconds(time);
 
@@ -218,7 +216,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             Debug.Log("Remain in Decision for " + time + " sec");
             yield return new WaitForSeconds(time);
 
-            if (!_decided)
+            //This is buggy because it should only be executed when no decision was made at all
+            //currently it triggers after the wait time is over without knowing how many new stimuli have been shown inbetween
+            /*if (!_decided)
             {
                 _decide = false;
                 Question.RetainAnswer(_currentIndex, "-1");
@@ -237,7 +237,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             else
             {
                 _decided = false;
-            }
+            }*/
         }
 
         private void UpdateVisibility()
