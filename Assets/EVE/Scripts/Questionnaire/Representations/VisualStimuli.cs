@@ -40,6 +40,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                 .GetComponent<LaunchManager>();
             _log = _launchManager.GetLoggingManager();
             _experimentParameters = _launchManager.SessionParameters;
+
+            ExpositionScreen.GetComponentInChildren<VideoPlayer>()
+                .SetTargetAudioSource(0, GameObject
+                    .FindGameObjectWithTag("MainCamera")
+                    .GetComponentInChildren<AudioSource>());
         }
 
         void Update()
