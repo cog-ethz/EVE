@@ -51,7 +51,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         {
             if (_inDecision)
             {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.Keypad4))
                 {
                     Debug.Log("1 key was pressed.");
                     Question.RetainAnswer(_currentIndex,"1");
@@ -59,7 +59,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                     _log.insertLiveMeasurement("LabChart", "Event", null, "User Choice: 1");
                     _decided = true;
                 }
-                else if (Input.GetKeyDown(KeyCode.RightArrow))
+                else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.Keypad6))
                 {
                     Debug.Log("2 key was pressed.");
                     Question.RetainAnswer(_currentIndex,"2");
