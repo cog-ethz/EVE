@@ -6,8 +6,6 @@ public class CountdownTimer : MonoBehaviour {
 
 	private Text[] time;
 
-	public int seconds;
-
 	private float deltaTime, maxDuration;
 
     private float fadeSpeed = 0.01f;

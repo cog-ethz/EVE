@@ -28,7 +28,20 @@ public class InstructionScreen : MonoBehaviour {
         if (DateTime.Now.Subtract(start).TotalSeconds > waitTime)
         {
             nextButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
-            
+            if (Input.GetButtonUp("Back"))
+            {
+                pressContinue();
+            }
+        }
+       
+    }
+
+    void OnGUI()
+    {
+        Event e = Event.current;
+        if (e.type == EventType.KeyDown && e.control && e.keyCode == KeyCode.End)
+        {
+            SceneManager.LoadScene("Loader");
         }
     }
 

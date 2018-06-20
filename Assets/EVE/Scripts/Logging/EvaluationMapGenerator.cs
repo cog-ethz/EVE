@@ -47,6 +47,7 @@ public class EvaluationMapGenerator : MonoBehaviour
         if (computeMapImage)
         {
             Camera camera = GetComponent<Camera>();
+            camera.pixelRect = new Rect(0, 0, width, height);
             RenderTexture rt = new RenderTexture(width, height, 24);
             camera.targetTexture = rt;
             Texture2D screenShot = new Texture2D(width, height, TextureFormat.RGB24, false);

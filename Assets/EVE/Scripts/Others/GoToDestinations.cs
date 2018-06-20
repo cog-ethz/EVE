@@ -23,10 +23,11 @@ public class GoToDestinations : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
         currentDestination = destinations[destIndex].transform;
         gameObject.GetComponent<Text>().text = "Find the " + currentDestination.name;
         currentDestination.transform.Find("Cylinder").gameObject.SetActive(true);
-        fader = GameObject.FindGameObjectWithTag("Player").GetComponent<FadeOutScene>();
+        fader =launchManager.FPC.GetComponent<FadeOutScene>();
         start = DateTime.Now;
         currentDestination = destinations[destIndex].transform;
         popUpText.text = "Find the " + currentDestination.name;
@@ -43,6 +44,10 @@ public class GoToDestinations : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (fader == null)
+            fader = GameObject.FindGameObjectWithTag("Player").GetComponent<FadeOutScene>();
+        if (background)
+            background = popUpText.transform.parent.GetChild(0).gameObject;
         if (changing)
         {
             if (DateTime.Now.Subtract(start).TotalSeconds > infoDelay)
@@ -59,9 +64,7 @@ public class GoToDestinations : MonoBehaviour
         else
         {
             if (fader.isFadedOut())
-            {
-
-                launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+            {               
                 rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
                 if (rpl.isActivated())
                     SceneManager.LoadScene("Evaluation");

@@ -13,7 +13,7 @@ public class LabchartStarter : MonoBehaviour {
 	{
 	    var launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
         _starterPath = launchManager.ExperimentSettings.LabchartSettings.StarterPath;
-        _participantsPath = launchManager.ExperimentSettings.LabchartSettings.ParticipantsPath;
+        _participantsPath = launchManager.ExperimentSettings.LabchartSettings.ParticipantsPath.Replace(@"\\",@"\");
         _log = launchManager.GetLoggingManager();
     }
 
@@ -27,14 +27,15 @@ public class LabchartStarter : MonoBehaviour {
     /// Calls Labchart to record onto the specified file.
     /// </summary>
     private void StartLabChart()
-    {
+    {       
         string fileName = _participantsPath + _log.GetLabChartFileName() + ".adicht";
 		try
         {
             Process foo = new Process();
             foo.StartInfo.FileName = _starterPath;
             foo.StartInfo.Arguments = fileName;
-            foo.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            //foo.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+           
             foo.Start();
         }
         catch

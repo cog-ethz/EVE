@@ -30,6 +30,12 @@ public class FadeOutScene : MonoBehaviour
 
     }
 
+    void OnEnable()
+    {
+        fadingOut = false;
+        alpha = 0;
+        lerpTime = 0;
+    }
     public void startFadeOut()
     {
         StartFading();

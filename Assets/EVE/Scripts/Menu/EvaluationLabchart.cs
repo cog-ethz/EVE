@@ -13,7 +13,7 @@ public class EvaluationLabchart : MonoBehaviour {
         var launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
         _log = launchManager.GetLoggingManager();
         _commentWriterPath = launchManager.ExperimentSettings.LabchartSettings.CommentWriterPath;
-        _participantsPath = launchManager.ExperimentSettings.LabchartSettings.ParticipantsPath;
+        _participantsPath = launchManager.ExperimentSettings.LabchartSettings.ParticipantsPath.Replace("\\\\", "\\");
     }
 
     /// <summary>

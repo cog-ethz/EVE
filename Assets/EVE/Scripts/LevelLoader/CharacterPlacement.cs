@@ -6,15 +6,15 @@ public class CharacterPlacement : MonoBehaviour {
 
     void Start()
     {
-        var fpc = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>().FPC;
-        fpc.SetActive(true);
+        var fpc = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>().FPC;        
         Cursor.lockState = UnityEngine.CursorLockMode.Locked;
         Cursor.visible = false;
         _controller = fpc.transform;
-        var aCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        var aCamera = fpc.GetComponentInChildren<Camera>();
         _controller.transform.position = this.transform.position;
         _controller.transform.eulerAngles = this.transform.eulerAngles;
         aCamera.transform.eulerAngles = this.transform.eulerAngles;
+        fpc.SetActive(true);
 
     }
 }

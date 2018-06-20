@@ -26,18 +26,28 @@ public class ReplayRoute : MonoBehaviour {
     private float[] timeDifferences;
     private DateTime playStart;
     private bool activated;
+    private LaunchManager launchManager;
+    private GameObject evalCamera;
 
 
-	private float pos_x = 0, pos_y = 0, pos_z = 0, view_x = 0, view_y = 0, view_z = 0;
+
+    private float pos_x = 0, pos_y = 0, pos_z = 0, view_x = 0, view_y = 0, view_z = 0;
 
 	// Use this for initialization
 	void Start () {
         playbackCamera = "FirstPersonCharacter";
-    }
+	    launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
+	    evalCamera = GameObject.Find("EvaluationCamera");
+	}
 
     public void activateReplay(int sessionID, string sceneName, int sceneID)
     {
-        LaunchManager launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
+        if (launchManager == null)
+        {
+            launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
+            evalCamera = GameObject.Find("EvaluationCamera");
+        }
+
         launchManager.setReplaySessionId(sessionID);
         log = launchManager.GetLoggingManager();
         pos_logger.enabled = false;
@@ -88,10 +98,10 @@ public class ReplayRoute : MonoBehaviour {
                 else if (GUI.Button(new Rect(5, 95, 120, 30), "Exit"))
                 {
                     // remove LineRenderer
-                    Destroy(GameObject.Find("FirstPersonCharacter").GetComponent<LineRenderer>());
+                    Destroy(launchManager.FPC.GetComponent<LineRenderer>());
                     playbackCamera = "FirstPersonCharacter";
-                    GameObject.Find("EvaluationCamera").GetComponent<Camera>().enabled = false;
-                    GameObject.Find("FirstPersonCharacter").GetComponent<Camera>().enabled = true;
+                    evalCamera.GetComponent<Camera>().enabled = false;
+                    launchManager.FPC.GetComponentInChildren<Camera>().enabled = true;
                     SceneManager.LoadScene("Evaluation");
                 }
             }
@@ -99,7 +109,7 @@ public class ReplayRoute : MonoBehaviour {
             {
                 if (GUI.Button(new Rect(5, 50, 120, 30), "Bird's Eye"))
                 {
-                    playbackLineRenderer = GameObject.Find("FirstPersonCharacter").AddComponent(typeof(LineRenderer)) as LineRenderer;
+                    playbackLineRenderer = launchManager.FPC.AddComponent(typeof(LineRenderer)) as LineRenderer;
                     playbackLineRenderer.material = new Material(Shader.Find("Particles/Additive"));
                     float alpha = 1.0f;
                     Gradient gradient = new Gradient();
@@ -119,9 +129,9 @@ public class ReplayRoute : MonoBehaviour {
                     // playbackLineRenderer.SetColors(Color.red, Color.red);
                     //playbackLineRenderer.SetWidth(0.2f, 0.2f);
 
-                    playbackCamera = "EvaluationCamera";
-                    GameObject.Find("EvaluationCamera").GetComponent<Camera>().enabled = true;
-                    GameObject.Find("FirstPersonCharacter").GetComponent<Camera>().enabled = false;
+                    playbackCamera = "EvaluationCamera";                    
+                    launchManager.FPC.GetComponentInChildren<Camera>().enabled = false;
+                    evalCamera.GetComponent<Camera>().enabled = true;
                 }
             }
             else if (playbackCamera == "EvaluationCamera")
@@ -129,11 +139,11 @@ public class ReplayRoute : MonoBehaviour {
                 if (GUI.Button(new Rect(5, 50, 120, 30), "First Person"))
                 {
                     // remove LineRenderer
-                    Destroy(GameObject.Find("FirstPersonCharacter").GetComponent<LineRenderer>());
+                    Destroy(launchManager.FPC.GetComponent<LineRenderer>());
 
                     playbackCamera = "FirstPersonCharacter";
-                    GameObject.Find("EvaluationCamera").GetComponent<Camera>().enabled = false;
-                    GameObject.Find("FirstPersonCharacter").GetComponent<Camera>().enabled = true;
+                    evalCamera.GetComponent<Camera>().enabled = false;
+                    launchManager.FPC.GetComponentInChildren<Camera>().enabled = true;
                 }
             }
         }
@@ -206,7 +216,7 @@ public class ReplayRoute : MonoBehaviour {
                 //player.transform.forward = new Vector3(view_x, view_y, view_z);
 
                 //replay input
-                // NOTE: This is only used by the popup questionnaire
+                // NOTE: This needs to be rewritten, since the takeglobalparameterscript no longer exists
                 /*if (input[0] != null)
                     if (input_pointer < input[0].Count)
                     {
@@ -222,6 +232,11 @@ public class ReplayRoute : MonoBehaviour {
             }
         }
        
+    }
+
+    public string getInput()
+    {
+        return null;
     }
 
     private void StopPlayback() {
