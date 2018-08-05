@@ -7,11 +7,17 @@ using UnityEngine.Video;
 
 namespace Assets.EVE.Scripts.Questionnaire.Representations
 {
+    /// <summary>
+    /// Represents the visual stimuli question type in the questionnaire system.
+    ///
+    /// Can use open sound control (OSC) to address 3D sound systems.
+    /// </summary>
     public class VisualStimuli : Representation
     {
         public Questions.VisualStimuli Question;
         
         public GameObject FixationSceen, DecisionScreen, ExpositionScreen;
+		private OSC _osc; //L
 
 
         private bool _fixation, _decide, _inDecision, _decided, _firstStimulus, _secondStimulus;
@@ -32,6 +38,8 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         private QuestionnaireSystem _qSystem;
         private int _currentDecision;
 
+        private Coroutine previousCoroutine;
+
         // Use this for initialization
         void Awake ()
         {
@@ -40,6 +48,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                 .GetComponent<LaunchManager>();
             _log = _launchManager.GetLoggingManager();
             _experimentParameters = _launchManager.SessionParameters;
+
+
+			_osc = _launchManager.gameObject.GetComponent<OSC> ();
 
             ExpositionScreen.GetComponentInChildren<VideoPlayer>()
                 .SetTargetAudioSource(0, GameObject
@@ -80,7 +91,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                     if (!Question.IsAnswered())
                     {
                         _decide = false;
-                        StartCoroutine(Question.Configuration.SeparatorFirst
+                        if (previousCoroutine != null)
+                        {
+                            StopCoroutine(previousCoroutine);
+                        }
+                        previousCoroutine = StartCoroutine(Question.Configuration.SeparatorFirst
                             ? SwitchToFixation(Question.Times.Fixation)
                             : SwitchToNext(Question.Times.Exposition));
                     }
@@ -89,6 +104,10 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             }
         }
 
+        /// <summary>
+        /// Setup up its representation in the questionnaire system.
+        /// </summary>
+        /// <param name="qSystem"></param>
         public override void InitialiseRepresentation(QuestionnaireSystem qSystem)
         {
             _qSystem = qSystem;
@@ -98,6 +117,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             _currentIndex = 0;
             _currentDecision = 0;
             _randomisationOrder = Question.RandomisationOrder(_experimentParameters).ToArray();
+
 
             if (Question.Configuration.Type == Type.Image)
             {
@@ -125,7 +145,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                 _videoPlayer.clip = _vidLocs[_randomisationOrder[_currentIndex]];
             }
 
-            StartCoroutine(Question.Configuration.SeparatorFirst
+            if (previousCoroutine != null)
+            {
+                StopCoroutine(previousCoroutine);
+            }
+            previousCoroutine = StartCoroutine(Question.Configuration.SeparatorFirst
                 ? SwitchToFixation(Question.Times.Fixation)
                 : SwitchToNext(Question.Times.Exposition));
         }
@@ -133,8 +157,15 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
         private IEnumerator SwitchToFixation(float time)
         {
+
+			var message = new OscMessage (); //L
+			message.address = Question.Stimuli[_randomisationOrder[_currentIndex]]; //L
+			message.values.Add (0); //L
+
+
             _fixation = true;
-            UpdateVisibility();
+			UpdateVisibility();
+			_osc.Send (message); //L
 
 			if (Question.Configuration.SeparatorFirst && !_firstStimulus)
 			{
@@ -168,12 +199,22 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             yield return new WaitForSeconds(time);
             
             _fixation = false;
-            StartCoroutine(SwitchToNext(Question.Times.Exposition));
+            if (previousCoroutine != null)
+            {
+                StopCoroutine(previousCoroutine);
+            }
+            previousCoroutine = StartCoroutine(SwitchToNext(Question.Times.Exposition));
         }
 
         private IEnumerator SwitchToNext(float time)
         {
             UpdateVisibility();
+
+			var message = new OscMessage (); //L
+			message.address = Question.Stimuli[_randomisationOrder[_currentIndex]]; //L
+			message.values.Add (1); //L
+
+			_osc.Send (message); //L
 
 			_log.insertLiveMeasurement("Video", "Event", null, "Start " + Question.Stimuli[_randomisationOrder[_currentIndex]]);
 			_log.insertLiveMeasurement("LabChart", "Event", null, "Video: " + Question.Stimuli[_randomisationOrder[_currentIndex]]);
@@ -185,11 +226,23 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                 && Question.Configuration.Randomisation == Randomisation.None)
             {
                 Question.SetIsAnswered(true);
+
+				message = new OscMessage (); //L
+				message.address = Question.Stimuli[_randomisationOrder[_currentIndex]]; //L
+				message.values.Add (0); //L
+
+				_osc.Send (message); //L
+
                 _qSystem.GoToNextQuestion();
             }
             else
             {
-                StartCoroutine(_secondStimulus
+
+                if (previousCoroutine != null)
+                {
+                    StopCoroutine(previousCoroutine);
+                }
+                previousCoroutine = StartCoroutine(_secondStimulus
                     ? SwitchToDecision(Question.Times.Decision)
                     : SwitchToFixation(Question.Times.Fixation));
             }
@@ -197,11 +250,17 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
         private IEnumerator SwitchToDecision(float time)
         {
+
+			var message = new OscMessage (); //L
+			message.address = Question.Stimuli[_randomisationOrder[_currentIndex]]; //L
+			message.values.Add (0); //L
+
             _secondStimulus = false;
             _log.insertLiveMeasurement("Decision", "Event", null, "Start " + _currentDecision);
             _log.insertLiveMeasurement("LabChart", "Event", null, "Decision: " + _currentDecision);
             _decide = true;
-            UpdateVisibility();
+			UpdateVisibility();
+			_osc.Send (message); //L
 
 
             
@@ -221,9 +280,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             Debug.Log("Remain in Decision for " + time + " sec");
             yield return new WaitForSeconds(time);
 
-            //This is buggy because it should only be executed when no decision was made at all
-            //currently it triggers after the wait time is over without knowing how many new stimuli have been shown inbetween
-            /*if (!_decided)
+            if (!_decided)
             {
                 _decide = false;
                 Question.RetainAnswer(_currentIndex, "-1");
@@ -234,7 +291,12 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                 }
                 if (!Question.IsAnswered())
                 {
-                    StartCoroutine(Question.Configuration.SeparatorFirst
+
+                    if (previousCoroutine != null)
+                    {
+                        StopCoroutine(previousCoroutine);
+                    }
+                    previousCoroutine = StartCoroutine(Question.Configuration.SeparatorFirst
                         ? SwitchToFixation(Question.Times.Fixation)
                         : SwitchToNext(Question.Times.Exposition));
                 }
@@ -242,7 +304,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             else
             {
                 _decided = false;
-            }*/
+            }
         }
 
         private void UpdateVisibility()

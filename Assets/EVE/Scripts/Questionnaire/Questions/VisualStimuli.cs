@@ -8,6 +8,13 @@ using Assets.EVE.Scripts.Questionnaire.XMLHelper.VisualStimuli;
 
 namespace Assets.EVE.Scripts.Questionnaire.Questions
 {
+    /// <summary>
+    /// Visual Stimuli represent a question type that allows researchers to compare two visual stimuli at a time and ask for the respondents preference.
+    /// 
+    /// Additional option allow the researcher to specify how many different stimuli pairs to show and how to randomise their combination.
+    /// 
+    /// Both images and videos are supported.
+    /// </summary>
     public class VisualStimuli : Question
     {
         [XmlArray]
@@ -27,6 +34,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
 
         [XmlIgnore] private bool answersCompleted;
 
+        /// <summary>
+        /// Creates an empty VisualStimuli.
+        /// </summary>
         public VisualStimuli()
         {
             _answers = new List<KeyValuePair<int, string>>();
@@ -143,34 +153,43 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             return answersCompleted;
         }
 
+        /// <summary>
+        /// Visual Stimuli Representation sets externally, whether the question has been answered.
+        /// </summary>
+        /// <param name="state">state of whether the question is answered.</param>
         public void SetIsAnswered(bool state)
         {
             answersCompleted = state;
         }
         
-
+        /// <summary>
+        /// Stores the user Answer
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="internalAnswer"></param>
         public override void RetainAnswer(int number, string internalAnswer)
         {
             _answers.Add(new KeyValuePair<int, string>(number,internalAnswer));
         }
 
+        /// <summary>
+        /// Jumps are not available in Visual Stimuli
+        /// </summary>
+        /// <returns>returns null</returns>
         public override string GetJumpDestination()
         {
             return null;
         }
 
 
+        /// <summary>
+        /// Returns Randomisation order from experiment parameters.
+        /// </summary>
+        /// <param name="experimentParameters">Dictionary of experiment Parameters returned from the database</param>
+        /// <returns>A list describing the order of items.</returns>
         public List<int> RandomisationOrder(Dictionary<string, string> experimentParameters)
         {
-
-            if (Configuration.Randomisation == Randomisation.ExperimentParameter)
-            {
-                return experimentParameters[ExternalRandomisation].Split(',').Select(int.Parse).ToList();
-            }
-            else //StimuliRandomisation.None
-            {
-                return Enumerable.Range(1, Stimuli.Count).ToList(); 
-            }
+            return experimentParameters[ExternalRandomisation].Split(',').Select(int.Parse).ToList();
         }
 
     }
