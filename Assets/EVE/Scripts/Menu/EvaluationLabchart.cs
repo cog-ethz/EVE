@@ -2,11 +2,11 @@
 using System.Diagnostics;
 
 public class EvaluationLabchart : MonoBehaviour {
-
-    private string _file;
+    
     private LoggingManager _log;
     private string _commentWriterPath;
     private string _participantsPath;
+    private string _experimentName;
 
     void Start()
     {
@@ -14,6 +14,7 @@ public class EvaluationLabchart : MonoBehaviour {
         _log = launchManager.GetLoggingManager();
         _commentWriterPath = launchManager.ExperimentSettings.LabchartSettings.CommentWriterPath;
         _participantsPath = launchManager.ExperimentSettings.LabchartSettings.ParticipantsPath;
+        _experimentName = launchManager.ExperimentSettings.Name;
     }
 
     /// <summary>
@@ -26,43 +27,73 @@ public class EvaluationLabchart : MonoBehaviour {
     {
 		var sessionID = _log.GetCurrentSessionID()-1;
 
-        _file = _log.getSessionData(sessionID)[3];
+        var file = _log.getSessionData(sessionID)[3];
 
-        if (_file.Length > 0)
+        AddLabchartComments(sessionID, file);
+    }
+
+    public void AddLabchartComments(int sessionID, string file)
+    {
+        if (file.Length > 0)
         {
-            //add scene start and end
-            var sceneNames = _log.getListOfEnvironments(sessionID);
+            AddScenesToLabChart(sessionID, file);
 
-            var nScenes = sceneNames.Length;
-            for (var k = 0; k < nScenes; k++)
-            {
-                var sceneTime = _log.getSceneTime(k, sessionID);
-                if (sceneTime != null)
-                {
-                    AddCommentToLabChart(_file, "Scene " + sceneNames[k] + k + " start", sceneTime[0], sessionID);
-                    if (sceneTime[1].Length > 0)
-                        AddCommentToLabChart(_file, "End of scene " + sceneNames[k] + k, sceneTime[1], sessionID);
-                    else
-                    {
-                        // Needs to be fixed, currently gets time from store postitions (which only works for virtual environments
-                        var abortTime = _log.getAbortTime(sessionID, k);
-                        if (abortTime.Length > 0)
-                            AddCommentToLabChart(_file, "End of scene " + sceneNames[k] + k + "-stopped Manually", abortTime, sessionID);
-                    }
-                }
-            }
-            // add all trigger events
-            var events = _log.getSessionMeasurmentsAsString("Labchart", sessionID);
-            if (events != null)
-            {
-                for (var j = 0; j < events[0].Count; j++)
-                {
-                    AddCommentToLabChart(_file, events[1][j], events[0][j], sessionID);
-                }
-            }
-        } else
+            AddSensorToLabChart("Labchart", sessionID, file);
+            AddSensorToLabChart("QuestionnaireSystem", sessionID, file);
+
+        }
+        else
         {
             UnityEngine.Debug.Log("Labchart file is not recorded");
+        }
+    }
+
+    public void AddLabchartCommentsToAll()
+    {
+        var sessionData = _log.getAllSessionsData(_experimentName);
+
+        for (int i = 0; i < sessionData[0].Length; i++)
+        { 
+            int sessionID = int.Parse(sessionData[0][i]);
+            var file = sessionData[3][i];
+
+            AddLabchartComments(sessionID, file);
+        }
+    }
+
+    private void AddSensorToLabChart(string sensorName, int sessionID, string _file)
+    {
+        var events = _log.getSessionMeasurmentsAsString("Labchart", sessionID);
+        if (events != null)
+        {
+            for (var j = 0; j < events[0].Count; j++)
+            {
+                AddCommentToLabChart(_file, events[1][j], events[0][j], sessionID);
+            }
+        }
+    }
+
+    private void AddScenesToLabChart(int sessionID, string _file)
+    {
+        //add scene start and end
+        var sceneNames = _log.getListOfEnvironments(sessionID);
+        var nScenes = sceneNames.Length;
+        for (var k = 0; k < nScenes; k++)
+        {
+            var sceneTime = _log.getSceneTime(k, sessionID);
+            if (sceneTime != null)
+            {
+                AddCommentToLabChart(_file, "Scene " + sceneNames[k] + k + " start", sceneTime[0], sessionID);
+                if (sceneTime[1].Length > 0)
+                    AddCommentToLabChart(_file, "End of scene " + sceneNames[k] + k, sceneTime[1], sessionID);
+                else
+                {
+                    // Needs to be fixed, currently gets time from store postitions (which only works for virtual environments
+                    var abortTime = _log.getAbortTime(sessionID, k);
+                    if (abortTime.Length > 0)
+                        AddCommentToLabChart(_file, "End of scene " + sceneNames[k] + k + "-stopped Manually", abortTime, sessionID);
+                }
+            }
         }
     }
 
