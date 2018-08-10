@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli;
 using Assets.EVE.Scripts.Questionnaire.Questions;
 using Assets.EVE.Scripts.Questionnaire;
+using UnityEngine.UI;
 
 public class LaunchManager : MonoBehaviour
 {
@@ -61,7 +62,16 @@ public class LaunchManager : MonoBehaviour
             DontDestroyOnLoad(FPC);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
+
+
         ReadExperimentSettings();
+
+        //ExperimentSettings.UISettings.ReferenceResolution = new Vector2(1920,1080);
+
+        //var path = UnityEditor.EditorUtility.SaveFilePanel("Save Experiment Settings", "", "experiment_settings", "xml");
+        //WriteExperimentSettings(path);
+
+
         filePathRoot = Application.persistentDataPath + "/participant_files/"; ;
         DirectoryInfo dirInf = new DirectoryInfo(filePathRoot);
         if (!dirInf.Exists)
@@ -76,6 +86,10 @@ public class LaunchManager : MonoBehaviour
         _menuManager = GameObject.Find("Canvas").GetComponent<MenuManager>();
         _sessionParameters = new Dictionary<string, string>();
         LoadSettingsIntoDB();
+
+        var _canvas = GameObject.Find("Canvas");
+
+        _canvas.GetComponent<CanvasScaler>().referenceResolution = ExperimentSettings.UISettings.ReferenceResolution;
 
         var qs = new QuestionSet("TestSet");
         /*qs.Questions.Add(new InfoScreen("example_info", "People questionnaire:Perception of people in the neighborhood"));

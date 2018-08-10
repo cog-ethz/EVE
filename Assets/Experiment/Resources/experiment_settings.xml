@@ -22,5 +22,12 @@
     <StarterPath>\\Labchart\\StreamDebug\\Debug\\DriveChart.exe</StarterPath>
     <CommentWriterPath>\\Labchart\\AddCommentsDebug\\Debug\\DriveChart.exe</CommentWriterPath>
     <ParticipantsPath>path_to_labchart_files</ParticipantsPath>
+    <Commenters>
+      <Sensor>QuestionnaireSystem</Sensor>
+      <Sensor>LabChart</Sensor>
+    </Commenters>
   </LabchartSettings>
+  <UISettings>
+    <Resolution X="1920" Y="1080" />
+  </UISettings>
 </ExperimentSettings>

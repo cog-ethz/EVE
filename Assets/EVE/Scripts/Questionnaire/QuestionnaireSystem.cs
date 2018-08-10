@@ -9,7 +9,6 @@ using Assets.EVE.Scripts.Questionnaire.Visitor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Debug = System.Diagnostics.Debug;
 using Question = Assets.EVE.Scripts.Questionnaire.Questions.Question;
 
 namespace Assets.EVE.Scripts.Questionnaire
@@ -75,6 +74,8 @@ namespace Assets.EVE.Scripts.Questionnaire
 
 
             _canvas = GameObject.Find("Canvas");
+
+            _canvas.GetComponent<CanvasScaler>().referenceResolution = launchManager.ExperimentSettings.UISettings.ReferenceResolution;
             _menuManager = _canvas.GetComponent<MenuManager>();
 
             _oldQuestionPlaceholder = Instantiate(Resources.Load("Prefabs/Menus/QuestionPlaceholder")) as GameObject;
