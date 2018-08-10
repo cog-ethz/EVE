@@ -6,14 +6,14 @@ public class LabchartStarter : MonoBehaviour {
 
     private LoggingManager _log;
     private string _starterPath;
-    private string _participantsPath;
+    private string _path;
 
 	// Use this for initialization
 	void Start ()
 	{
 	    var launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        _starterPath = launchManager.ExperimentSettings.LabchartSettings.StarterPath;
-        _participantsPath = launchManager.ExperimentSettings.LabchartSettings.ParticipantsPath;
+	    _path = launchManager.ExperimentSettings.LabchartSettings.Path;
+        _starterPath = _path + "StartData\\DriveChart.exe";
         _log = launchManager.GetLoggingManager();
     }
 
@@ -28,13 +28,18 @@ public class LabchartStarter : MonoBehaviour {
     /// </summary>
     private void StartLabChart()
     {
-        string fileName = _participantsPath + _log.GetLabChartFileName() + ".adicht";
+        var fileName = _path + _log.GetLabChartFileName() + ".adicht";
 		try
         {
-            Process foo = new Process();
-            foo.StartInfo.FileName = _starterPath;
-            foo.StartInfo.Arguments = fileName;
-            foo.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            var foo = new Process
+            {
+                StartInfo =
+                {
+                    FileName = _starterPath,
+                    Arguments = fileName,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                }
+            };
             foo.Start();
         }
         catch

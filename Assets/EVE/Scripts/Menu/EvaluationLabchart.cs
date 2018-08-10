@@ -6,7 +6,7 @@ public class EvaluationLabchart : MonoBehaviour {
     
     private LoggingManager _log;
     private string _commentWriterPath;
-    private string _participantsPath;
+    private string _path;
     private string _experimentName;
     private List<string> _commenters;
 
@@ -14,8 +14,8 @@ public class EvaluationLabchart : MonoBehaviour {
     {
         var launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
         _log = launchManager.GetLoggingManager();
-        _commentWriterPath = launchManager.ExperimentSettings.LabchartSettings.CommentWriterPath;
-        _participantsPath = launchManager.ExperimentSettings.LabchartSettings.ParticipantsPath;
+        _path = launchManager.ExperimentSettings.LabchartSettings.Path;
+        _commentWriterPath = _path + "AddComments\\DriveChart.exe";
         _experimentName = launchManager.ExperimentSettings.Name;
         _commenters = launchManager.ExperimentSettings.LabchartSettings.Commenters;
     }
@@ -103,20 +103,19 @@ public class EvaluationLabchart : MonoBehaviour {
 
     private void AddCommentToLabChart(string fileName, string comment, string timestamp, int session)
     {
-		var filePath = _participantsPath + fileName + ".adicht";
+		var filePath = _path + fileName + ".adicht";
         
         var labchartStart = _log.getLabchartStarttime(session);
         var ms = (int)_log.timeDifference(labchartStart, timestamp) / 1000;
         
 		var args = filePath + " \"" + comment + "\" " + ms;
-        
-        var p = new Process();
+
         var psi = new ProcessStartInfo
         {
             FileName = _commentWriterPath,
             Arguments = args
         };
-        p = Process.Start(psi);
+        var p = Process.Start(psi);
         p.WaitForExit();
     }
 }
