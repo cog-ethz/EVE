@@ -66,8 +66,8 @@ public class LaunchManager : MonoBehaviour
 
         ReadExperimentSettings();
 
+        //THIS SECTION CAN TEST WRITING EXPERIMENT SETTINGS
         //ExperimentSettings.UISettings.ReferenceResolution = new Vector2(1920,1080);
-
         //var path = UnityEditor.EditorUtility.SaveFilePanel("Save Experiment Settings", "", "experiment_settings", "xml");
         //WriteExperimentSettings(path);
 
