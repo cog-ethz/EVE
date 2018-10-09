@@ -222,6 +222,16 @@
     </ChoiceQuestion>
     <TextQuestion Name="inflam_med_name" NColumns="1" NRows="1">
       <Text><![CDATA[Which medication(s)?]]></Text>
-    </TextQuestion>
+    </TextQuestion>	
+    <VisualStimuli Name="test_stimuli" NColumns="1" NRows="1">
+      <Text><![CDATA[A]]></Text>
+      <Stimuli>
+        <Stimulus>Images/test_image</Stimulus>
+        <Stimulus>Images/test_image</Stimulus>
+      </Stimuli>
+      <Configuration Separator="FixationCross" Choice="ArrowKeys" Randomisation="ExperimentParameter" Type="Image" SeparatorFirst="false" />
+      <ExternalRandomisation>test_stimuli_order</ExternalRandomisation>
+      <Times Fixation="20" Exposition="30" Decision="10" />
+    </VisualStimuli>
   </Questions>
 </QuestionSet>
