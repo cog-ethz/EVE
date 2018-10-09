@@ -24,5 +24,7 @@ namespace Assets.EVE.Scripts.XML
 
         public LabchartSettings LabchartSettings;
 
+        public UISettings UISettings;
+
     }
 }

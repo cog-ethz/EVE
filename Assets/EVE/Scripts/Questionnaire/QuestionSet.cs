@@ -1,69 +1,80 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
+using Assets.EVE.Scripts.Questionnaire.Questions;
 
-public class QuestionSet
+namespace Assets.EVE.Scripts.Questionnaire
 {
-
-    //question params
-    private string name;
-    private List<Question> questionList;
-    private List<QuestionJump> jumpList;
-
-    //---------------------------
-    // 		Constructor
-    //---------------------------
-    public QuestionSet(string name)
+    [Serializable]
+    public class QuestionSet
     {
-        this.name = name;
-        questionList = new List<Question>();
-        jumpList = new List<QuestionJump>();
+        [XmlAttribute]
+        public string Name;
+
+        [XmlArray]
+        [XmlArrayItem("ChoiceQuestion", typeof(ChoiceQuestion))]
+        [XmlArrayItem("InfoScreen", typeof(InfoScreen))]
+        [XmlArrayItem("TextQuestion", typeof(TextQuestion))]
+        [XmlArrayItem("ScaleQuestion", typeof(ScaleQuestion))]
+        [XmlArrayItem("LadderQuestion", typeof(LadderQuestion))]
+        [XmlArrayItem("VisualStimuli", typeof(VisualStimuli))]
+        public List<Question> Questions;
+
+        public QuestionSet() { }
+
+        public QuestionSet(string name)
+        {
+            Name = name;
+            Questions = new List<Question>();
+        }
+
+        public void WriteToDatabase(LoggingManager log)
+        {
+            log.CreateQuestionSet(Name);
+            Questions.ForEach(q =>
+            {
+                log.InsertQuestionToDB(q.AsDatabaseQuestion(Name));
+            });
+            Questions.ForEach(q =>
+            {
+                log.AddQuestionJumps(q, Name);
+            });
+        }
+
+        public void LoadFromDatabase(LoggingManager log)
+        {
+            var qDataList = log.GetQuestionSetContent(Name);
+            foreach (var questionData in qDataList)
+            {
+                Question q;
+                switch ((Enums.Question) questionData.QuestionType)
+                {
+                    case Enums.Question.Info:
+                        q = new InfoScreen(questionData);
+                        break;
+                    case Enums.Question.Text:
+                        q = new TextQuestion(questionData);
+                        break;
+                    case Enums.Question.Choice:
+                        q = new ChoiceQuestion(questionData);
+                        break;
+                    case Enums.Question.Scale:
+                        q = new ScaleQuestion(questionData);
+                        break;
+                    case Enums.Question.Ladder:
+                        q = new LadderQuestion(questionData);
+                        break;
+                    case Enums.Question.Stimuli:
+                        q = new VisualStimuli(questionData);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                q.Jumps = log.GetJumps(questionData);
+                Questions.Add(q);
+            }
+
+        }
     }
-
-    //---------------------------
-    // 		Set & Get
-    //---------------------------
-
-
-    public string getName()
-    {
-        return name;
-    }
-
-    public void addQuestion(Question q, QuestionJump j)
-    {
-        questionList.Add(q);
-        jumpList.Add(j);
-    }
-
-    public void addQuestion(Question q)
-    {
-        questionList.Add(q);
-        QuestionJump j = new QuestionJump();
-        jumpList.Add(j);
-    }
-
-    public List<Question> getQuestions()
-    {
-        return questionList;
-    }
-
-    public Question getQuestion(int i)
-    {
-        return questionList[i];
-    }
-
-    public int getPageAmount()
-    {
-        return questionList.Count();
-    }
-
-    public int getJumpSize(int i)
-    {
-        return jumpList[i].getJumpForGivenAnswer();
-    }
-
-
-
 }

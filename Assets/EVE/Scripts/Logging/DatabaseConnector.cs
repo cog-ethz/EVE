@@ -2,8 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Assets.EVE.Scripts.Questionnaire2;
-using Assets.EVE.Scripts.Questionnaire2.XMLHelper;
+using Assets.EVE.Scripts.Questionnaire;
+using Assets.EVE.Scripts.Questionnaire.Questions;
 
 public abstract class DatabaseConnector
 {
@@ -210,14 +210,7 @@ public abstract class DatabaseConnector
     /// <param name="name"> Name of the new question set</param>
     /// <returns> Return true if creation was sucessfull </returns>
     public abstract bool CreateQuestionSet(String name);
-
-    /// <summary>
-    /// Add the conditional jumps of a question
-    /// </summary>
-    /// <param name="jumps"> Jumps belonging to a question</param>
-    /// <param name="questionSetName"> Name of the question set the question belongs to</param>
-    public abstract void AddQuestionJumps(QuestionJumpImport jumps, string questionSetName);
-
+    
     /// <summary>
     /// Get the conditions for the jumps given their ids
     /// </summary>
@@ -511,7 +504,7 @@ public abstract class DatabaseConnector
 
     public abstract void CreateSchema();
 
-    public abstract void AddJumps(Assets.EVE.Scripts.Questionnaire2.Questions.Question question1, string questionSetName);
+    public abstract void AddJumps(Question question1, string questionSetName);
     public abstract int GetQuestionIdByName(string name);
     public abstract string GetQuestionNameById(int id);
     public abstract string GetJumpCondition(int jumpId);

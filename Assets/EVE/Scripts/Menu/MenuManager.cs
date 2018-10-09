@@ -99,10 +99,13 @@ public class MenuManager : MonoBehaviour {
 
     public void AddToBackOfSceneList(string sceneName)
     {
-        _sceneSettings.Scenes.Add(sceneName);
-        _log.AddScene(sceneName);
-        _log.RemoveExperimentSceneOrder(_launchManager.GetExperimentName());
-        _log.SetExperimentSceneOrder(_launchManager.GetExperimentName(), _sceneSettings.Scenes.ToArray());
+        if (_sceneSettings != null)
+        {
+            _sceneSettings.Scenes.Add(sceneName);
+            _log.AddScene(sceneName);
+            _log.RemoveExperimentSceneOrder(_launchManager.GetExperimentName());
+            _log.SetExperimentSceneOrder(_launchManager.GetExperimentName(), _sceneSettings.Scenes.ToArray());
+        }
     }
     
     public void DeleteSceneEntry(int i) {
