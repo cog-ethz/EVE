@@ -34,7 +34,6 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-Assets/Experiment/
 
 # Windows thumbnail cache files
 Thumbs.db
@@ -58,6 +57,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# EVE SPECIFIC
 Assets/EVE/Plugins/
 Assets/EVE/Resources/Textures/
 Assets/MiddleVR/
+
+Assets/Experiment/
