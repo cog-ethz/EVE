@@ -562,7 +562,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         
         }
 
-        public void Visit(Questions.TextQuestion q)
+        public void Visit(TextQuestion q)
         {
             var answernumber = 0;
             if (q.NRows == 1)
@@ -593,7 +593,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             }
         }
 
-        public void Visit(Questions.LadderQuestion q)
+        public void Visit(LadderQuestion q)
         {
             var ladder = Instantiate(Resources.Load("Prefabs/Menus/LadderContent")) as GameObject;
             _customContent = ladder.transform;
@@ -632,17 +632,20 @@ namespace Assets.EVE.Scripts.Questionnaire
             var image = _customContent.Find("Image");
             var questionName = q.Name;
             var imageSource = "Textures/questionline";
-            if (questionName.Contains("pleasure"))
+            if (q.Scale==Scale.Pleasure)
             {
                 imageSource = "Textures/SAM-V-5";
             }
-            else if (questionName.Contains("arousal"))
+            else if (q.Scale == Scale.Arousal)
             {
                 imageSource = "Textures/SAM-A-5";
             }
-            else if (questionName.Contains("dominance"))
+            else if (q.Scale == Scale.Dominance)
             {
                 imageSource = "Textures/SAM-D-5";
+            } else if (q.Scale == Scale.Custom)
+            {
+                imageSource = q.Image;
             }
             image.GetComponent<Image>().overrideSprite = Resources.Load<Sprite>(imageSource);
 
@@ -669,8 +672,6 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         public void Visit(VisualStimuli q)
         {
-
-
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
             _lastValidQuestion = _currentQuestion + 1;

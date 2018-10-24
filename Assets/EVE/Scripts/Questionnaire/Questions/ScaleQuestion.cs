@@ -14,7 +14,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         [XmlAttribute]
         public Scale Scale;
 
-        public string LeftLabel, RightLabel;
+        public string LeftLabel, RightLabel, Image;
 
         [XmlIgnore]
         private int _temporaryIntAnswer = -1;
@@ -26,10 +26,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             FromDatabaseQuestion(questionData);
         }
 
-        public ScaleQuestion(string name, string text, Scale scale, string leftLabel, string rightLabel)
+        public ScaleQuestion(string name, string text, string image, Scale scale, string leftLabel, string rightLabel)
         {
             Name = name;
             Text = text;
+            Image = image;
             Scale = scale;
             LeftLabel = leftLabel;
             RightLabel = rightLabel;
@@ -37,10 +38,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             NColumns = 9;
         }
 
-        public ScaleQuestion(string name, string text, Scale scale, string leftLabel, string rightLabel,int nColumns)
+        public ScaleQuestion(string name, string text, string image, Scale scale, string leftLabel, string rightLabel,int nColumns)
         {
             Name = name;
             Text = text;
+            Image = image;
             Scale = scale;
             LeftLabel = leftLabel;
             RightLabel = rightLabel;
@@ -48,10 +50,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             NColumns = nColumns;
         }
 
-        public ScaleQuestion(string name, string text, Scale scale, string leftLabel, string rightLabel, List<Jump> jumps )
+        public ScaleQuestion(string name, string text, string image, Scale scale, string leftLabel, string rightLabel, List<Jump> jumps )
         {
             Name = name;
             Text = text;
+            Image = image;
             Scale = scale;
             LeftLabel = leftLabel;
             RightLabel = rightLabel;
@@ -67,7 +70,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 questionSet,
                 (int)Enums.Question.Scale,
                 new int[3] { NRows, NColumns, (int)Scale },
-                new string[2] {LeftLabel,RightLabel}, 
+                new string[3] {LeftLabel,RightLabel,Image}, 
                 null);
         }
 
@@ -82,6 +85,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 Scale = (Scale)q.Vals[2];
                 LeftLabel = q.Labels[0];
                 RightLabel = q.Labels[1];
+                Image = q.Labels[2];
             }
             else
             {

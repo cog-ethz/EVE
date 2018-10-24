@@ -5,6 +5,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Enums
         Line,
         Pleasure,
         Arousal,
-        Dominance
+        Dominance,
+        Custom
     }
 }

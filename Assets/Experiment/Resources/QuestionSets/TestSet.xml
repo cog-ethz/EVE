@@ -185,6 +185,12 @@
       <LeftLabel>DEPENDENT</LeftLabel>
       <RightLabel>INDEPENDENT</RightLabel>
     </ScaleQuestion>
+    <ScaleQuestion Name="custom_amuesment_scale" NColumns="9" NRows="1" Scale="Custom">
+      <Text><![CDATA[How much did you feel AMUSEMENT?]]></Text>
+      <LeftLabel>Did not experience at all</LeftLabel>
+      <RightLabel>Strongest experience ever felt</RightLabel>
+      <Image>Textures/questionline</Image>
+    </ScaleQuestion>
     <LadderQuestion Name="swiss_status" NColumns="1" NRows="1">
       <Text><![CDATA[Swiss comparison of social status]]></Text>
       <LadderText><![CDATA[At the TOP of the ladder are the people who are the best off. The lower you are, the closer you are to the people at the very bottom. Where would you place yourself on this ladder, compared to all the other people in Switzerland?]]></LadderText>
@@ -222,9 +228,11 @@
     </ChoiceQuestion>
     <TextQuestion Name="inflam_med_name" NColumns="1" NRows="1">
       <Text><![CDATA[Which medication(s)?]]></Text>
-    </TextQuestion>	
+    </TextQuestion>
     <VisualStimuli Name="test_stimuli" NColumns="1" NRows="1">
-      <Text><![CDATA[A]]></Text>
+      <Text><![CDATA[Which stimulus is more pleasing?
+
+Press "1" for the first or "2" for the second.]]></Text>
       <Stimuli>
         <Stimulus>Images/test_image</Stimulus>
         <Stimulus>Images/test_image</Stimulus>
