@@ -652,7 +652,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             _customContent.Find("extremesText").Find("extreme2").gameObject.GetComponent<Text>().text = q.RightLabel;
 
             var buttons = _customContent.Find("Buttons");
-            for (var i = 0; i < 9; i++)
+            for (var i = 0; i < q.NColumns; i++)
             {
                 var mainikinToggle = buttons.Find("ToggleButtons" + i);
                 var btn = mainikinToggle.GetComponent<Toggle>();

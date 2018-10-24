@@ -37,6 +37,17 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             NColumns = 9;
         }
 
+        public ScaleQuestion(string name, string text, Scale scale, string leftLabel, string rightLabel,int nColumns)
+        {
+            Name = name;
+            Text = text;
+            Scale = scale;
+            LeftLabel = leftLabel;
+            RightLabel = rightLabel;
+            NRows = 1;
+            NColumns = nColumns;
+        }
+
         public ScaleQuestion(string name, string text, Scale scale, string leftLabel, string rightLabel, List<Jump> jumps )
         {
             Name = name;
