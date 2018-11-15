@@ -7,12 +7,15 @@ public class HL7Toggle : MonoBehaviour {
 
     public Toggle button;
     private LoggingManager _log;
+    private HL7ServerStarter hl7ServerStarter;
+    private LaunchManager launchManager;
 
     // Use this for initialization
     void Start()
     {
-        var launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+        launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
         _log = launchManager.GetLoggingManager();
+        hl7ServerStarter = launchManager.gameObject.GetComponent<HL7ServerStarter>();
         gameObject.GetComponent<Toggle>().isOn = launchManager.ExperimentSettings.SensorSettings.H7Server;
     }
 
@@ -20,10 +23,15 @@ public class HL7Toggle : MonoBehaviour {
     {
         if (!gameObject.GetComponent<Toggle>().isOn)
         {
+            hl7ServerStarter.enabled = false;
+            launchManager.ExperimentSettings.SensorSettings.H7Server = false;
             _log.RemoveSensor("HL7Server");
+
         }
         else
         {
+            hl7ServerStarter.enabled = true;
+            launchManager.ExperimentSettings.SensorSettings.H7Server = true;
             _log.AddSensor("HL7Server");
         }
 

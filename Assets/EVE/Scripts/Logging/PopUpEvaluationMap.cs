@@ -22,11 +22,13 @@ public class PopUpEvaluationMap : MonoBehaviour
     [Tooltip("Texture of the close button.")]
     public Texture closeX;
     [Tooltip("Map height on the evaluation screen.")]
-    public float mapHeight = 512;
+    public float mapHeight = 540;
     [Tooltip("Map width on the evaluation screen.")]
-    public float mapWidth = 512;
-    [Tooltip("Resolution of the original map.")]
-    public int resolution = 2048;
+    public float mapWidth = 960;
+    [Tooltip("Width of the original map.")]
+    public int ResolutionWidth = 1920;
+    [Tooltip("Height of the original map.")]
+    public int ResolutionHeight = 1080;
 
     //Derived settings data
     private float top;
@@ -101,7 +103,7 @@ public class PopUpEvaluationMap : MonoBehaviour
         {
             Vector3 worldLocation = new Vector3(xyz[i][0], xyz[i][1], xyz[i][2]);
             Vector3 screenPoint = projectionMatrices[currentMapToDisplay].MultiplyPoint(worldToCameraMatrices[currentMapToDisplay].MultiplyPoint(worldLocation));
-            Vector2 screenPixel = new Vector2(left + (screenPoint[0] + 0.5f) * mapWidth, top + (-screenPoint[1] + 1.0f) * 0.5f * mapHeight);
+            Vector2 screenPixel = new Vector2(left + (screenPoint[0] + 1.0f) *0.5f* mapWidth, top + (-screenPoint[1] + 1.0f) * 0.5f * mapHeight);
 
             tempParticipantLocationsOnMap.Add(screenPixel);
         }
@@ -162,7 +164,7 @@ public class PopUpEvaluationMap : MonoBehaviour
             {
                 Debug.LogError("A matrix for " + uniqueNames[i] + " was not found:\n" + ex.StackTrace);
             }
-            StartCoroutine(LoadMap(uniqueNames[i], resolution));
+            StartCoroutine(LoadMap(uniqueNames[i], ResolutionWidth, ResolutionHeight));
         }
 
     }
@@ -172,9 +174,9 @@ public class PopUpEvaluationMap : MonoBehaviour
     /// </summary>
     /// <param name="mapName"></param>
     /// <returns></returns>
-    private IEnumerator LoadMap(string mapName, int resolution)
+    private IEnumerator LoadMap(string mapName, int width, int height)
     {
-        string path = "file:///" + Application.persistentDataPath + "/maps/" + mapName + "_" + resolution + "x" + resolution + ".png";
+        string path = "file:///" + Application.persistentDataPath + "/maps/" + mapName + "_" + width + "x" + height + ".png";
 
         WWW www = new WWW(path);
         yield return www;

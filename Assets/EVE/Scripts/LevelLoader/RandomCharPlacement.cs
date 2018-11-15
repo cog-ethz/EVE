@@ -3,24 +3,26 @@ using System.Collections;
 
 public class RandomCharPlacement : MonoBehaviour
 {
-
-    public CharacterController controller;
-    public Transform[] placementPositions;
-    private LoggingManager log;
+    public Transform[] PlacementPositions;
 
     void Start()
     {
-        // get Logging Manager
-        LaunchManager launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-         log = launchManager.GetLoggingManager();
-
+        var launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+        var fpc = launchManager.FPC;
+        fpc.SetActive(true);
+        Cursor.lockState = UnityEngine.CursorLockMode.Locked;
+        Cursor.visible = false;
+        var controller = fpc.transform;
+        var aCamera = fpc.GetComponentInChildren<Camera>(); ;
         // set random route and log number
         System.Random rnd = new System.Random();
-        int r = rnd.Next(0, placementPositions.Length);
+        int r = rnd.Next(0, PlacementPositions.Length);
 
-        controller.transform.position = placementPositions[r].position;
-        controller.transform.rotation = placementPositions[r].rotation;
+        controller.transform.position = PlacementPositions[r].position;
+        controller.transform.eulerAngles = PlacementPositions[r].eulerAngles;
+        aCamera.transform.eulerAngles = PlacementPositions[r].eulerAngles;
 
-        log.insertLiveMeasurement("CharacterPlacement", "arrayIndex", null, r.ToString());
+        if (!fpc.GetComponentInChildren<ReplayRoute>().isActivated())
+            launchManager.GetLoggingManager().insertLiveMeasurement("CharacterPlacement", "arrayIndex", null, r.ToString());
     }
 }

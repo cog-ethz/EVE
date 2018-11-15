@@ -2112,6 +2112,8 @@ public class MySQLConnector : DatabaseConnector
     {
         string query = string.Empty;
         List<string>[] result = new List<string>[2];
+        result[0] = new List<string>();
+        result[1] = new List<string>();
 
         try
         {

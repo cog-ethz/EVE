@@ -46,11 +46,11 @@ public class MoneyCounter : MonoBehaviour {
         alpha = 0;
         lerpTime = 0;
 
-        /* int expCondition = int.Parse(launchManager.getLoggingManager().getParameterValue("expCondition"));
+        int expCondition = int.Parse(launchManager.GetLoggingManager().getParameterValue("expCondition"));
          if (expCondition == 1)
              decays = true;
          else
-             decays = false;*/
+             decays = false;
     }
 	
 	// Update is called once per frame

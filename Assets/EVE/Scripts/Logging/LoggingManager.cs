@@ -453,25 +453,34 @@ public class LoggingManager
         List<DateTime> dataKeys = new List<DateTime>(dataPosition.Keys);
         List<DateTime> dataSorted = SortDatesAscending(dataKeys);
 
-        DateTime sceneStart = Convert.ToDateTime(sceneTime[0]);
-        DateTime sceneEnd = Convert.ToDateTime(sceneTime[1]);
-        for (int j = 0; j < dataSorted.Count; j++)
+        if (dataSorted.Count > 0)
         {
-            if (dataSorted[j] > sceneStart)
+            DateTime sceneStart = Convert.ToDateTime(sceneTime[0]);
+            DateTime sceneEnd = dataSorted[dataSorted.Count - 1];
+            if (sceneTime[1] != null)
             {
-                if (dataSorted[j] < sceneEnd)
+                sceneEnd = Convert.ToDateTime(sceneTime[1]);
+            }
+
+            for (int j = 0; j < dataSorted.Count; j++)
+            {
+                if (dataSorted[j] > sceneStart)
                 {
-                    xyz[0].Add(float.Parse(dataPosition[dataSorted[j]][0]));
-                    xyz[1].Add(float.Parse(dataPosition[dataSorted[j]][1]));
-                    xyz[2].Add(float.Parse(dataPosition[dataSorted[j]][2]));
-                    xyz[3].Add(float.Parse(dataView[dataSorted[j]][0]));
-                    xyz[4].Add(float.Parse(dataView[dataSorted[j]][1]));
-                    xyz[5].Add(float.Parse(dataView[dataSorted[j]][2]));
+                    if (dataSorted[j] < sceneEnd)
+                    {
+                        xyz[0].Add(float.Parse(dataPosition[dataSorted[j]][0]));
+                        xyz[1].Add(float.Parse(dataPosition[dataSorted[j]][1]));
+                        xyz[2].Add(float.Parse(dataPosition[dataSorted[j]][2]));
+                        xyz[3].Add(float.Parse(dataView[dataSorted[j]][0]));
+                        xyz[4].Add(float.Parse(dataView[dataSorted[j]][1]));
+                        xyz[5].Add(float.Parse(dataView[dataSorted[j]][2]));
+                    }
+                    else
+                        break;
                 }
-                else
-                    break;
             }
         }
+        
         return xyz;
     }
 
@@ -512,7 +521,11 @@ public class LoggingManager
         List<DateTime> dataSorted = SortDatesAscending(dataKeys);
 
         DateTime sceneStart = Convert.ToDateTime(sceneTime[0]);
-        DateTime sceneEnd = Convert.ToDateTime(sceneTime[1]);
+        DateTime sceneEnd = dataSorted[dataSorted.Count - 1];
+        if (sceneTime[1] != null)
+        {
+            sceneEnd = Convert.ToDateTime(sceneTime[1]);
+        }
         for (int j = 0; j < dataSorted.Count; j++)
         {
             if (dataSorted[j] > sceneStart)
@@ -536,6 +549,8 @@ public class LoggingManager
     public List<string>[] getAllInput(int sessionId, int sceneNumber)
     {
         List<string>[] result = new List<string>[2];
+        result[0] = new List<string>();
+        result[1] = new List<string>();
 
         List<string>[] input = _dbConnector.GetSystemData("Player", "input", sessionId);
 
@@ -543,7 +558,7 @@ public class LoggingManager
 
             for (int i = 0; i < input[0].Count; i++)
             {
-                DateTime time1DT = Convert.ToDateTime(input[0][i]);
+                DateTime time1DT = Convert.ToDateTime(input[1][i]);
                 result[0].Add(time1DT.ToString("yyyy-MM-dd HH:mm:ss.fff"));
                 result[1].Add(input[1][i]);
             }         

@@ -2,6 +2,8 @@
 using System.Collections;
 using System;
 using UnityEngine.SceneManagement;
+using System.Xml.Serialization;
+using System.IO;
 
 public class MapDisplay : MonoBehaviour
 {
@@ -34,9 +36,12 @@ public class MapDisplay : MonoBehaviour
     //map data
     private Texture mapTexture;
     private Vector2 screenPixel, goalScreenPixel;
+    private double screenPixelX, screenPixelY;
 
-    private int resolution = 2048;
+    public int ResolutionWidth = 1920, ResolutionHeight = 1080;
     private LaunchManager launchManager;
+
+    private Matrix4x4 projectionMatrices, worldToCameraMatrices;
 
 
     // Use this for initialization
@@ -48,11 +53,15 @@ public class MapDisplay : MonoBehaviour
         rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
         if (rpl.isActivated())
         {
-            mapType = int.Parse(launchManager.GetLoggingManager().getParameterValue(launchManager.getReplaySessionId(),"mapType"));
+            var parameterValue = 0;
+            int.TryParse(launchManager.GetLoggingManager().getParameterValue(launchManager.getReplaySessionId(),"mapType"), out parameterValue);
+            mapType = parameterValue;
         }
         else
         {
-            mapType = int.Parse(launchManager.GetLoggingManager().getParameterValue("mapType"));
+            var parameterValue = 0;
+            int.TryParse(launchManager.GetLoggingManager().getParameterValue("mapType"), out parameterValue);
+            mapType = parameterValue;
         }                     
 
         whiteBG = new Texture2D(1, 1, TextureFormat.ARGB32, false);
@@ -64,7 +73,7 @@ public class MapDisplay : MonoBehaviour
         posX = Screen.width - mapWidth;
         posY = 0;//Screen.width - mapWidth;
 
-        mainCam = GameObject.Find("FirstPersonCharacter").GetComponent<Camera>();
+        mainCam = launchManager.FPC.GetComponentInChildren<Camera>();
         arrow = launchManager.FPC.transform.Find("GuidanceArrow").transform;
     }
 
@@ -74,20 +83,28 @@ public class MapDisplay : MonoBehaviour
 
         if (mapTexture != null)
         {
-            mapWidth = Screen.width * mapScale;
-            mapHeight = (mapWidth / mapTexture.width) * mapTexture.height;
+            mapHeight = Screen.height* mapScale;
+            mapWidth = (mapHeight / mapTexture.height) * mapTexture.width;
+            /*mapWidth = Screen.width * 1.0f;
+            mapHeight = (mapWidth / mapTexture.width) * mapTexture.height;*/
 
-            Vector3 worldLocation = new Vector3(GameObject.Find("FPSController").transform.position.x, GameObject.Find("FPSController").transform.position.y, GameObject.Find("FPSController").transform.position.z);
+            float top = ((float)Screen.height - mapHeight) / 2f;
+            float left = ((float)Screen.width - mapWidth) / 2f;
 
-            Camera c = GameObject.Find("EvaluationCamera").GetComponent<Camera>();
-            Vector3 tmp = c.WorldToScreenPoint(worldLocation);
+            Vector3 worldLocation = new Vector3(launchManager.FPC.transform.position.x, launchManager.FPC.transform.position.y, launchManager.FPC.transform.position.z);
 
-            screenPixel = new Vector2(Screen.width - tmp[0], tmp[1]);
-            
+           // Camera c = GameObject.Find("EvaluationCamera").GetComponent<Camera>();
+          
+            Vector3 screenPoint = projectionMatrices.MultiplyPoint(worldToCameraMatrices.MultiplyPoint(worldLocation));
+
+
+            //screenPixel = new Vector2(left + (screenPoint[0] + 0.5f) * mapWidth, top + (-screenPoint[1] + 1.0f) * 0.5f * mapHeight);
+            screenPixel = new Vector2(left + ((screenPoint[0] + 1.0f)*0.5f* mapWidth), (top +(-screenPoint[1] + 1.0f)*0.5f * mapHeight));
+
             if (goal != null)
             {
-                tmp = c.WorldToScreenPoint(goal.transform.position);
-                goalScreenPixel = new Vector2(Screen.width - tmp[0], tmp[1]);
+                screenPoint = projectionMatrices.MultiplyPoint(worldToCameraMatrices.MultiplyPoint(goal.transform.position));
+                goalScreenPixel = new Vector2(Screen.width - screenPoint[0], screenPoint[1]);
             }
 
             angle = GameObject.Find("FPSController").transform.eulerAngles.y;
@@ -123,6 +140,10 @@ public class MapDisplay : MonoBehaviour
 
             }
         }
+        else
+        {
+            SetupMap(SceneManager.GetActiveScene().name);
+        }
        
     }
 
@@ -137,13 +158,13 @@ public class MapDisplay : MonoBehaviour
             switch (mapType)
             {
                 case 0:
-                    GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), whiteBG);
+                   // GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), whiteBG);
                     GUI.color = new Color(1.0f, 1.0f, 1.0f, opacity);
-                    GUI.DrawTexture(new Rect(posX, posY, mapWidth, mapHeight), mapTexture);
+                    GUI.DrawTexture(new Rect(posX, posY, mapWidth, mapHeight), mapTexture);                    
 
-                    if (goal != null)
+                   if (goal != null)
                     {
-                        Rect goalMarkerPos = new Rect(goalScreenPixel[0] - (bmwidth / 2), goalScreenPixel[1] - (bmheight / 2), bmwidth, bmheight);
+                        var goalMarkerPos = new Rect(goalScreenPixel[0] - (bmwidth / 2), goalScreenPixel[1] - (bmheight / 2), bmwidth, bmheight);
                         Matrix4x4 matrixBackup2 = GUI.matrix;
                         Vector2 pivot2 = new Vector2(Screen.width / 2f, Screen.height / 2f);
                         GUIUtility.RotateAroundPivot(GameObject.Find("EvaluationCamera").transform.eulerAngles.y, pivot2);
@@ -155,14 +176,11 @@ public class MapDisplay : MonoBehaviour
                     Matrix4x4 matrixBackup = GUI.matrix;
                     Vector2 pivot = new Vector2(mapMarkerPos.xMin + mapMarkerPos.width * 0.5f, mapMarkerPos.yMin + mapMarkerPos.height * 0.5f);
                     GUIUtility.RotateAroundPivot(angle, pivot);
-                    pivot = new Vector2(Screen.width / 2f, Screen.height / 2f);
-                    GUIUtility.RotateAroundPivot(GameObject.Find("EvaluationCamera").transform.eulerAngles.y, pivot);
-                    GUI.DrawTexture(mapMarkerPos, playerMarker);
-                    
+                    GUI.DrawTexture(mapMarkerPos, playerMarker);                    
                     GUI.matrix = matrixBackup;
                     break;
                 case 1:
-                    GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), whiteBG);
+                   /* GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), whiteBG);
                     GUI.color = new Color(1.0f, 1.0f, 1.0f, opacity);
                                                       
                     Vector3 newPoint = RotatePointAroundPivot(new Vector3(screenPixel[0], screenPixel[1], 0), new Vector3((Screen.width / 2), (Screen.height / 2) , 0), new Vector3(0, 0, (360- angle)/2));
@@ -188,7 +206,7 @@ public class MapDisplay : MonoBehaviour
                         GUI.DrawTexture(goalMarkerPos, goalMarker);
                     }
 
-                    break;
+                    break;*/
                 case 2:
 
                     arrow.gameObject.SetActive(true);
@@ -201,10 +219,11 @@ public class MapDisplay : MonoBehaviour
 
         }
         else
-        {
-           arrow.gameObject.SetActive(false);
-           mainCam.enabled = true;
-           ContinueMotion();
+        {          
+            arrow.gameObject.SetActive(false);
+            if (mapType == 2 && !rpl.isActivated())
+                mainCam.enabled = true;
+            ContinueMotion();
         }
 
     }
@@ -217,17 +236,9 @@ public class MapDisplay : MonoBehaviour
         return point; // return it
     }
 
-    internal void SetupMap(string envName)
-    {        
-        mapTexture = new Texture();
-        
-        StartCoroutine(LoadMap(envName, resolution));        
-
-    }
-
-    private IEnumerator LoadMap(string mapName, int resolution)
+    private IEnumerator LoadMap(string mapName, int width, int height)
     {
-        string path = "file:///" + Application.persistentDataPath + "/maps/" + mapName + "_" + resolution + "x" + resolution + ".png";
+        string path = "file:///" + Application.persistentDataPath + "/maps/" + mapName + "_" + width + "x" + height + ".png";
 
         WWW www = new WWW(path);
         yield return www;
@@ -236,20 +247,64 @@ public class MapDisplay : MonoBehaviour
         mapTexture = tmpTex;
     }
 
+    /// <summary>
+    /// Loads map from the persistent data path.
+    /// </summary>
+    /// <remarks>
+    /// The maps need to be generated by placing an `EvaluationCamera`-Prefab in the scene.
+    /// </remarks>
+    /// <param name="envName"Map names</param>
+    internal void SetupMap(string envName)
+    {
+        projectionMatrices = new Matrix4x4();
+        worldToCameraMatrices = new Matrix4x4();
+
+        try
+        {
+            string path = Application.persistentDataPath + "/maps/" + envName + "_worldToCameraMatrix.xml";
+
+            XmlSerializer xmls = new XmlSerializer(new Matrix4x4().GetType());
+            using (var stream = File.OpenRead(path))
+            {
+                worldToCameraMatrices = (Matrix4x4)xmls.Deserialize(stream);
+            }
+            path = Application.persistentDataPath + "/maps/" + envName + "_projectionMatrix.xml";
+            using (var stream = File.OpenRead(path))
+            {
+                projectionMatrices = (Matrix4x4)xmls.Deserialize(stream);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("A matrix for " + envName + " was not found:\n" + ex.StackTrace);
+        }
+        mapTexture = new Texture();
+
+        StartCoroutine(LoadMap(envName, ResolutionWidth, ResolutionHeight));
+    }
+
     // -----------------------------------------
     //			 mouse motion enable/disable
     //------------------------------------------
     public void StopAllMotion()
     {
         //disable movement
-        launchManager.FPC.GetComponent<CharacterController>().enabled = false;
-        launchManager.FPC.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = false;
+        if (!launchManager.FPC.GetComponentInChildren<ReplayRoute>().isActivated())
+        {
+            launchManager.FPC.GetComponent<CharacterController>().enabled = false;
+            launchManager.FPC.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = false;
+        }
+        
     }
 
     public void ContinueMotion()
     {
         //enable movement
-        launchManager.FPC.GetComponent<CharacterController>().enabled = true;
-        launchManager.FPC.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = true;
+        if (!launchManager.FPC.GetComponentInChildren<ReplayRoute>().isActivated())
+        {
+            launchManager.FPC.GetComponent<CharacterController>().enabled = true;
+            launchManager.FPC.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = true;
+        }
+            
     }
 }

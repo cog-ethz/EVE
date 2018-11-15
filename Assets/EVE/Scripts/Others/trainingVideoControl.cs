@@ -26,9 +26,10 @@ public class trainingVideoControl : MonoBehaviour {
 
     public UIVideo movDisplay;
 
-    private float oldTransformAngleX;
+    private float oldTransformAngleY;
     private DateTime start;
     private bool changing;
+    private LaunchManager launchManager;
 
     public int changeSeconds;
 
@@ -36,8 +37,9 @@ public class trainingVideoControl : MonoBehaviour {
 	void Start () {
         currentSetting = FORWARD;
         instructions.text = "Move forward";
-        oldTransformAngleX = transform.localEulerAngles.x;
-        movDisplay.showVideo();
+	    launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+        oldTransformAngleY = launchManager.FPC.transform.localEulerAngles.y;
+        //movDisplay.showVideo();
         changing = false;
 
 	}
@@ -59,11 +61,11 @@ public class trainingVideoControl : MonoBehaviour {
                 else
                 {
                     instructions.text = instructionStrings[currentSetting];
-                    movDisplay.playVideo();
+                    //movDisplay.playVideo();
                 }
                     
             }
-            oldTransformAngleX = transform.localEulerAngles.x;
+            oldTransformAngleY = launchManager.FPC.transform.localEulerAngles.y;
             
         }
         else
@@ -151,7 +153,7 @@ public class trainingVideoControl : MonoBehaviour {
                     }
                     break;
             }
-            oldTransformAngleX = transform.localEulerAngles.x;
+            oldTransformAngleY = launchManager.FPC.transform.localEulerAngles.y;
         }
 
       
@@ -161,16 +163,22 @@ public class trainingVideoControl : MonoBehaviour {
     {
         if (direction == "left")
         {
-            if (transform.localEulerAngles.x - oldTransformAngleX > 2f)
+            if (launchManager.FPC.transform.localEulerAngles.y - oldTransformAngleY < -0.5f)
+            {
+                oldTransformAngleY = launchManager.FPC.transform.localEulerAngles.y;
                 return true;
+            }
             else
                 return false;
         }
 
         else if (direction == "right")
         {
-            if (transform.localEulerAngles.x - oldTransformAngleX < -2f)
+            if (launchManager.FPC.transform.localEulerAngles.y - oldTransformAngleY > 0.5f)
+            {
+                oldTransformAngleY = launchManager.FPC.transform.localEulerAngles.y;
                 return true;
+            }
             else
                 return false;
         }
