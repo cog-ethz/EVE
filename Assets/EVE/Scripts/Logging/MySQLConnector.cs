@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Data;
 using MySql.Data.MySqlClient;
-using System.IO;
-using System.Linq;
-using Assets.EVE.Scripts.Questionnaire2;
-using Assets.EVE.Scripts.Questionnaire2.XMLHelper;
+using Assets.EVE.Scripts.Questionnaire;
+using Assets.EVE.Scripts.Questionnaire.Questions;
 
 public class MySQLConnector : DatabaseConnector
 {
@@ -687,7 +685,7 @@ public class MySQLConnector : DatabaseConnector
         return questionnaireNames;
     }
 
-    public override void AddJumps(Assets.EVE.Scripts.Questionnaire2.Questions.Question q, string questionSetName)
+    public override void AddJumps(Question q, string questionSetName)
     {
         if (q.Jumps != null)
         {
@@ -748,70 +746,9 @@ public class MySQLConnector : DatabaseConnector
             }
             catch (System.Exception ex)
             {
-                Debug.LogError(ex.ToString() + " " + questionSetName + " " + q.Name);
+                Debug.LogError(ex + " " + questionSetName + " " + q.Name);
 
             }
-        }
-    }
-
-    public override void AddQuestionJumps(QuestionJumpImport jumps, string questionSetName)
-    {
-        // First insert the jumps
-        try
-        {
-            for (int i = 0; i < jumps.getDestNames().Length; i++)
-            {
-                string query = "INSERT INTO jumps (question_set, origin_id, dest_id) " +
-                    "VALUES ((SELECT id FROM question_sets WHERE name = ?setName),((SELECT tmp.id FROM (SELECT qs.id,qs.name,qset.name AS qsetName FROM questions AS qs " +
-                    "INNER JOIN question_question_sets AS qqs ON qs.id = qqs.question_id " +
-                    "INNER JOIN question_sets AS qset ON  qqs.question_set_id = qset.id) AS tmp " +
-                    "WHERE  tmp.qsetName = ?setName AND tmp.name = ?origin_name)),((SELECT tmp.id FROM (SELECT qs.id,qs.name,qset.name AS qsetName FROM questions AS qs " +
-                    "INNER JOIN question_question_sets AS qqs ON qs.id = qqs.question_id " +
-                    "INNER JOIN question_sets AS qset ON  qqs.question_set_id = qset.id) AS tmp " +
-                    "WHERE  tmp.qsetName = ?setName AND tmp.name = ?dest_name)))";
-                if (!con.State.Equals(ConnectionState.Open)) con.Open();
-                using (con)
-                {
-                    using (cmd = new MySqlCommand(query, con))
-                    {
-                        MySqlParameter oParam0 = cmd.Parameters.Add("?setName", MySqlDbType.VarChar); oParam0.Value = questionSetName;
-                        MySqlParameter oParam1 = cmd.Parameters.Add("?origin_name", MySqlDbType.VarChar); oParam1.Value = jumps.getQuestionName();
-                        MySqlParameter oParam2 = cmd.Parameters.Add("?dest_name", MySqlDbType.VarChar); oParam2.Value = jumps.getDestNames()[i];
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-                Debug.Log("Inserted question jump!");
-
-                // Insert conditions (for each jump add entries for each option and the assigned boolean)
-                //      If conditions has 2 possible jumps and 2 choices (2x2 matrix) we get 4 entries (two for each jump id)
-
-                int jumpID = (int)cmd.LastInsertedId;                
-
-                object[,] conditions = jumps.getConditions();
-
-                if (conditions != null)
-                {
-
-                    for (int j = 0; j < conditions.GetLength(1); j++)
-                    {
-                        query = "INSERT INTO jump_conditions (jump_id, option_id, assign) " +
-                      "VALUES (" + jumpID + "," + j + "," + conditions[i, j] + ")";
-                        if (!con.State.Equals(ConnectionState.Open)) con.Open();
-                        using (con)
-                        {
-                            using (cmd = new MySqlCommand(query, con))
-                            {
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-                        Debug.Log("Inserted question jump condition!");
-                    }
-                }
-            }
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError(ex.ToString() + " " + questionSetName + " " + jumps.getQuestionName());
         }
     }
 
@@ -1114,7 +1051,7 @@ public class MySQLConnector : DatabaseConnector
         {
             query = "SELECT name FROM (SELECT * FROM questionnaire_question_sets  WHERE questionnaire_id =" +
                 "(SELECT id FROM questionnaires WHERE name = ?name) GROUP BY id ASC)" +
-                "AS qsi INNER JOIN question_sets ON qsi.question_set_id = question_sets.id";
+                "AS qsi INNER JOIN question_sets ON qsi.question_set_id = question_sets.id ORDER BY question_sets.id";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {

@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.EVE.Scripts.Questionnaire2;
+﻿using Assets.EVE.Scripts.Questionnaire;
+using Assets.EVE.Scripts.Questionnaire.Questions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +10,7 @@ public class StoreAnswer : MonoBehaviour
     private bool _displayableTextField;
     private bool _currentlyDisplayed;
 
-    private Assets.EVE.Scripts.Questionnaire2.Questions.Question q;
+    private Question q;
     private InputField input;
 
     void Awake()

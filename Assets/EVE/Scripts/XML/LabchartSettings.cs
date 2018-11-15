@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace Assets.EVE.Scripts.XML
@@ -9,6 +10,31 @@ namespace Assets.EVE.Scripts.XML
     [Serializable]
     public class LabchartSettings
     {
-        public string StarterPath, CommentWriterPath, ParticipantsPath;
+        [XmlIgnore]
+        public string Path { get; set; }
+        [XmlElement("Path")]
+        public string PathToXml
+        {
+            get
+            {
+                if (!Path.EndsWith("\\"))
+                {
+                    Path += "\\";
+                }
+                return Path;
+            }
+            set
+            {
+                Path = value;
+                if (!Path.EndsWith("\\"))
+                {
+                    Path += "\\";
+                }
+            }
+        }
+
+        [XmlArray]
+        [XmlArrayItem("Sensor")]
+        public List<string> Commenters;
     }
 }
