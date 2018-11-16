@@ -9,7 +9,7 @@ public class OpenFolderScript : MonoBehaviour {
     {
         string scenePath = "";
 #if UNITY_EDITOR
-        scenePath = UnityEditor.EditorUtility.OpenFilePanel("", "D:/git/EVE/Assets/Experiment/Scenes", "unity,xml");
+        scenePath = UnityEditor.EditorUtility.OpenFilePanel("", Application.dataPath+"/Experiment/Scenes", "unity,xml");
 #endif
         //call setscenepath as with the folder textfield
         if (scenePath != null && !scenePath.Equals(""))
