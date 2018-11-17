@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.EVE.Scripts.Menu;
 using UnityEngine;
 
 public class DeleteEvaluationEntry : MonoBehaviour {
@@ -16,6 +17,6 @@ public class DeleteEvaluationEntry : MonoBehaviour {
         GameObject.Find("MakeSureDelete").GetComponent<MakeSureDeleteScript>().updateWriting();
 
 
-        GameObject.Find("Canvas").GetComponent<MenuManager>().ShowMenu(GameObject.Find("MakeSureDelete").GetComponent<Menu>());
+        GameObject.Find("Canvas").GetComponent<MenuManager>().ShowMenu(GameObject.Find("MakeSureDelete").GetComponent<BaseMenu>());
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.EVE.Scripts.Menu;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ExperimentMenu : Menu {
+public class ExperimentMenu : BaseMenu {
 
     private LaunchManager _launchManager;
 

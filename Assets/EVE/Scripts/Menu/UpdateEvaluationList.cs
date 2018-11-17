@@ -9,6 +9,7 @@ using System.Text;
 using System.Linq;
 using System.IO;
 using System.Diagnostics;
+using Assets.EVE.Scripts.Menu;
 using UnityEngine.SceneManagement;
 
 public class UpdateEvaluationList : MonoBehaviour {
@@ -99,7 +100,7 @@ public class UpdateEvaluationList : MonoBehaviour {
         map.SetupMaps(envs);
         
         //delete all entries, note that this complicated procedure is needed as the enumeration of transforms changes while erasing one entry
-        Transform dynamicFieldT = GameObject.Find("Evaluation Menu").GetComponent<Menu>().getDynamicFields("DynFieldsA");
+        Transform dynamicFieldT = GameObject.Find("Evaluation Menu").GetComponent<BaseMenu>().getDynamicFields("DynFieldsA");
         List<GameObject> entriesObjects = new List<GameObject>();
         foreach (Transform entry in dynamicFieldT) entriesObjects.Add(entry.gameObject);
         foreach (GameObject entryObject in entriesObjects) Destroy(entryObject);
@@ -110,7 +111,7 @@ public class UpdateEvaluationList : MonoBehaviour {
             string ptcID = participant_ids[i];
 
             GameObject filenameObj = Instantiate(Resources.Load("Prefabs/Menus/EvaluationEntry")) as GameObject;
-            Transform dynamicField = GameObject.Find("Evaluation Menu").GetComponent<Menu>().getDynamicFields("DynFieldsA");
+            Transform dynamicField = GameObject.Find("Evaluation Menu").GetComponent<BaseMenu>().getDynamicFields("DynFieldsA");
             filenameObj.transform.SetParent(dynamicField);
             filenameObj.transform.localPosition = new Vector3(filenameObj.transform.localPosition.x, filenameObj.transform.localPosition.y, dynamicField.localPosition.z);
             filenameObj.transform.localScale = new Vector3(1, 1, 1);

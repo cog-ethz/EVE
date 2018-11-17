@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.EVE.Scripts.Menu;
 using UnityEngine;
 
-public class ErrorMenu : Menu {
+public class ErrorMenu : BaseMenu {
 
-    Menu originMenu = null;
+    BaseMenu _originBaseMenu = null;
 
     public void setErrorText(string errorText)
     {
@@ -12,13 +13,13 @@ public class ErrorMenu : Menu {
         errorMessageObj.GetComponent<UnityEngine.UI.Text>().text = errorText;
     }
 
-    public void setErrorOriginMenu(Menu originMenu)
+    public void setErrorOriginMenu(BaseMenu originBaseMenu)
     {
-        this.originMenu = originMenu;
+        this._originBaseMenu = originBaseMenu;
     }
 
     public void showOriginMenu() {
-        GameObject.Find("Canvas").GetComponent<MenuManager>().ShowMenu(originMenu);
+        GameObject.Find("Canvas").GetComponent<MenuManager>().ShowMenu(_originBaseMenu);
     }
 
 

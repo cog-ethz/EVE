@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Assets.EVE.Scripts.Menu;
 using UnityEngine;
 using Assets.EVE.Scripts.XML;
 
@@ -21,14 +22,16 @@ public class MenuManager : MonoBehaviour {
     private List<string> _activeSensors = new List<string>();
     private List<string> _activeParameters;
     private string SceneFilePath;
+    private GameObject menuObject;
+    private GameObject oldMenuObject;
     
-    public Menu CurrentMenu;
+    public BaseMenu CurrentMenu;
     private bool loadEvalScene;
     private bool loadLoaderScene;
     private LaunchManager _launchManager;
     private LoggingManager _log;
     private SceneSettings _sceneSettings;
-    private ErrorMenu _errorMenu;
+    private ErrorMenu _errorBaseMenu;
 
     public string GetSceneFilePath() {
         if (SceneFilePath == null)
@@ -48,8 +51,9 @@ public class MenuManager : MonoBehaviour {
     public void Awake()
     {
         _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+        //TODO delete this function
         _launchManager.SetMenuManager(this);
-        _errorMenu = GameObject.Find("ErrorMenu").GetComponent<ErrorMenu>();
+        _errorBaseMenu = GameObject.Find("ErrorMenu").GetComponent<ErrorMenu>();
         _activeParameters = new List<string>();
     }
 
@@ -59,19 +63,34 @@ public class MenuManager : MonoBehaviour {
         _sceneSettings = _launchManager.ExperimentSettings.SceneSettings;
     }
 
-    public void ShowMenu(Menu menu)
+    public void ShowMenu(BaseMenu menu)
     {        
-        if (CurrentMenu != null) CurrentMenu.isOpen = false;
+        if (CurrentMenu != null) CloseCurrentMenu();
         CurrentMenu = menu;
         CurrentMenu.isOpen = true;
-
+    }
+    /// <summary>
+    /// Instantiates a Menu and shows it.
+    /// </summary>
+    /// <param name="menu">Name of the menu to be instantiated</param>
+    /// <param name="menuContext">Context in which the menu is instantiated</param>
+    public void InstantiateAndShowMenu(string menu, string menuContext)
+    {
+        if (CurrentMenu != null) CloseCurrentMenu();
+        menuObject = Instantiate(Resources.Load("Prefabs/Menus/"+menuContext+"/" + menu)) as GameObject;
+        CurrentMenu = menuObject.GetComponent<BaseMenu>();
     }
 
-    public void CloseMenu(Menu menu)
+    public void CloseMenu(BaseMenu baseMenu)
     {
-        CurrentMenu = menu;
-        CurrentMenu.isOpen = false;
+        CurrentMenu = baseMenu;
+        CloseCurrentMenu();
+    }
 
+    public void CloseCurrentMenu()
+    {
+
+        CurrentMenu.isOpen = false;
     }
    
     public void AddExperimentParameter(string attributeName)
@@ -178,16 +197,16 @@ public class MenuManager : MonoBehaviour {
 
     public void DisplayErrorMessage(string errorMessage)
     {
-        _errorMenu.setErrorOriginMenu(CurrentMenu);
-        _errorMenu.setErrorText(errorMessage);
-        ShowMenu(_errorMenu);
+        _errorBaseMenu.setErrorOriginMenu(CurrentMenu);
+        _errorBaseMenu.setErrorText(errorMessage);
+        ShowMenu(_errorBaseMenu);
     }
 
-    public void DisplayErrorMessage(string errorMessage, Menu originMenu)
+    public void DisplayErrorMessage(string errorMessage, BaseMenu originBaseMenu)
     {
-        _errorMenu.setErrorOriginMenu(originMenu);
-        _errorMenu.setErrorText(errorMessage);
-        ShowMenu(_errorMenu);
+        _errorBaseMenu.setErrorOriginMenu(originBaseMenu);
+        _errorBaseMenu.setErrorText(errorMessage);
+        ShowMenu(_errorBaseMenu);
     }
 
     /// <summary>

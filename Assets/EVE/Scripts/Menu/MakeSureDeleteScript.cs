@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.EVE.Scripts.Menu;
 using UnityEngine;
 
 
@@ -26,7 +27,7 @@ public class MakeSureDeleteScript : MonoBehaviour
 
     public void clickYes() {
         Destroy(listObjectButton.transform.parent.gameObject);
-        GameObject.Find("Canvas").GetComponent<MenuManager>().ShowMenu(GameObject.Find("Evaluation Menu").GetComponent<Menu>());
+        GameObject.Find("Canvas").GetComponent<MenuManager>().ShowMenu(GameObject.Find("Evaluation Menu").GetComponent<BaseMenu>());
         LoggingManager log = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>().GetLoggingManager();
         log.removeSession(sessionNumber);
 

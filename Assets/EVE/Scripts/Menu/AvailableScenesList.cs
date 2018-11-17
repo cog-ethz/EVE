@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Assets.EVE.Scripts.Menu;
 
 public class AvailableScenesList : MonoBehaviour {
     private LaunchManager _launchManager;
@@ -30,7 +31,7 @@ public class AvailableScenesList : MonoBehaviour {
 
             //this block adds the data to the menu
             var filenameObj = Instantiate(Resources.Load("Prefabs/Menus/TextAndAddButton")) as GameObject;
-            var dynamicField = GameObject.Find("Scene Config").GetComponent<Menu>().getDynamicFields("DynFields");
+            var dynamicField = GameObject.Find("Scene Config").GetComponent<BaseMenu>().getDynamicFields("DynFields");
             filenameObj.transform.SetParent(dynamicField);
             filenameObj.transform.localPosition = new Vector3(filenameObj.transform.localPosition.x, filenameObj.transform.localPosition.y, dynamicField.localPosition.z);
             filenameObj.transform.localScale = new Vector3(1, 1, 1);

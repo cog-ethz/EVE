@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using Assets.EVE.Scripts.Menu;
 using Assets.EVE.Scripts.XML;
 using UnityEngine.SceneManagement;
 using Assets.EVE.Scripts.Questionnaire.Questions;
@@ -16,6 +17,7 @@ public class LaunchManager : MonoBehaviour
 {
     public ExperimentSettings ExperimentSettings;
     public GameObject FPC;
+    public GameObject MenuCanvas;
 
     //public Boolean debug = false;
 
@@ -62,6 +64,8 @@ public class LaunchManager : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(this);
             DontDestroyOnLoad(FPC);
+            DontDestroyOnLoad(MenuCanvas); 
+
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
@@ -85,7 +89,7 @@ public class LaunchManager : MonoBehaviour
         _log = new LoggingManager();
         _log.ConnectToServer(ExperimentSettings.DatabaseSettings);
         initialized = false;
-        _menuManager = GameObject.Find("Canvas").GetComponent<MenuManager>();
+        _menuManager = MenuCanvas.GetComponent<MenuManager>();
         _sessionParameters = new Dictionary<string, string>();
         LoadSettingsIntoDB();
 
@@ -169,12 +173,12 @@ public class LaunchManager : MonoBehaviour
             else
             {
                 _menuManager = GameObject.Find("Canvas").GetComponent<MenuManager>();
-                _menuManager.ShowMenu(GameObject.Find("Finished").GetComponent<Menu>());
+                _menuManager.ShowMenu(GameObject.Find("Finished").GetComponent<BaseMenu>());
             }
         }
         else if (activeSceneName == "Loader" && previousSceneName == "Evaluation")
         {
-            _menuManager.ShowMenu(GameObject.Find("Evaluation Menu").GetComponent<Menu>());
+            _menuManager.ShowMenu(GameObject.Find("Evaluation Menu").GetComponent<BaseMenu>());
         }
         else if (activeSceneName == "Evaluation" && previousSceneName != "Loader")
         {
@@ -183,7 +187,7 @@ public class LaunchManager : MonoBehaviour
             FPC.SetActive(false);
             this.enabled = true;
             _menuManager.setDetailsInt(_replaySessionId);
-            _menuManager.ShowMenu(GameObject.Find("Evaluation Details").GetComponent<Menu>());
+            _menuManager.ShowMenu(GameObject.Find("Evaluation Details").GetComponent<BaseMenu>());
         }
         else if (activeSceneName == "Evaluation")
         {
@@ -214,7 +218,7 @@ public class LaunchManager : MonoBehaviour
         _sessionId = _log.GetCurrentSessionID();
         if (_sessionId < 0)
         {
-            var databaseSetupMenu = GameObject.Find("SetupDatabaseMenu").GetComponent<Menu>();
+            var databaseSetupMenu = GameObject.Find("SetupDatabaseMenu").GetComponent<BaseMenu>();
             _menuManager.DisplayErrorMessage("Unable to connect to the database! Press ok to check the database status", databaseSetupMenu);
         }
         else
@@ -297,8 +301,8 @@ public class LaunchManager : MonoBehaviour
 
         if (_subjectId.Length < 1)
         {
-            Menu originMenu = GameObject.Find("Experiment Menu").GetComponent<Menu>();
-            _menuManager.DisplayErrorMessage("The Subject ID is invalid!", originMenu);
+            BaseMenu originBaseMenu = GameObject.Find("Experiment Menu").GetComponent<BaseMenu>();
+            _menuManager.DisplayErrorMessage("The Subject ID is invalid!", originBaseMenu);
         }
         else
         {
@@ -309,16 +313,16 @@ public class LaunchManager : MonoBehaviour
             int nParameters = _menuManager.GetAttributesList().Count;
             if (sceneList.Count <= 0)
             {
-                Menu originMenu = GameObject.Find("Scene Config").GetComponent<Menu>();
-                _menuManager.DisplayErrorMessage("No scenes selected!", originMenu);
+                BaseMenu originBaseMenu = GameObject.Find("Scene Config").GetComponent<BaseMenu>();
+                _menuManager.DisplayErrorMessage("No scenes selected!", originBaseMenu);
             }
             else
             {
                 if (_sessionParameters.Count != nParameters)
                 {
 
-                    Menu originMenu = GameObject.Find("Attribute Form").GetComponent<Menu>();
-                    _menuManager.DisplayErrorMessage("Session parameters are not set.",originMenu);
+                    BaseMenu originBaseMenu = GameObject.Find("Attribute Form").GetComponent<BaseMenu>();
+                    _menuManager.DisplayErrorMessage("Session parameters are not set.",originBaseMenu);
                 }
                 else
                 {
@@ -329,8 +333,8 @@ public class LaunchManager : MonoBehaviour
                     if (_log.getSensors().Contains("HL7Server"))
                         this.gameObject.GetComponent<HL7ServerStarter>().enabled = true;
                     storeSessionParameters();
-                    Menu startMenu = GameObject.Find("Start Menu").GetComponent<Menu>();
-                    _menuManager.ShowMenu(startMenu);
+                    BaseMenu startBaseMenu = GameObject.Find("Start Menu").GetComponent<BaseMenu>();
+                    _menuManager.ShowMenu(startBaseMenu);
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.EVE.Scripts.Menu;
 using UnityEngine;
 
 public class DeleteSceneEntry : MonoBehaviour {
@@ -9,7 +10,7 @@ public class DeleteSceneEntry : MonoBehaviour {
 
         GameObject parentObject=button.transform.parent.gameObject;
 
-        Transform dynamicFieldT = GameObject.Find("Scene Config").GetComponent<Menu>().getDynamicFields("DynFields2");
+        Transform dynamicFieldT = GameObject.Find("Scene Config").GetComponent<BaseMenu>().getDynamicFields("DynFields2");
         List<GameObject> entriesObjects = new List<GameObject>();
         foreach (Transform entry in dynamicFieldT) entriesObjects.Add(entry.gameObject);
         int i = 0;

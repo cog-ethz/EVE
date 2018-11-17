@@ -3,20 +3,44 @@
   <DatabaseSettings>
     <Server>localhost</Server>
     <Schema>eve</Schema>
-    <User>user_replace_me</User>
-    <Password>user_password_replace_me</Password>
+    <User>energyscape</User>
+    <Password>MainExperiment2018</Password>
   </DatabaseSettings>
-  <SensorSettings Labchart="false" H7Server="false">
-    <Sensors />
+  <SensorSettings Labchart="true" H7Server="false">
+    <Sensors>
+      <Sensor>QuestionnaireSystem</Sensor>
+      <Sensor>Fixation</Sensor>
+      <Sensor>LabChart</Sensor>
+      <Sensor>Video</Sensor>
+      <Sensor>Decision</Sensor>
+      <Sensor>User_Choice</Sensor>
+      <Sensor>Questionnaire</Sensor>
+    </Sensors>
   </SensorSettings>
   <ParameterSettings>
-    <Parameters />
+    <Parameters>
+      <Parameter>training_stimuli_order</Parameter>
+      <Parameter>landscape_stimuli_order</Parameter>
+      <Parameter>perception_1_order</Parameter>
+      <Parameter>perception_2_order</Parameter>
+      <Parameter>perception_3_order</Parameter>
+      <Parameter>perception_4_order</Parameter>
+      <Parameter>perception_5_order</Parameter>
+      <Parameter>perception_6_order</Parameter>
+      <Parameter>researcher_id</Parameter>
+      <Parameter>Labchart File Name</Parameter>
+    </Parameters>
   </ParameterSettings>
   <QuestionnaireSettings>
-    <Questionnaires />
+    <Questionnaires>
+      <Questionnaire>nasa_tlx</Questionnaire>
+    </Questionnaires>
   </QuestionnaireSettings>
   <SceneSettings>
-    <Scenes />
+    <Scenes>
+      <Scene>LabchartStartScene</Scene>
+      <Scene>nasa_tlx.xml</Scene>
+    </Scenes>
   </SceneSettings>
   <LabchartSettings>
     <Path>PathToLabchartFiles\\</Path>

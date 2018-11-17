@@ -109,7 +109,7 @@ namespace Assets.EVE.Scripts.Questionnaire
                     _question = _currentQuestionSet.Questions[_currentQuestion];
                 }
             
-                _menuManager.CloseMenu(_oldQuestionPlaceholder.GetComponent<Menu>());
+                _menuManager.CloseMenu(_oldQuestionPlaceholder.GetComponent<Menu.BaseMenu>());
                 _questionPlaceholder = Instantiate(Resources.Load("Prefabs/Menus/QuestionPlaceholder")) as GameObject;
                 _questionPlaceholder.name = "QuestionPlaceholder";
                 _oldQuestionPlaceholder.name = "Old QuestionPlaceholder";
@@ -141,8 +141,8 @@ namespace Assets.EVE.Scripts.Questionnaire
                         .GetComponent<Button>()
                         .interactable = false;
 
-                //StartCoroutine(RemoveOldQuestionPlaceholder(_oldQuestionPlaceholder));
-				Destroy(_oldQuestionPlaceholder);
+                //StartCoroutine(GameObjectUtils.GameObjectUtils(_oldQuestionPlaceholder,5));
+                Destroy(_oldQuestionPlaceholder);
 				_oldQuestionPlaceholder = _questionPlaceholder;
             }
             else if (_currentQuestion == _totalQuestions)
@@ -177,15 +177,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             _totalQuestions = _currentQuestionSet.Questions.Count;
             _questionNames = _currentQuestionSet.Questions.Select(question => question.Name).ToList();
         }
-
-        private IEnumerator RemoveOldQuestionPlaceholder(GameObject placeholder)
-        {
-            var helper = placeholder;
-            yield return new WaitForSeconds(5);
-            Destroy(helper);
-        }
-
-
+        
         /// <summary>
         /// Delete all entries in the dynamic field.
         /// </summary>
@@ -238,7 +230,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         /// </summary>
         private void UpdateQuestionDisplay()
         {
-            var menu = _questionPlaceholder.GetComponent<Menu>();
+            var menu = _questionPlaceholder.GetComponent<Menu.BaseMenu>();
             _menuManager.ShowMenu(menu);
             LayoutRebuilder.ForceRebuildLayoutImmediate(_questionContent.GetComponent<RectTransform>());
         }

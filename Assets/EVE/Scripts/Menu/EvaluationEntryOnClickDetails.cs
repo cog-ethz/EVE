@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.EVE.Scripts.Menu;
 using UnityEngine;
 
 public class EvaluationEntryOnClickDetails : MonoBehaviour {
@@ -11,7 +12,7 @@ public class EvaluationEntryOnClickDetails : MonoBehaviour {
         GameObject objectContainingMenuManager = GameObject.Find("Canvas");
         var menumanager = objectContainingMenuManager.GetComponent<MenuManager>();
         menumanager.setDetailsInt(sessionId);
-        menumanager.ShowMenu(GameObject.Find("Evaluation Details").GetComponent<Menu>());
+        menumanager.ShowMenu(GameObject.Find("Evaluation Details").GetComponent<BaseMenu>());
 
     }
 
