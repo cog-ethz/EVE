@@ -228,6 +228,9 @@ public class LaunchManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// The function resets the state of the participant for the next round
+    /// </summary>
     public void setCompletedAndReset() {
         currentScene = 0;
         _log.updateParameters();
