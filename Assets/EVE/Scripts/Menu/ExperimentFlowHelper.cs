@@ -11,10 +11,6 @@ public class ExperimentFlowHelper : MonoBehaviour
         _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
     }
 
-	public void findAndStart()
-    {
-        _launchManager.startExperiment();
-    }
 
     public void findAndStop()
     {

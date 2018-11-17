@@ -295,10 +295,14 @@ public class LaunchManager : MonoBehaviour
     {
         return _subjectId;
     }
-
-	//error checking before running an experiment
-	//the part with the logsessionparameters is from the old implementation and is not suited for everchanging sensors
-    public void startExperiment() {
+    
+    /// <summary>
+    /// Start experiment and checks errors.
+    /// </summary>
+    /// <remarks>
+    /// The part with the logsessionparameters is from the old implementation and is not suited for everchanging sensors
+    /// </remarks>
+    public void StartExperiment() {
         
         _subjectId = _menuManager.subjectId;
 

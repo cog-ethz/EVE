@@ -208,22 +208,7 @@ public class MenuManager : MonoBehaviour {
         _errorBaseMenu.setErrorText(errorMessage);
         ShowMenu(_errorBaseMenu);
     }
-
-    public void StartExperiment()
-    {
-        _launchManager.startExperiment();
-    }
-
-    public void CompleteExperiment()
-    {
-        _launchManager.setCompletedAndReset();
-    }
-
-    public void LoadNextScene()
-    {
-        _launchManager.loadCurrentScene();
-    }
-
+    
     /// <summary>
     /// Compares whether two lists contain the same elements ignoring order.
     /// </summary>

@@ -1,0 +1,101 @@
+﻿using System.Linq;
+using Assets.EVE.Scripts.Questionnaire;
+using Assets.EVE.Scripts.XML;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Assets.EVE.Scripts.Menu.Buttons
+{
+    /// <summary>
+    /// Buttons related to manage the database.
+    /// </summary>
+    public class DatabaseButtons : MonoBehaviour {
+        private LaunchManager _launchManager;
+        private LoggingManager _log;
+        private DatabaseSettings _dbSettings;
+        private Text _checkConnection;
+        private Text _dbSchema;
+        private Text _questionText;
+        private Button _setupButton;
+        private Button _questionButton;
+
+        // Use this for initialization
+        void Start () {
+            _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+            _log = _launchManager.GetLoggingManager();
+            _dbSettings = _launchManager.ExperimentSettings.DatabaseSettings;
+
+            var content = gameObject.transform.Find("Panel").Find("Content");
+            _checkConnection = content.Find("ConnectionState").Find("Response").GetComponent<Text>();
+            _dbSchema = content.Find("SchemaState").Find("Response").GetComponent<Text>();
+            _questionText = content.Find("QuestionnaireState").Find("Response").GetComponent<Text>();
+            _setupButton = content.Find("SetupDatabaseTables").GetComponent<Button>();
+            _questionButton = content.Find("SetupQuestionnaires").GetComponent<Button>();
+
+            CheckDatabase();
+        }
+
+        private void CheckDatabase()
+        {
+            var currentSessionId = _log.GetCurrentSessionID();
+            switch (currentSessionId)
+            {
+
+                case -2:
+                    _checkConnection.text = "<color=#ff0000ff>MySQL server not found</color>";
+                    _dbSchema.text = "";
+                    _questionText.text = "";
+                    break;
+                case -3:
+                    _checkConnection.text = "<color=#ff0000ff>Invalid credentials</color>";
+                    _dbSchema.text = "";
+                    _questionText.text = "";
+                    break;
+                case -4:
+                    _checkConnection.text = "MySQL server found";
+                    _dbSchema.text = "<color=#ff0000ff>Database '" + _dbSettings.Schema + "' not found</color>";
+                    _questionText.text = "";
+                    _setupButton.interactable = true;
+                    break;
+                default:
+                    _checkConnection.text = "MySQL server found";
+                    _dbSchema.text = "<color=#008000ff>Database '" + _dbSettings.Schema + "' found</color>";
+                    _setupButton.interactable = false;
+                    if (_log.GetQuestionnaireNames().Any())
+                    {
+                        _questionText.text = "<color=#008000ff>Questions found (see log)</color>";
+                        Debug.Log("Existing Questionnaires");
+                        _log.GetQuestionnaireNames().ForEach(Debug.Log);
+                        _questionButton.interactable = false;
+                    }
+                    else
+                    {
+                        _questionText.text = "<color=#ff0000ff>Questions not found</color>";
+                        _questionButton.interactable = true;
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Creates the standard EVE database schema with the name specified in the experiment settings.
+        /// </summary>
+        public void CreateDbSchema()
+        {
+            _log.ConnectToServerAndCreateSchema(_dbSettings);
+            _log.LogExperiment(_launchManager.GetExperimentName());
+            _launchManager.setSessionId(_log.GetCurrentSessionID());
+            CheckDatabase();
+        }
+
+        /// <summary>
+        /// Loads the questionnaires specified in the experiment settings.
+        /// </summary>
+        public void LoadQuestionnairesFromXML()
+        {
+            var qf = new QuestionnaireFactory(_log, _launchManager.ExperimentSettings);
+            qf.ImportAllQuestionnairesFromXml();
+            CheckDatabase();
+        }
+    }
+}
