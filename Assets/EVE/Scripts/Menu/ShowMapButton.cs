@@ -8,6 +8,7 @@ public class ShowMapButton : MonoBehaviour {
     private PopUpEvaluationMap internalMap;
     private string internalEnvName;
     private LoggingManager log;
+    private GameObject _map;
 
     public void onClickShowMapButton()
     {

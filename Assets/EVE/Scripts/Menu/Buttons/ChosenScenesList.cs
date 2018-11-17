@@ -26,7 +26,7 @@ public class ChosenScenesList : MonoBehaviour {
 	    _scenes = new List<string>(currentlist);
 
 	    //delete all entries, note that this complicated procedure is needed as the enumeration of transforms changes while erasing one entry
-	    var dynamicFieldT = GameObject.Find("Scene Config").GetComponent<BaseMenu>().getDynamicFields("DynFields2");
+	    var dynamicFieldT = GameObject.Find("Scene Configuration").GetComponent<BaseMenu>().getDynamicFields("DynFields2");
 	    var entriesObjects = (from Transform entry in dynamicFieldT select entry.gameObject).ToList();
 	    foreach (var entryObject in entriesObjects) Destroy(entryObject);
 
@@ -34,7 +34,7 @@ public class ChosenScenesList : MonoBehaviour {
 	    foreach (var filename in _scenes)
 	    {
 	        var filenameObj = Instantiate(Resources.Load("Prefabs/Menus/TextAndButtons")) as GameObject;
-	        var dynamicField = GameObject.Find("Scene Config").GetComponent<BaseMenu>().getDynamicFields("DynFields2");
+	        var dynamicField = GameObject.Find("Scene Configuration").GetComponent<BaseMenu>().getDynamicFields("DynFields2");
 	        filenameObj.transform.SetParent(dynamicField);
 	        filenameObj.transform.localPosition = new Vector3(filenameObj.transform.localPosition.x, filenameObj.transform.localPosition.y, dynamicField.localPosition.z);
 	        filenameObj.transform.localScale = new Vector3(1, 1, 1);

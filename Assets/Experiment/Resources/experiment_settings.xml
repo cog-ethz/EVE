@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="Windows-1252"?>
-<ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Example">
+<ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Energyscape">
   <DatabaseSettings>
     <Server>localhost</Server>
-    <Schema>eve</Schema>
+    <Schema>energyscape_eve</Schema>
     <User>energyscape</User>
     <Password>MainExperiment2018</Password>
   </DatabaseSettings>

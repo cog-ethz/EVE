@@ -306,7 +306,7 @@ public class LaunchManager : MonoBehaviour
             int nParameters = _menuManager.GetExperimentParameterList().Count;
             if (sceneList.Count <= 0)
             {
-                BaseMenu originBaseMenu = GameObject.Find("Scene Config").GetComponent<BaseMenu>();
+                BaseMenu originBaseMenu = GameObject.Find("Scene Configuration").GetComponent<BaseMenu>();
                 _menuManager.DisplayErrorMessage("No scenes selected!", originBaseMenu);
             }
             else
@@ -314,7 +314,7 @@ public class LaunchManager : MonoBehaviour
                 if (_sessionParameters.Count != nParameters)
                 {
 
-                    BaseMenu originBaseMenu = GameObject.Find("Attribute Form").GetComponent<BaseMenu>();
+                    BaseMenu originBaseMenu = GameObject.Find("Session Parameters Menu").GetComponent<BaseMenu>();
                     _menuManager.DisplayErrorMessage("Session parameters are not set.",originBaseMenu);
                 }
                 else

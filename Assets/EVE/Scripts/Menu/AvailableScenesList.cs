@@ -31,7 +31,7 @@ public class AvailableScenesList : MonoBehaviour {
 
             //this block adds the data to the menu
             var filenameObj = Instantiate(Resources.Load("Prefabs/Menus/TextAndAddButton")) as GameObject;
-            var dynamicField = GameObject.Find("Scene Config").GetComponent<BaseMenu>().getDynamicFields("DynFields");
+            var dynamicField = GameObject.Find("Scene Configuration").GetComponent<BaseMenu>().getDynamicFields("DynFields");
             filenameObj.transform.SetParent(dynamicField);
             filenameObj.transform.localPosition = new Vector3(filenameObj.transform.localPosition.x, filenameObj.transform.localPosition.y, dynamicField.localPosition.z);
             filenameObj.transform.localScale = new Vector3(1, 1, 1);

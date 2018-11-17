@@ -24,7 +24,7 @@ public class UpdateEvalDetailList : MonoBehaviour {
         {
             internalSessionID = menumanager.getDetailsInt();
             //wipe current interior
-            Transform dynamicFieldT = GameObject.Find("Evaluation Details").GetComponent<BaseMenu>().getDynamicFields("DynFieldsA");
+            Transform dynamicFieldT = GameObject.Find("Participant Menu").GetComponent<BaseMenu>().getDynamicFields("DynFields");
             List<GameObject> entriesObjects = new List<GameObject>();
             foreach (Transform entry in dynamicFieldT) entriesObjects.Add(entry.gameObject);
             foreach (GameObject entryObject in entriesObjects) Destroy(entryObject);
@@ -90,7 +90,7 @@ public class UpdateEvalDetailList : MonoBehaviour {
 
     public void instantiateTextWithText(string evalField,string evalValue){
         GameObject filenameObj = Instantiate(Resources.Load("Prefabs/Menus/TextWithText")) as GameObject;
-        Transform dynamicField = GameObject.Find("Evaluation Details").GetComponent<BaseMenu>().getDynamicFields("DynFieldsA");
+        Transform dynamicField = GameObject.Find("Participant Menu").GetComponent<BaseMenu>().getDynamicFields("DynFields");
         filenameObj.transform.SetParent(dynamicField);
         filenameObj.transform.localPosition = new Vector3(filenameObj.transform.localPosition.x, filenameObj.transform.localPosition.y, dynamicField.localPosition.z);
         filenameObj.transform.localScale = new Vector3(1, 1, 1);
@@ -105,7 +105,7 @@ public class UpdateEvalDetailList : MonoBehaviour {
     public void instantiateTextWithTextAndTab(string evalField, string evalValue)
     {
         GameObject filenameObj = Instantiate(Resources.Load("Prefabs/Menus/TextWithTextAndTab")) as GameObject;
-        Transform dynamicField = GameObject.Find("Evaluation Details").GetComponent<BaseMenu>().getDynamicFields("DynFieldsA");
+        Transform dynamicField = GameObject.Find("Participant Menu").GetComponent<BaseMenu>().getDynamicFields("DynFields");
         filenameObj.transform.SetParent(dynamicField);
         filenameObj.transform.localPosition = new Vector3(filenameObj.transform.localPosition.x, filenameObj.transform.localPosition.y, dynamicField.localPosition.z);
         filenameObj.transform.localScale = new Vector3(1, 1, 1);
