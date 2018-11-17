@@ -3,6 +3,7 @@ using System.Linq;
 using Assets.EVE.Scripts.Menu;
 using UnityEngine;
 using Assets.EVE.Scripts.XML;
+using UnityEngine.UI;
 
 /// <summary>
 /// this class manages everything related to menus but also keeps state and important information
@@ -20,7 +21,7 @@ public class MenuManager : MonoBehaviour {
     public string fieldTitle = null;
     public string subjectId = null;
     private List<string> _activeSensors = new List<string>();
-    private List<string> _activeParameters;
+    private List<string> _experimentParameters;
     private string SceneFilePath;
     private GameObject menuObject;
     private GameObject oldMenuObject;
@@ -45,7 +46,7 @@ public class MenuManager : MonoBehaviour {
 
     public void SetActiveParameters(List<string> parameters)
     {
-        _activeParameters = parameters;
+        _experimentParameters = parameters;
     }
 
     public void Awake()
@@ -54,7 +55,7 @@ public class MenuManager : MonoBehaviour {
         //TODO delete this function
         _launchManager.SetMenuManager(this);
         _errorBaseMenu = GameObject.Find("ErrorMenu").GetComponent<ErrorMenu>();
-        _activeParameters = new List<string>();
+        _experimentParameters = new List<string>();
     }
 
     public void Start() {        
@@ -92,12 +93,28 @@ public class MenuManager : MonoBehaviour {
 
         CurrentMenu.isOpen = false;
     }
-   
-    public void AddExperimentParameter(string attributeName)
+
+    public void AddExperimentParameter(string experimentParameter)
     {
-        if (_activeParameters.Contains(attributeName)) return;
-        _activeParameters.Add(attributeName);
-        AddExperimentParameterToDb(attributeName);
+        if (_experimentParameters.Contains(experimentParameter))
+        {
+            Debug.LogWarning("Parameter exists! " + experimentParameter);
+            return;
+        }
+        _experimentParameters.Add(experimentParameter);
+        AddExperimentParameterToDb(experimentParameter);
+    }
+
+    public void AddExperimentParameter(Text text)
+    {
+        var experimentParameter = text.text;
+        if (_experimentParameters.Contains(experimentParameter))
+        {
+            Debug.LogWarning("Parameter exists! " + experimentParameter);
+            return;
+        }
+        _experimentParameters.Add(experimentParameter);
+        AddExperimentParameterToDb(experimentParameter);
     }
     
     public void AddExperimentParameterToDb(string attributeName)
@@ -154,12 +171,13 @@ public class MenuManager : MonoBehaviour {
     public void RemoveExperimentParameter(string experimentParameter)
     {
         _log.RemoveExperimentParameter(experimentParameter, _launchManager.ExperimentSettings.Name);
-        _activeParameters.Remove(experimentParameter);
+        _experimentParameters.Remove(experimentParameter);
+        _launchManager.SessionParameters.Remove(experimentParameter);
     }
     
-    public List<string> GetAttributesList()
+    public List<string> GetExperimentParameterList()
     {
-        return _activeParameters;
+        return _experimentParameters;
     }
 
     public void setDetailsInt(int i) {
@@ -169,30 +187,6 @@ public class MenuManager : MonoBehaviour {
     public int getDetailsInt()
     {
         return detailsInt;
-    }
-
-	//necessary to check if the eval scene was loaded
-    public bool CheckBackEvalScene()
-    {
-        if (!loadEvalScene) return false;
-        loadEvalScene = false;
-        return true;
-    }
-
-	//necessary to check if the loader scene was loaded
-    public bool CheckBackLoaderScene()
-    {
-        if (!loadLoaderScene) return false;
-        loadLoaderScene = false;
-        return true;
-    }
-
-    public void activateLoadEvalScene() {
-        loadEvalScene = true;
-    }
-
-    public void activateLoadLoaderScene() {
-        loadLoaderScene = true;
     }
 
     public void DisplayErrorMessage(string errorMessage)

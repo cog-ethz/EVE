@@ -33,9 +33,6 @@ public class LabchartToggle : MonoBehaviour {
             _menuManager.AddToBackOfSceneList("LabchartStartScene");
             _menuManager.AddExperimentParameter("Labchart File Name");
             _launchManager.ExperimentSettings.SensorSettings.Labchart = true;
-
         }
-       
-
     }	
 }

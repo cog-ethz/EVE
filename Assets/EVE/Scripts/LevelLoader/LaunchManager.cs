@@ -254,20 +254,6 @@ public class LaunchManager : MonoBehaviour
             
             SceneManager.LoadScene(nextScene);
         }
-        else if (_menuManager != null)
-        {
-            if (_menuManager.CheckBackEvalScene())
-            {
-                SceneManager.LoadScene("Evaluation");
-            }
-
-            if (_menuManager.CheckBackLoaderScene())
-            {
-                SceneManager.LoadScene("Loader");
-            }
-        }
-
-
     }
 
     public void loadCurrentScene()
@@ -317,7 +303,7 @@ public class LaunchManager : MonoBehaviour
 
             var sceneList = ExperimentSettings.SceneSettings.Scenes;
             Console.Write(sceneList.Count);
-            int nParameters = _menuManager.GetAttributesList().Count;
+            int nParameters = _menuManager.GetExperimentParameterList().Count;
             if (sceneList.Count <= 0)
             {
                 BaseMenu originBaseMenu = GameObject.Find("Scene Config").GetComponent<BaseMenu>();
@@ -339,7 +325,7 @@ public class LaunchManager : MonoBehaviour
 
                     if (_log.getSensors().Contains("HL7Server"))
                         this.gameObject.GetComponent<HL7ServerStarter>().enabled = true;
-                    storeSessionParameters();
+                    StoreSessionParameters();
                     BaseMenu startBaseMenu = GameObject.Find("Start Menu").GetComponent<BaseMenu>();
                     _menuManager.ShowMenu(startBaseMenu);
                 }
@@ -348,7 +334,7 @@ public class LaunchManager : MonoBehaviour
 
     }
 
-    private void storeSessionParameters()
+    private void StoreSessionParameters()
     {
         foreach (KeyValuePair<string, string> entry in _sessionParameters)
         {

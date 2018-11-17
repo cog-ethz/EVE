@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.EVE.Scripts.Menu.Buttons
 {
-    public class SessionParametersButtons : MonoBehaviour {
+    public class ExperimentParametersButtons : MonoBehaviour {
 
         private MenuManager _menuManager;
         private LaunchManager _launchManager;
@@ -19,17 +18,17 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
             _dynamicField = gameObject.transform.Find("Panel").Find("Fields").Find("DynFieldsWithScrollbar").Find("DynFields");
 
-            DisplaySessionParameters();
+            DisplayExperimentParameters();
         }
 
-        public void DisplaySessionParameters()
+        public void DisplayExperimentParameters()
         {
             var experimentParameters = _menuManager.GetExperimentParameterList();
 
 
             foreach (var experimentParameter in experimentParameters)
             {
-                var gObject = Instantiate(Resources.Load("Prefabs/Menus/TextAndFieldNoXButton")) as GameObject;
+                var gObject = Instantiate(Resources.Load("Prefabs/Menus/TextWithoutField")) as GameObject;
                 Utils.PlaceElement(gObject, _dynamicField);
                 gObject.transform.Find("FieldName").GetComponent<Text>().text = experimentParameter;
                 if (_launchManager.SessionParameters.ContainsKey(experimentParameter))
@@ -37,5 +36,6 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                         _launchManager.SessionParameters[experimentParameter];
             }
         }
+        
     }
 }
