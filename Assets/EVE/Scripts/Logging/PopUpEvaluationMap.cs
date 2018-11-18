@@ -143,28 +143,28 @@ public class PopUpEvaluationMap : MonoBehaviour
         projectionMatrices = new Dictionary<string, Matrix4x4>();
         worldToCameraMatrices = new Dictionary<string, Matrix4x4>();
         mapTextures = new Dictionary<string, Texture>();
-        for (int i = 0; i < uniqueNames.Count; i++)
+        foreach (var name in uniqueNames)
         {
             try
             {
-                string path = Application.persistentDataPath + "/maps/" + uniqueNames[i] + "_worldToCameraMatrix.xml";
+                string path = Application.persistentDataPath + "/maps/" + name + "_worldToCameraMatrix.xml";
 
                 XmlSerializer xmls = new XmlSerializer(new Matrix4x4().GetType());
                 using (var stream = File.OpenRead(path))
                 {
-                    worldToCameraMatrices.Add(uniqueNames[i], (Matrix4x4)xmls.Deserialize(stream));
+                    worldToCameraMatrices.Add(name, (Matrix4x4)xmls.Deserialize(stream));
                 }
-                path = Application.persistentDataPath + "/maps/" + uniqueNames[i] + "_projectionMatrix.xml";
+                path = Application.persistentDataPath + "/maps/" + name + "_projectionMatrix.xml";
                 using (var stream = File.OpenRead(path))
                 {
-                    projectionMatrices.Add(uniqueNames[i], (Matrix4x4)xmls.Deserialize(stream));
+                    projectionMatrices.Add(name, (Matrix4x4)xmls.Deserialize(stream));
                 }
+                StartCoroutine(LoadMap(name, ResolutionWidth, ResolutionHeight));
             }
             catch (Exception ex)
             {
-                Debug.LogError("A matrix for " + uniqueNames[i] + " was not found:\n" + ex.StackTrace);
+                Debug.LogWarning("A matrix for " + name + " was not found:\n" + ex.StackTrace);
             }
-            StartCoroutine(LoadMap(uniqueNames[i], ResolutionWidth, ResolutionHeight));
         }
 
     }

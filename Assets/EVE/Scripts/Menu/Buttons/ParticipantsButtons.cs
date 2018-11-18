@@ -61,7 +61,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             envs = new string[session_ids.Length][];
 
 
-            var dynamicField = GameObject.Find("Evaluation Menu").GetComponent<BaseMenu>().getDynamicFields("DynFields");
+            var dynamicField = GameObject.Find("Participants Menu").GetComponent<BaseMenu>().getDynamicFields("DynFields");
 
             for (var i = 0; i < session_ids.Length; i++)
             {
@@ -83,21 +83,11 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                         timeSec[i][k] = log.timeDifferenceTimespan(times[0], times[1]);
                     else if (times[0].Length > 0)
                     {
-                        string abortTime;
-                        try
-                        {
-
-                            abortTime = log.getAbortTime(sid, k);
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.LogWarning(e);
-                            throw;
-                        }
-                        if (abortTime.Length > 0)
-                            timeSec[i][k] = log.timeDifferenceTimespan(times[0], abortTime);
-                        else
-                            timeSec[i][k] = log.timeDifferenceTimespan(times[0], times[0]); ;
+                        //string abortTime = log.getAbortTime(sid, k);
+                        //if (abortTime.Length > 0)
+                        //    timeSec[i][k] = log.timeDifferenceTimespan(times[0], abortTime);
+                        //else
+                        timeSec[i][k] = log.timeDifferenceTimespan(times[0], times[0]); ;
                     }
                     distances[i][k] = computeDistance(sid, k);
                 }

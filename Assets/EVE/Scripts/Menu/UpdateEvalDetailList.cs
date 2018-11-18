@@ -43,11 +43,11 @@ public class UpdateEvalDetailList : MonoBehaviour {
                 if (times[0] != null && times[1] != null)
                     timeSec[k] = log.timeDifferenceTimespan(times[0], times[1]);
                 else if (times[0].Length > 0){
-                    string abortTime = log.getAbortTime(sessionID, k);
-                    if (abortTime.Length > 0)
-                        timeSec[k] = log.timeDifferenceTimespan(times[0], abortTime);
-                    else
-                        timeSec[k] = log.timeDifferenceTimespan(times[0], times[0]);
+                    //string abortTime = log.getAbortTime(sessionID, k);
+                    //if (abortTime.Length > 0)
+                    //    timeSec[k] = log.timeDifferenceTimespan(times[0], abortTime);
+                    //else
+                    timeSec[k] = log.timeDifferenceTimespan(times[0], times[0]);
                 }
                 instantiateTextWithTextAndTab("Time", timeSec[k].TotalSeconds.ToString());
 
