@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RemoveSensor : MonoBehaviour {
+public class RemoveSensorButton : MonoBehaviour {
     private LoggingManager _log;
     private LaunchManager _launchManager;
 
@@ -15,9 +15,10 @@ public class RemoveSensor : MonoBehaviour {
         _log = _launchManager.GetLoggingManager();
     }
 
-    public void ClickRemoveSensor()
+    public void RemoveSensor(GameObject item)
     {
         _log.RemoveSensor(transform.parent.Find("SensorName").GetComponent<Text>().text);
         _launchManager.SynchroniseSensorListWithDB();
+        Destroy(item);
     }
 }
