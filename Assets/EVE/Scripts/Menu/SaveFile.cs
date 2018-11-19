@@ -18,7 +18,7 @@ public class SaveFile : MonoBehaviour
     {
         var path = Application.persistentDataPath;
 #if UNITY_EDITOR
-        path = UnityEditor.EditorUtility.SaveFilePanel("Save Experiment Settings", "", "experiment_settings", "xml");
+        path = UnityEditor.EditorUtility.SaveFilePanel("Save Experiment Settings", Application.dataPath + "/Experiment/Resources", "experiment_settings", "xml");
 #endif
         _launchManager.WriteExperimentSettings(path);
     }
