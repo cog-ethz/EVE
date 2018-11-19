@@ -12,7 +12,7 @@ public class CrossOfElement : MonoBehaviour {
 
     private Image[] _strokes;
     private int _nReached = 0;
-    private int _maxSecs;
+    private int _maxSecs = 10;
     private FadeOutScene _fader;
     private DateTime _start;
     private GameObject _fpc;
