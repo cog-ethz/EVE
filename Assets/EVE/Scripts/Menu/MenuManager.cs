@@ -32,7 +32,7 @@ public class MenuManager : MonoBehaviour {
     private LaunchManager _launchManager;
     private LoggingManager _log;
     private SceneSettings _sceneSettings;
-    private ErrorMenu _errorBaseMenu;
+    private ErrorMenuButtons _errorBaseMenu;
 
     public string GetSceneFilePath() {
         if (SceneFilePath == null)
@@ -54,7 +54,7 @@ public class MenuManager : MonoBehaviour {
         _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
         //TODO delete this function
         _launchManager.SetMenuManager(this);
-        _errorBaseMenu = GameObject.Find("ErrorMenu").GetComponent<ErrorMenu>();
+        _errorBaseMenu = GameObject.Find("ErrorMenu").GetComponent<ErrorMenuButtons>();
         _experimentParameters = new List<string>();
     }
 

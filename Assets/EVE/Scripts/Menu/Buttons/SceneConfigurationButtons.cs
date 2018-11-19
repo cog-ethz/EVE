@@ -1,0 +1,184 @@
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.VR.WSA.Persistence;
+
+namespace Assets.EVE.Scripts.Menu.Buttons
+{
+    public class SceneConfigurationButtons : MonoBehaviour {
+
+        private List<string> _scenes;
+        private LaunchManager _launchManager;
+        private Transform _choosenScenesList;
+        private Transform _availableScenesList;
+        private MenuManager _menuManager;
+
+        // Use this for initialization
+        void Start()
+        {
+            _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
+            _menuManager = _launchManager.GetMenuManager();
+            _scenes = new List<string>();
+
+
+            _availableScenesList = transform.Find("Panel").Find("SceneSelection").Find("DynFieldsWithScrollbarRight").Find("DynFields");
+            _choosenScenesList = transform.Find("Panel").Find("SceneSelection").Find("DynFieldsWithScrollbarLeft").Find("DynFields");
+
+            UpdateAvailableScenes();
+            UpdateChosenScenes();
+        }
+
+        /// <summary>
+        /// Add elements to the available scenes list.
+        /// </summary>
+        public void UpdateAvailableScenes()
+        {
+            var path = _launchManager.GetMenuManager().GetSceneFilePath();
+            var filenames = Directory.GetFiles(path);
+            foreach (var filename in filenames)
+            {
+                //this block is a filter which filters files by the ".unity" or ".xml"-ending(questionnaires)
+                var splittedFilename = filename.Split('.');
+                var fileType = splittedFilename[splittedFilename.Length - 1];
+                if (!(fileType.Equals("unity") || fileType.Equals("xml"))) continue;
+
+                //this block adds the data to the menu
+                var filenameObj = Instantiate(Resources.Load("Prefabs/Menus/TextAndAddButton")) as GameObject;
+                Utils.PlaceElement(filenameObj, _availableScenesList);
+
+                filenameObj.transform.Find("SceneName").GetComponent<Text>().text = GetFileNameOnly(filename);
+            }
+        }
+
+        /// <summary>
+        /// Add Elements to the choosen scenes list.
+        /// </summary>
+        public void UpdateChosenScenes()
+        {
+            _launchManager.SynchroniseSceneListWithDB();
+
+            foreach (Transform child in _choosenScenesList)
+            {
+                Destroy(child.gameObject);
+            }
+
+            _scenes = _launchManager.ExperimentSettings.SceneSettings.Scenes;
+            
+            foreach (var filename in _scenes)
+            {
+                var filenameObj = Instantiate(Resources.Load("Prefabs/Menus/TextAndButtons")) as GameObject;
+                filenameObj.transform.Find("MoveUpButton").GetComponent<Button>().onClick.AddListener(() => { MoveUpChoosenSceneEntry(filenameObj); });
+                filenameObj.transform.Find("RemoveButton").GetComponent<Button>().onClick.AddListener(() => { RemoveChoosenSceneEntry(filenameObj); });
+                Utils.PlaceElement(filenameObj, _choosenScenesList);
+                filenameObj.transform.Find("SceneName").GetComponent<Text>().text = GetFileNameOnly(filename);
+            }
+        }
+
+        /// <summary>
+        /// Opens File menu to select a folder from where to read scenes.
+        /// </summary>
+        public void OpenFolder()
+        {
+            var scenePath = "";
+#if UNITY_EDITOR
+            scenePath = UnityEditor.EditorUtility.OpenFilePanel("", "D:/git/EVE/Assets/Experiment/Scenes", "unity,xml");
+#endif
+            //call setscenepath as with the folder textfield
+            if (scenePath != null && !scenePath.Equals(""))
+            {
+                _menuManager.SetSceneFilePath(scenePath);
+            }
+            UpdateAvailableScenes();
+            transform.Find("Panel").Find("Folder Selection").Find("PathField").GetComponent<InputField>().text = scenePath;
+        }
+
+        public void AddToChoosenScenes(Text fileName)
+        {
+            var filenameCropped = GetFileNameOnly(fileName.text);
+
+            if (!filenameCropped.Contains("xml"))
+            {
+                if (filenameCropped.Contains("."))
+                {
+                    filenameCropped = filenameCropped.Split('.')[0];
+                }
+            }
+            else
+            {
+                if (_launchManager.ExperimentSettings.QuestionnaireSettings.Questionnaires == null)
+                {
+                    _launchManager.ExperimentSettings.QuestionnaireSettings.Questionnaires = new List<string>();
+                }
+                var helper = filenameCropped.Split('.');
+                if (!_launchManager.ExperimentSettings.QuestionnaireSettings.Questionnaires.Contains(helper[0]))
+                {
+                    _launchManager.ExperimentSettings.QuestionnaireSettings.Questionnaires.Add(helper[0]);
+                }
+            }
+            _menuManager.AddToBackOfSceneList(filenameCropped);
+            UpdateChosenScenes();
+        }
+
+        public void RemoveChoosenSceneEntry(GameObject item)
+        {
+            var numberOfEntry = 0;
+            
+            var entriesObjects = new List<GameObject>();
+            foreach (Transform entry in _choosenScenesList) entriesObjects.Add(entry.gameObject);
+            var i = 0;
+            foreach (var entryObject in entriesObjects)
+            {
+                if (entryObject == item)
+                {
+                    numberOfEntry = i;
+                }
+                i++;
+            };
+
+            Destroy(item);
+
+            _menuManager.DeleteSceneEntry(numberOfEntry);
+            UpdateChosenScenes();
+        }
+
+        public void MoveUpChoosenSceneEntry(GameObject item)
+        {
+            var numberOfEntry = 0;
+            var entriesObjects = new List<GameObject>();
+            foreach (Transform entry in _choosenScenesList) entriesObjects.Add(entry.gameObject);
+            var i = 0;
+            foreach (var entryObject in entriesObjects)
+            {
+                if (entryObject == item)
+                {
+                    numberOfEntry = i;
+                }
+                i++;
+            };
+
+            _menuManager.PromoteSceneEntry(numberOfEntry);
+
+            UpdateChosenScenes();
+        }
+
+        private string GetFileNameOnly(string filePath)
+        {
+            var filenameCropped = filePath;
+            //extract only the name and the ending without the path
+            if (filenameCropped.Contains("\\"))
+            {
+                var splittedFilename = filenameCropped.Split('\\');
+                filenameCropped = splittedFilename[splittedFilename.Length - 1];
+            }
+            else if (filenameCropped.Contains("/"))
+            {
+                var splittedFilename = filenameCropped.Split('/');
+                filenameCropped = splittedFilename[splittedFilename.Length - 1];
+            }
+
+            return filenameCropped;
+        }
+    }
+}

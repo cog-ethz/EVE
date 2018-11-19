@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Assets.EVE.Scripts.Menu;
 using UnityEngine;
 
-public class ErrorMenu : BaseMenu {
+public class ErrorMenuButtons : BaseMenu {
 
     BaseMenu _originBaseMenu = null;
 

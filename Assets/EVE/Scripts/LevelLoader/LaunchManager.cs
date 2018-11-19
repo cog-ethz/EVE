@@ -168,7 +168,7 @@ public class LaunchManager : MonoBehaviour
             if (currentScene < sceneList.Count - 1)
             {
                 currentScene++;
-                loadCurrentScene();
+                LoadCurrentScene();
             }
             else
             {
@@ -231,7 +231,7 @@ public class LaunchManager : MonoBehaviour
     /// <summary>
     /// The function resets the state of the participant for the next round
     /// </summary>
-    public void setCompletedAndReset() {
+    public void SetCompletedAndReset() {
         currentScene = 0;
         _log.updateParameters();
         _sessionId = _log.GetCurrentSessionID();
@@ -256,7 +256,7 @@ public class LaunchManager : MonoBehaviour
         }
     }
 
-    public void loadCurrentScene()
+    public void LoadCurrentScene()
     {
         SynchroniseSceneListWithDB();
         var sceneList = ExperimentSettings.SceneSettings.Scenes;

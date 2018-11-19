@@ -33,7 +33,6 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             Destroy(_item);
             _launchManager.GetMenuManager().ShowMenu(GameObject.Find("Participants Menu").GetComponent<BaseMenu>());
             _launchManager.GetLoggingManager().removeSession(sessionNumber);
-
         }
 
         internal void SetItem(GameObject item)

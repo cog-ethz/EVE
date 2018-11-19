@@ -49,6 +49,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 foreach (var sensorName in sensors)
                 {
                     var sensorDisplay = Instantiate(Resources.Load("Prefabs/Menus/SensorDisplay")) as GameObject;
+                    sensorDisplay.transform.Find("RemoveSensor").GetComponent<Button>().onClick.AddListener(() => { RemoveSensor(sensorDisplay); });
                     Utils.PlaceElement(sensorDisplay,dynamicField);
                     sensorDisplay.transform.Find("SensorName").GetComponent<Text>().text = sensorName;
                 }
@@ -78,6 +79,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         }
 
+
         public void HL7ServerToggle()
         {
             if (!HL7ServerButton.isOn)
@@ -93,6 +95,17 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 _launchManager.ExperimentSettings.SensorSettings.H7Server = true;
                 _log.AddSensor("HL7Server");
             }
+        }
+        
+        /// <summary>
+        /// Removes a sensor from the list.
+        /// </summary>
+        /// <param name="item"></param>
+        public void RemoveSensor(GameObject item)
+        {
+            _log.RemoveSensor(item.transform.Find("SensorName").GetComponent<Text>().text);
+            _launchManager.SynchroniseSensorListWithDB();
+            Destroy(item);
         }
     }
 }
