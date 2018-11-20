@@ -26,12 +26,12 @@ public class MoneyCounter : MonoBehaviour {
         rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
         if (rpl.isActivated())
         {
-            rateOfDecay = int.Parse(launchManager.GetLoggingManager().getParameterValue(launchManager.getReplaySessionId(),"rateOfDecay"));
-            startMoney = int.Parse(launchManager.GetLoggingManager().getParameterValue(launchManager.getReplaySessionId(), "startMoney"));
+            rateOfDecay = int.Parse(launchManager.LoggingManager.getParameterValue(launchManager.ReplaySessionId,"rateOfDecay"));
+            startMoney = int.Parse(launchManager.LoggingManager.getParameterValue(launchManager.ReplaySessionId, "startMoney"));
         }
         else {            
-            rateOfDecay = int.Parse(launchManager.GetLoggingManager().getParameterValue("rateOfDecay"));
-            startMoney = int.Parse(launchManager.GetLoggingManager().getParameterValue("startMoney"));                
+            rateOfDecay = int.Parse(launchManager.LoggingManager.getParameterValue("rateOfDecay"));
+            startMoney = int.Parse(launchManager.LoggingManager.getParameterValue("startMoney"));                
         }
         money = this.gameObject.GetComponentsInChildren<Text> ();
         deltaMoney = startMoney;
@@ -46,7 +46,7 @@ public class MoneyCounter : MonoBehaviour {
         alpha = 0;
         lerpTime = 0;
 
-        int expCondition = int.Parse(launchManager.GetLoggingManager().getParameterValue("expCondition"));
+        int expCondition = int.Parse(launchManager.LoggingManager.getParameterValue("expCondition"));
          if (expCondition == 1)
              decays = true;
          else

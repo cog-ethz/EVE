@@ -20,9 +20,9 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _menuManager = _launchManager.GetMenuManager();
+            _menuManager = _launchManager.MenuManager;
 
-            _log = _launchManager.GetLoggingManager();
+            _log = _launchManager.LoggingManager;
             _hl7ServerStarter = _launchManager.gameObject.GetComponent<HL7ServerStarter>();
             HL7ServerButton.isOn = _launchManager.ExperimentSettings.SensorSettings.H7Server;
             LabchartButton.isOn = _launchManager.ExperimentSettings.SensorSettings.Labchart;

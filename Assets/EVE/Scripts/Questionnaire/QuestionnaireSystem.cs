@@ -52,10 +52,10 @@ namespace Assets.EVE.Scripts.Questionnaire
         {
             //creating for debugging reasons
             var launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _log = launchManager.GetLoggingManager();
+            _log = launchManager.LoggingManager;
         
             var qf = new QuestionnaireFactory(_log,launchManager.ExperimentSettings);
-            var questionnaireName = launchManager.GetQuestionnaireName();
+            var questionnaireName = launchManager.QuestionnaireName;
 
             var questionnaires = qf.ReadQuestionnairesFromDb(new List<string>() { questionnaireName});
             _questionSets = qf.ReadQuestionSetsFromDb(questionnaires);

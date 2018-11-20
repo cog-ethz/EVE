@@ -48,8 +48,8 @@ public class ReplayRoute : MonoBehaviour {
             evalCamera = GameObject.Find("EvaluationCamera");
         }
 
-        launchManager.setReplaySessionId(sessionID);
-        log = launchManager.GetLoggingManager();
+        launchManager.ReplaySessionId = sessionID;
+        log = launchManager.LoggingManager;
         pos_logger.enabled = false;
         xyz = log.getXYZ(sessionID, sceneID);
         xyzT = log.getXYZtimestamp(sessionID, sceneID);

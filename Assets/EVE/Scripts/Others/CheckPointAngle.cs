@@ -38,7 +38,7 @@ public class CheckPointAngle : MonoBehaviour {
         if (lauchManagerObject != null)
         {
             var launchManager = lauchManagerObject.GetComponent<LaunchManager>();
-            _log = launchManager.GetLoggingManager();
+            _log = launchManager.LoggingManager;
             _rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
         }
         else

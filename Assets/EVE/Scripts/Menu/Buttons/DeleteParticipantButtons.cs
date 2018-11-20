@@ -5,39 +5,31 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 {
     public class DeleteParticipantButtons : MonoBehaviour
     {
-        private int sessionNumber=-1;
-        private string participantId = "";
+        private int _sid=-1;
+        private string _pid = "";
         private GameObject _item;
         private LaunchManager _launchManager;
+        private MenuManager _menuManager;
 
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
+            _menuManager = _launchManager.MenuManager;
+            DisplayDeleteQuestion();
         }
-
-        public void SetSessionId(int sessionNumber)
-        {
-            this.sessionNumber = sessionNumber;
-        }
-
-        public void SetParticipantId(string participantId)
-        {
-            this.participantId = participantId;
-        }
-
+        
         public void DisplayDeleteQuestion() {
-            gameObject.transform.Find("Panel").Find("Fields").Find("Participant Details").GetComponent<Text>().text="Session: "+sessionNumber+" Participant: "+ participantId;
+            _sid = _menuManager.ActiveSessionId;
+            _pid = _menuManager.ActiveParticipantId;
+            _item = _menuManager.ActiveListItem;
+
+            gameObject.transform.Find("Panel").Find("Fields").Find("Participant Details").GetComponent<Text>().text="Session: " + _sid + " Participant: " + _pid;
         }
 
         public void ConfirmDelete() {
             Destroy(_item);
-            _launchManager.GetMenuManager().ShowMenu(GameObject.Find("Participants Menu").GetComponent<BaseMenu>());
-            _launchManager.GetLoggingManager().removeSession(sessionNumber);
-        }
-
-        internal void SetItem(GameObject item)
-        {
-            _item = item;
+            _launchManager.MenuManager.ShowMenu(GameObject.Find("Participants Menu").GetComponent<BaseMenu>());
+            _launchManager.LoggingManager.removeSession(_sid);
         }
     }
 }

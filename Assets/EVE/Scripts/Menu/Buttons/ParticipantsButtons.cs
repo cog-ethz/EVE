@@ -46,16 +46,17 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _menuManager = _launchManager.GetMenuManager();
-            _log = _launchManager.GetLoggingManager();
+            _menuManager = _launchManager.MenuManager;
+            _log = _launchManager.LoggingManager;
 
             _map = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Evaluation/EvaluationMap");
 
+            DisplayParticipants();
         }
 
         public void DisplayParticipants()
         {
-            var experimentName = _launchManager.GetExperimentName();
+            var experimentName = _launchManager.ExperimentName;
             var s = _log.getAllSessionsData(experimentName);
             session_ids = Array.ConvertAll(s[0], int.Parse);
             participant_ids = s[1];
@@ -86,6 +87,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 for (var k = 0; k < envs[i].Length; k++)
                 {
                     var times = _log.getSceneTime(k, sid);
+                    if (times == null) continue;
                     timeSec[i][k] = TimeSpan.FromSeconds(0);
                     if (times[0] != null && times[1] != null)
                         timeSec[i][k] = _log.timeDifferenceTimespan(times[0], times[1]);
@@ -98,7 +100,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                         timeSec[i][k] = _log.timeDifferenceTimespan(times[0], times[0]); ;
                     }
                     var xyzTable = _log.getXYZ(sid, k);
-                    distances[i][k] = Utils.MenuUtils.ComputeParticipantPathDistance(xyzTable);
+                    distances[i][k] = MenuUtils.ComputeParticipantPathDistance(xyzTable);
                 }
 
                 var pid = participant_ids[i];
@@ -111,10 +113,10 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 });
                 gObject.transform.Find("RemoveButton").GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    ShowParticipantDetails(sid);
+                    RemoveEvaluationEntry(sid, pid, gObject);
 
                 });
-                Utils.MenuUtils.PlaceElement(gObject, dynamicField);
+                MenuUtils.PlaceElement(gObject, dynamicField);
 
                 gObject.transform.Find("SessionId").GetComponent<Text>().text = sid.ToString();
                 gObject.transform.Find("ParticipantId").GetComponent<Text>().text = pid;
@@ -142,14 +144,10 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// <param name="item">List item that will be removed upon confirmation</param>
         public void RemoveEvaluationEntry(int sid, string pid, GameObject item)
         {
-
-            GameObject.Find("Delete Participant Menu").GetComponent<DeleteParticipantButtons>().SetSessionId(sid);
-            GameObject.Find("Delete Participant Menu").GetComponent<DeleteParticipantButtons>().SetParticipantId(pid);
-            GameObject.Find("Delete Participant Menu").GetComponent<DeleteParticipantButtons>().SetItem(item);
-            GameObject.Find("Delete Participant Menu").GetComponent<DeleteParticipantButtons>().DisplayDeleteQuestion();
-
-
-            GameObject.Find("Canvas").GetComponent<MenuManager>().ShowMenu(GameObject.Find("Delete Participant Menu").GetComponent<BaseMenu>());
+            _menuManager.ActiveSessionId = sid;
+            _menuManager.ActiveParticipantId = pid;
+            _menuManager.ActiveListItem = item;
+            _menuManager.ShowMenu(GameObject.Find("Delete Participant Menu").GetComponent<BaseMenu>());
         }
     }
 }

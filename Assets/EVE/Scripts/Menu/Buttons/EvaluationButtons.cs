@@ -16,7 +16,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         void Start ()
         {
             var launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _log = launchManager.GetLoggingManager();
+            _log = launchManager.LoggingManager;
             _path = launchManager.ExperimentSettings.LabchartSettings.Path;
             _commentWriterPath = _path + "AddComments\\DriveChart.exe";
             _experimentName = launchManager.ExperimentSettings.Name;

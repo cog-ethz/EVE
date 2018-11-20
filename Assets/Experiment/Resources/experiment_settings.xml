@@ -33,13 +33,13 @@
   </ParameterSettings>
   <QuestionnaireSettings>
     <Questionnaires>
-      <Questionnaire>nasa_tlx</Questionnaire>
+      <Questionnaire>energyscape_pre</Questionnaire>
     </Questionnaires>
   </QuestionnaireSettings>
   <SceneSettings>
     <Scenes>
       <Scene>LabchartStartScene</Scene>
-      <Scene>nasa_tlx.xml</Scene>
+      <Scene>energyscape_pre.xml</Scene>
     </Scenes>
   </SceneSettings>
   <LabchartSettings>

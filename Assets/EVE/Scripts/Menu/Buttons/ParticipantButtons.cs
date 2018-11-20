@@ -17,8 +17,8 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _menumanager = _launchManager.GetMenuManager();
-            _log = _launchManager.GetLoggingManager();
+            _menumanager = _launchManager.MenuManager;
+            _log = _launchManager.LoggingManager;
             
             _dynamicField = transform.Find("Panel").Find("Fields").Find("DynFieldsWithScrollbar").Find("DynFields");
 
@@ -30,7 +30,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// </summary>
         public void DisplayParticipantDetails()
         {
-            Utils.MenuUtils.ClearList(_dynamicField);
+            MenuUtils.ClearList(_dynamicField);
 
             _sessionId = _menumanager.ActiveSessionId;
 

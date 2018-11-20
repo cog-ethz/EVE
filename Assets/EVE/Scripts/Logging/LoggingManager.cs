@@ -153,7 +153,7 @@ public class LoggingManager
     }
 
 	public List<string> GetExperimentScenes(string experimentName){
-		int experimentId = _dbConnector.getExperimentId(experimentName);
+		var experimentId = _dbConnector.getExperimentId(experimentName);
 		Scenes = _dbConnector.GetExperimentScenes(experimentId);
 		return Scenes;
 	}
@@ -236,7 +236,7 @@ public class LoggingManager
     public void RecordLabChartStartTime()
     {
         // NEW NAME AddLabchartStartTime
-        string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
 
         _dbConnector.AddLabchartStartTime(_currentSessionId, timestamp);
     }
@@ -362,25 +362,26 @@ public class LoggingManager
 
     public void LogSceneStart(String name)
     {
-        string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
         InsertSystemEvent("Scene", "start", null, name, timestamp);
     }
 
     public void LogSceneEnd(String name)
     {
-        string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
         InsertSystemEvent("Scene", "end", null, name, timestamp);
     }
 
     public string[] getSceneTime(int sceneNumber, int sessionId)
     {
-        string[] result = new string[2];
+        var result = new string[2];
 
-        List<string>[] sceneTimesList = _dbConnector.GetSystemData("Scene", sessionId);        
+        var sceneTimesList = _dbConnector.GetSystemData("Scene", sessionId);
 
-        result[0] = sceneTimesList[2][2*sceneNumber];
+        if (sceneTimesList[2].Count <= 2 * sceneNumber) return null;
+        result[0] = sceneTimesList[2][2 * sceneNumber];
         if (sceneTimesList[2].Count > 2 * sceneNumber + 1)
-            result[1] = sceneTimesList[2][2*sceneNumber+1];
+            result[1] = sceneTimesList[2][2 * sceneNumber + 1];
         return result;
     }
 
@@ -391,8 +392,8 @@ public class LoggingManager
 
     public int getNumberOfScenes(int sessionId)
     {
-        int experimentId = _dbConnector.getExperimentId(sessionId);
-        int result = _dbConnector.GetExperimentScenes(experimentId).Count;
+        var experimentId = _dbConnector.getExperimentId(sessionId);
+        var result = _dbConnector.GetExperimentScenes(experimentId).Count;
 
         return result;
 
@@ -414,7 +415,7 @@ public class LoggingManager
 
     public void LogPositionAndView(float x, float y, float z, float ex, float ey, float ez)
     {
-        string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
         insert3DMeasurement("Player", "position", null, x.ToString(), y.ToString(), z.ToString(),timestamp);
         insert3DMeasurement("Player", "euler_angles", null, ex.ToString(), ey.ToString(), ez.ToString(), timestamp);
 
@@ -422,13 +423,13 @@ public class LoggingManager
 
     public string[] getListOfEnvironments(int sessionId)
     {
-        List<string> result = new List<string>();
+        var result = new List<string>();
 
-        Dictionary<DateTime, Dictionary<string, string>> data = _dbConnector.GetSystemDataByTime("Scene", "start", sessionId);
-        List<DateTime> dataKeys = new List<DateTime>(data.Keys);
-        List<DateTime> dataSorted = SortDatesAscending(dataKeys);
+        var data = _dbConnector.GetSystemDataByTime("Scene", "start", sessionId);
+        var dataKeys = new List<DateTime>(data.Keys);
+        var dataSorted = SortDatesAscending(dataKeys);
 
-        for (int i = 0; i < dataSorted.Count; i++)
+        for (var i = 0; i < dataSorted.Count; i++)
         {
             result.Add(data[dataSorted[i]]["start"]);
         }
@@ -437,7 +438,7 @@ public class LoggingManager
 
     public List<float>[] getXYZ(int sessionId, int sceneNumber)
     {
-        List<float>[] xyz = new List<float>[6];
+        var xyz = new List<float>[6];
 
         xyz[0] = new List<float>();
         xyz[1] = new List<float>();
@@ -446,23 +447,25 @@ public class LoggingManager
         xyz[4] = new List<float>();
         xyz[5] = new List<float>();
 
-        string[] sceneTime = getSceneTime(sceneNumber, sessionId);
+        var sceneTime = getSceneTime(sceneNumber, sessionId);
 
-        Dictionary<DateTime, string[]> dataPosition = _dbConnector.Get3DMeasuredDataByTime("Player", "position", sessionId);
-        Dictionary<DateTime, string[]> dataView = _dbConnector.Get3DMeasuredDataByTime("Player", "euler_angles", sessionId);
-        List<DateTime> dataKeys = new List<DateTime>(dataPosition.Keys);
-        List<DateTime> dataSorted = SortDatesAscending(dataKeys);
+        if (sceneTime == null) return xyz;
+
+        var dataPosition = _dbConnector.Get3DMeasuredDataByTime("Player", "position", sessionId);
+        var dataView = _dbConnector.Get3DMeasuredDataByTime("Player", "euler_angles", sessionId);
+        var dataKeys = new List<DateTime>(dataPosition.Keys);
+        var dataSorted = SortDatesAscending(dataKeys);
 
         if (dataSorted.Count > 0)
         {
-            DateTime sceneStart = Convert.ToDateTime(sceneTime[0]);
-            DateTime sceneEnd = dataSorted[dataSorted.Count - 1];
+            var sceneStart = Convert.ToDateTime(sceneTime[0]);
+            var sceneEnd = dataSorted[dataSorted.Count - 1];
             if (sceneTime[1] != null)
             {
                 sceneEnd = Convert.ToDateTime(sceneTime[1]);
             }
 
-            for (int j = 0; j < dataSorted.Count; j++)
+            for (var j = 0; j < dataSorted.Count; j++)
             {
                 if (dataSorted[j] > sceneStart)
                 {
@@ -486,8 +489,8 @@ public class LoggingManager
 
     public List<float>[] getXYZ(int sessionId)
     {   
-        string[] environments = getListOfEnvironments(sessionId);
-        List<float>[] result = new List<float>[6];
+        var environments = getListOfEnvironments(sessionId);
+        var result = new List<float>[6];
         result[0] = new List<float>();
         result[1] = new List<float>();
         result[2] = new List<float>();
@@ -495,10 +498,10 @@ public class LoggingManager
         result[4] = new List<float>();
         result[5] = new List<float>();
 
-        int envIdx = 0;
-        for (int i = 0; i < environments.Length; i++)
+        var envIdx = 0;
+        for (var i = 0; i < environments.Length; i++)
         {
-            List<float>[] tmp = getXYZ(sessionId, i);
+            var tmp = getXYZ(sessionId, i);
             result[0].AddRange(tmp[0]);
             result[1].AddRange(tmp[1]);
             result[2].AddRange(tmp[2]);
@@ -512,21 +515,21 @@ public class LoggingManager
 
     public List<string> getXYZtimestamp(int sessionId, int sceneNumber)
     {
-        List<string> xyzT = new List<string>();
+        var xyzT = new List<string>();
         
-        string[] sceneTime = getSceneTime(sceneNumber, sessionId);
+        var sceneTime = getSceneTime(sceneNumber, sessionId);
 
-        Dictionary<DateTime, string[]> dataPosition = _dbConnector.Get3DMeasuredDataByTime("Player", "position", sessionId);
-        List<DateTime> dataKeys = new List<DateTime>(dataPosition.Keys);
-        List<DateTime> dataSorted = SortDatesAscending(dataKeys);
+        var dataPosition = _dbConnector.Get3DMeasuredDataByTime("Player", "position", sessionId);
+        var dataKeys = new List<DateTime>(dataPosition.Keys);
+        var dataSorted = SortDatesAscending(dataKeys);
 
-        DateTime sceneStart = Convert.ToDateTime(sceneTime[0]);
-        DateTime sceneEnd = dataSorted[dataSorted.Count - 1];
+        var sceneStart = Convert.ToDateTime(sceneTime[0]);
+        var sceneEnd = dataSorted[dataSorted.Count - 1];
         if (sceneTime[1] != null)
         {
             sceneEnd = Convert.ToDateTime(sceneTime[1]);
         }
-        for (int j = 0; j < dataSorted.Count; j++)
+        for (var j = 0; j < dataSorted.Count; j++)
         {
             if (dataSorted[j] > sceneStart)
             {
@@ -548,17 +551,17 @@ public class LoggingManager
 
     public List<string>[] getAllInput(int sessionId, int sceneNumber)
     {
-        List<string>[] result = new List<string>[2];
+        var result = new List<string>[2];
         result[0] = new List<string>();
         result[1] = new List<string>();
 
-        List<string>[] input = _dbConnector.GetSystemData("Player", "input", sessionId);
+        var input = _dbConnector.GetSystemData("Player", "input", sessionId);
 
         if (input[0] != null) {             
 
-            for (int i = 0; i < input[0].Count; i++)
+            for (var i = 0; i < input[0].Count; i++)
             {
-                DateTime time1DT = Convert.ToDateTime(input[1][i]);
+                var time1DT = Convert.ToDateTime(input[1][i]);
                 result[0].Add(time1DT.ToString("yyyy-MM-dd HH:mm:ss.fff"));
                 result[1].Add(input[1][i]);
             }         
@@ -569,7 +572,7 @@ public class LoggingManager
     public string getAbortTime(int sessionId, int sceneId)
     {
 
-        List<string> timestamps = getXYZtimestamp(sessionId, sceneId);
+        var timestamps = getXYZtimestamp(sessionId, sceneId);
 
         if (timestamps.Count > 0)
             return timestamps[timestamps.Count - 1];
@@ -581,10 +584,10 @@ public class LoggingManager
     {
         // time difference in microseconds
 
-        DateTime time1DT = Convert.ToDateTime(time1);
-        DateTime time2DT = Convert.ToDateTime(time2);
+        var time1DT = Convert.ToDateTime(time1);
+        var time2DT = Convert.ToDateTime(time2);
 
-        TimeSpan difference = time2DT - time1DT;
+        var difference = time2DT - time1DT;
 
         return (float)difference.TotalMilliseconds * 1000;
     }
@@ -593,10 +596,10 @@ public class LoggingManager
     {
         // time difference in microseconds
 
-        DateTime time1DT = Convert.ToDateTime(time1);
-        DateTime time2DT = Convert.ToDateTime(time2);
+        var time1DT = Convert.ToDateTime(time1);
+        var time2DT = Convert.ToDateTime(time2);
 
-        TimeSpan difference = time2DT - time1DT;
+        var difference = time2DT - time1DT;
 
         return difference;
     }
@@ -642,9 +645,9 @@ public class LoggingManager
 
     public void insertLiveMeasurement(String deviceName, String[] outputDescriptions, String[] units, String[] values)
     {
-        string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
         _dbConnector.AddDataOrigin(deviceName);
-        for (int i =0; i< outputDescriptions.Length; i++)
+        for (var i =0; i< outputDescriptions.Length; i++)
         {
             _dbConnector.AddDataOutput(deviceName, outputDescriptions[i]);
             _dbConnector.AddDataUnit(deviceName, outputDescriptions[i], units[i]);
@@ -654,7 +657,7 @@ public class LoggingManager
 
     public void insertLiveMeasurement(String deviceName, String outputDescription, String unit, String value)
     {
-        string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
@@ -671,7 +674,7 @@ public class LoggingManager
 
     public void insertLive3DMeasurement(String deviceName, String outputDescription, String unit, String valueX, String valueY, String valueZ)
     {
-        string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
@@ -688,7 +691,7 @@ public class LoggingManager
 
     public void InsertLiveSystemEvent(String deviceName, String outputDescription, String unit, String value)
     {
-        string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
@@ -700,7 +703,7 @@ public class LoggingManager
     //------------------------------------------
     public void insertBPMeasurement(string NBPs, string NBPd, string NBPm, string Sp02, string HR_pulse, string NBPs_unit, string NBPd_unit, string NBPm_unit, string Sp02_unit, string HR_pulse_unit, string time)
     {
-        string device_name = "Blood pressure machine";
+        var device_name = "Blood pressure machine";
         if (NBPs != null)
             insertMeasurement(device_name, "NBPs", NBPs_unit, NBPs, time);
         if (NBPd != null)
@@ -755,7 +758,7 @@ public class LoggingManager
 
     public List<string> getSensors()
     {
-        List<string> origins = _dbConnector.GetDataOrigins();
+        var origins = _dbConnector.GetDataOrigins();
         origins.Remove("Player");
         origins.Remove("Scene");
         origins.Remove("Collectible");

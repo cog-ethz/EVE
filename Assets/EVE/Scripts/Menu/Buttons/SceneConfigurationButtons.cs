@@ -21,7 +21,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _menuManager = _launchManager.GetMenuManager();
+            _menuManager = _launchManager.MenuManager;
             _scenes = new List<string>();
 
 
@@ -37,7 +37,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// </summary>
         public void UpdateAvailableScenes()
         {
-            var path = _launchManager.GetMenuManager().GetSceneFilePath();
+            var path = _launchManager.MenuManager.GetSceneFilePath();
             var filenames = Directory.GetFiles(path);
             foreach (var filename in filenames)
             {
@@ -60,11 +60,8 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         public void UpdateChosenScenes()
         {
             _launchManager.SynchroniseSceneListWithDB();
-
             MenuUtils.ClearList(_choosenScenesList);
-
             _scenes = _launchManager.ExperimentSettings.SceneSettings.Scenes;
-            
             foreach (var filename in _scenes)
             {
                 var filenameObj = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/TextAndButtons");

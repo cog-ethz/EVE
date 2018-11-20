@@ -43,6 +43,18 @@ public class MenuManager : MonoBehaviour {
     /// </remarks>
     public int ActiveSessionId { get; set; }
 
+    /// <summary>
+    /// Participant Id that is currently manipulated
+    /// in a menu.
+    /// </summary>
+    public string ActiveParticipantId { get; set; }
+
+    /// <summary>
+    /// Representation of a list item that is manipulated.
+    /// </summary>
+    public GameObject ActiveListItem { get; set; }
+
+
 
     public string GetSceneFilePath() {
         if (_sceneFilePath == null)
@@ -68,7 +80,7 @@ public class MenuManager : MonoBehaviour {
 
     public void Start() {        
         ShowMenu(CurrentMenu);
-        _log = _launchManager.GetLoggingManager();
+        _log = _launchManager.LoggingManager;
         _sceneSettings = _launchManager.ExperimentSettings.SceneSettings;
     }
 
@@ -147,18 +159,18 @@ public class MenuManager : MonoBehaviour {
         {
             _sceneSettings.Scenes.Add(sceneName);
             _log.AddScene(sceneName);
-            _log.RemoveExperimentSceneOrder(_launchManager.GetExperimentName());
-            _log.SetExperimentSceneOrder(_launchManager.GetExperimentName(), _sceneSettings.Scenes.ToArray());
+            _log.RemoveExperimentSceneOrder(_launchManager.ExperimentName);
+            _log.SetExperimentSceneOrder(_launchManager.ExperimentName, _sceneSettings.Scenes.ToArray());
         }
     }
     
     public void DeleteSceneEntry(int i) {
         var removedScene = _sceneSettings.Scenes[i];
         _sceneSettings.Scenes.RemoveAt(i);
-        _log.RemoveExperimentSceneOrder(_launchManager.GetExperimentName());
+        _log.RemoveExperimentSceneOrder(_launchManager.ExperimentName);
         if (!_sceneSettings.Scenes.Contains(removedScene))
             _log.RemoveScene(removedScene);
-        _log.SetExperimentSceneOrder(_launchManager.GetExperimentName(), _sceneSettings.Scenes.ToArray());
+        _log.SetExperimentSceneOrder(_launchManager.ExperimentName, _sceneSettings.Scenes.ToArray());
     }
 
     public void PromoteSceneEntry(int i) {
@@ -167,8 +179,8 @@ public class MenuManager : MonoBehaviour {
             _sceneSettings.Scenes.RemoveAt(i);
             _sceneSettings.Scenes.Insert(i - 1, scene);
         }
-        _log.RemoveExperimentSceneOrder(_launchManager.GetExperimentName());
-        _log.SetExperimentSceneOrder(_launchManager.GetExperimentName(), _sceneSettings.Scenes.ToArray());
+        _log.RemoveExperimentSceneOrder(_launchManager.ExperimentName);
+        _log.SetExperimentSceneOrder(_launchManager.ExperimentName, _sceneSettings.Scenes.ToArray());
     }
     
     public void RemoveExperimentParameter(string experimentParameter)

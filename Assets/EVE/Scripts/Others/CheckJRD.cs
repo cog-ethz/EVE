@@ -21,7 +21,7 @@ public class CheckJRD : MonoBehaviour {
         if (launchManagerObject != null)
         {
             var launchManager = launchManagerObject.GetComponent<LaunchManager>();
-            _log = launchManager.GetLoggingManager();
+            _log = launchManager.LoggingManager;
         }
         else
         {

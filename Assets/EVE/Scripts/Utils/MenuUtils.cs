@@ -38,7 +38,10 @@ namespace Assets.EVE.Scripts.Utils
         /// <returns></returns>
         public static float ComputeParticipantPathDistance(List<float>[] positions)
         {
+
             var distance = 0f;
+            if (positions[0].Count <= 0) return distance;
+
             var old = new Vector3(positions[0][0], positions[1][0], positions[2][0]);
             for (var i = 1; i < positions[0].Count; i++)
             {

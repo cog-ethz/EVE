@@ -16,7 +16,7 @@ public class MiddleVRLogger : MonoBehaviour {
     {
         player = GameObject.FindGameObjectWithTag("Player");
         LaunchManager launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        log = launchManager.GetLoggingManager();
+        log = launchManager.LoggingManager;
 
         doc = XDocument.Load(GameObject.FindGameObjectWithTag("MiddleVR").GetComponent<VRManagerScript>().ConfigFile); // load MiddleVR config file (XML)
 

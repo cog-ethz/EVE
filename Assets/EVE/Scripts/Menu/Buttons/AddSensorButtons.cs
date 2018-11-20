@@ -13,7 +13,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         void Start()
         {
             _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _log = _launchManager.GetLoggingManager();
+            _log = _launchManager.LoggingManager;
         }
 
         public void AddSensorToDatabase()

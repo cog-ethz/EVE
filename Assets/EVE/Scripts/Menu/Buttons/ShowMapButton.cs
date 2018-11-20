@@ -24,7 +24,7 @@ public class ShowMapButton : MonoBehaviour {
 
     public void setupButton()
     {
-        log = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>().GetLoggingManager();
+        log = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>().LoggingManager;
     }
     
 

@@ -12,7 +12,7 @@ public class CollectibleItem : MonoBehaviour {
     void Start()
     {
         LaunchManager launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        log = launchManager.GetLoggingManager();
+        log = launchManager.LoggingManager;
         collectedItems = 0;
     }
 

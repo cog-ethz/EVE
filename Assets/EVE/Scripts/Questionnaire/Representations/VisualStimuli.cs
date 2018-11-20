@@ -46,7 +46,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             _launchManager = GameObject
                 .FindGameObjectWithTag("LaunchManager")
                 .GetComponent<LaunchManager>();
-            _log = _launchManager.GetLoggingManager();
+            _log = _launchManager.LoggingManager;
             _experimentParameters = _launchManager.SessionParameters;
 
 

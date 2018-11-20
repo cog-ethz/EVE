@@ -14,7 +14,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _menuManager = _launchManager.GetMenuManager();
+            _menuManager = _launchManager.MenuManager;
 
 
             _dynamicField = gameObject.transform.Find("Panel").Find("Fields").Find("DynFieldsWithScrollbar").Find("DynFields");
@@ -37,8 +37,21 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 if (_launchManager.SessionParameters.ContainsKey(experimentParameter))
                     gObject.transform.Find("InputField").Find("Placeholder").GetComponent<Text>().text =
                         _launchManager.SessionParameters[experimentParameter];
+
+                gObject.transform.Find("RemoveButton").GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    RemoveExperimentParameter(gObject);
+
+                });
             }
         }
-        
+
+        public void RemoveExperimentParameter(GameObject item)
+        {
+            var nameOfEntry = item.transform.Find("FieldName").GetComponent<Text>().text;
+            _launchManager.MenuManager.RemoveExperimentParameter(nameOfEntry);
+            Destroy(item);
+        }
+
     }
 }

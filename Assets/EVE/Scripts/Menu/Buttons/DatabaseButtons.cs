@@ -22,7 +22,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         // Use this for initialization
         void Start () {
             _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _log = _launchManager.GetLoggingManager();
+            _log = _launchManager.LoggingManager;
             _dbSettings = _launchManager.ExperimentSettings.DatabaseSettings;
 
             var content = gameObject.transform.Find("Panel").Find("Content");
@@ -83,7 +83,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         public void CreateDbSchema()
         {
             _log.ConnectToServerAndCreateSchema(_dbSettings);
-            _log.LogExperiment(_launchManager.GetExperimentName());
+            _log.LogExperiment(_launchManager.ExperimentName);
             _launchManager.SessionId = _log.GetCurrentSessionID();
             CheckDatabase();
         }

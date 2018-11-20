@@ -25,7 +25,7 @@ public class ImageRecognition : MonoBehaviour {
     void Start () {
         Cursor.visible = false;
         LaunchManager launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-        log = launchManager.GetLoggingManager();
+        log = launchManager.LoggingManager;
         // Get condition and order
         condition = log.getParameterValue("Condition");
         string order = log.getParameterValue("Order");

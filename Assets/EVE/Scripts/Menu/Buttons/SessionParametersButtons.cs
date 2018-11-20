@@ -15,7 +15,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _menuManager = _launchManager.GetMenuManager();
+            _menuManager = _launchManager.MenuManager;
 
 
             _dynamicField = gameObject.transform.Find("Panel").Find("Fields").Find("DynFieldsWithScrollbar").Find("DynFields");
@@ -52,7 +52,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 Debug.LogWarning("Empty input for session parameter " + sessionParameter);
                 return;
             }
-            _launchManager.changeSessionsParameter(sessionParameter, value);
+            _launchManager.ChangeSessionsParameter(sessionParameter, value);
         }
     }
 }

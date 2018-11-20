@@ -11,7 +11,7 @@ public class EventMarker: MonoBehaviour {
 
     void Start() {
         launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-	    _log = launchManager.GetLoggingManager();
+	    _log = launchManager.LoggingManager;
 	}
 	
 	void OnTriggerEnter(Collider other) {

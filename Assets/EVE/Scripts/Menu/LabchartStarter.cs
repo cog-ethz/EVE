@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Diagnostics;
+using Assets.EVE.Scripts.Menu;
 using UnityEngine.SceneManagement;
 
 public class LabchartStarter : MonoBehaviour {
@@ -7,20 +8,23 @@ public class LabchartStarter : MonoBehaviour {
     private LoggingManager _log;
     private string _starterPath;
     private string _path;
+    private LaunchManager _launchManager;
 
-	// Use this for initialization
+    // Use this for initialization
 	void Start ()
 	{
-	    var launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-	    _path = launchManager.ExperimentSettings.LabchartSettings.Path;
+	    _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+	    _path = _launchManager.ExperimentSettings.LabchartSettings.Path;
         _starterPath = _path + "StartData\\DriveChart.exe";
-        _log = launchManager.GetLoggingManager();
+        _log = _launchManager.LoggingManager;
     }
 
     public void StartLabchartMeasuring()
     {
         StartLabChart();
-        SceneManager.LoadScene("Loader");
+        _launchManager.MenuManager.CloseCurrentMenu();
+        _launchManager.ManualContinueToNextScene();
+        //SceneManager.LoadScene("Loader");
     }
 
     /// <summary>
