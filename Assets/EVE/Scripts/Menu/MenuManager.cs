@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.EVE.Scripts.Menu;
+using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using Assets.EVE.Scripts.XML;
 using UnityEngine.UI;
@@ -16,32 +17,41 @@ using UnityEngine.UI;
 /// </remarks>
 public class MenuManager : MonoBehaviour {
 
-    public int detailsInt =0;
-    public int numberOfAddedSensors=0;
-    public string fieldTitle = null;
-    public string subjectId = null;
-    private List<string> _activeSensors = new List<string>();
-    private List<string> _experimentParameters;
-    private string SceneFilePath;
-    private GameObject menuObject;
-    private GameObject oldMenuObject;
-    
+    /// <summary>
+    /// The name of the participant as provided in the main menu.
+    /// </summary>
+    public string ParticipantId { get; set; }
+
+
     public BaseMenu CurrentMenu;
-    private bool loadEvalScene;
-    private bool loadLoaderScene;
     private LaunchManager _launchManager;
     private LoggingManager _log;
     private SceneSettings _sceneSettings;
     private ErrorMenuButtons _errorBaseMenu;
+    private List<string> _experimentParameters;
+    private string _sceneFilePath;
+    private GameObject _menuObject;
+
+    /// <summary>
+    /// Session id used to interact with the database.
+    ///
+    /// For example, in menus and replay.
+    /// </summary>
+    /// <remarks>
+    /// Note that this ID is most likely different than the
+    /// current session id!
+    /// </remarks>
+    public int ActiveSessionId { get; set; }
+
 
     public string GetSceneFilePath() {
-        if (SceneFilePath == null)
-            SceneFilePath = Application.dataPath + "/Experiment/Scenes";
-        return SceneFilePath;
+        if (_sceneFilePath == null)
+            _sceneFilePath = Application.dataPath + "/Experiment/Scenes";
+        return _sceneFilePath;
     }
     public void SetSceneFilePath(string path)
     {
-        SceneFilePath = path;
+        _sceneFilePath = path;
     }
 
     public void SetActiveParameters(List<string> parameters)
@@ -52,8 +62,6 @@ public class MenuManager : MonoBehaviour {
     public void Awake()
     {
         _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        //TODO delete this function
-        _launchManager.SetMenuManager(this);
         _errorBaseMenu = GameObject.Find("ErrorMenu").GetComponent<ErrorMenuButtons>();
         _experimentParameters = new List<string>();
     }
@@ -78,8 +86,8 @@ public class MenuManager : MonoBehaviour {
     public void InstantiateAndShowMenu(string menu, string menuContext)
     {
         if (CurrentMenu != null) CloseCurrentMenu();
-        menuObject = Instantiate(Resources.Load("Prefabs/Menus/"+menuContext+"/" + menu)) as GameObject;
-        CurrentMenu = menuObject.GetComponent<BaseMenu>();
+        _menuObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + menuContext + "/" + menu);
+        CurrentMenu = _menuObject.GetComponent<BaseMenu>();
     }
 
     public void CloseMenu(BaseMenu baseMenu)
@@ -125,7 +133,7 @@ public class MenuManager : MonoBehaviour {
 
     public void SetSubjectId(string subjectId)
     {
-        this.subjectId = string.IsNullOrEmpty(subjectId) ? "" : subjectId;
+        this.ParticipantId = string.IsNullOrEmpty(subjectId) ? "" : subjectId;
     }
     
     //no longer used?
@@ -162,12 +170,7 @@ public class MenuManager : MonoBehaviour {
         _log.RemoveExperimentSceneOrder(_launchManager.GetExperimentName());
         _log.SetExperimentSceneOrder(_launchManager.GetExperimentName(), _sceneSettings.Scenes.ToArray());
     }
-
-    public void RemoveSensor(string entryName)
-    {
-        _activeSensors.Remove(entryName);
-    }
-
+    
     public void RemoveExperimentParameter(string experimentParameter)
     {
         _log.RemoveExperimentParameter(experimentParameter, _launchManager.ExperimentSettings.Name);
@@ -179,16 +182,7 @@ public class MenuManager : MonoBehaviour {
     {
         return _experimentParameters;
     }
-
-    public void setDetailsInt(int i) {
-        detailsInt = i;
-    }
-
-    public int getDetailsInt()
-    {
-        return detailsInt;
-    }
-
+    
     public void DisplayErrorMessage(string errorMessage)
     {
         _errorBaseMenu.setErrorOriginMenu(CurrentMenu);

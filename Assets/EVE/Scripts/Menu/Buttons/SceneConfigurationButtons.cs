@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VR.WSA.Persistence;
@@ -45,8 +47,8 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 if (!(fileType.Equals("unity") || fileType.Equals("xml"))) continue;
 
                 //this block adds the data to the menu
-                var filenameObj = Instantiate(Resources.Load("Prefabs/Menus/TextAndAddButton")) as GameObject;
-                Utils.PlaceElement(filenameObj, _availableScenesList);
+                var filenameObj = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/TextAndAddButton");
+                MenuUtils.PlaceElement(filenameObj, _availableScenesList);
 
                 filenameObj.transform.Find("SceneName").GetComponent<Text>().text = GetFileNameOnly(filename);
             }
@@ -59,19 +61,16 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             _launchManager.SynchroniseSceneListWithDB();
 
-            foreach (Transform child in _choosenScenesList)
-            {
-                Destroy(child.gameObject);
-            }
+            MenuUtils.ClearList(_choosenScenesList);
 
             _scenes = _launchManager.ExperimentSettings.SceneSettings.Scenes;
             
             foreach (var filename in _scenes)
             {
-                var filenameObj = Instantiate(Resources.Load("Prefabs/Menus/TextAndButtons")) as GameObject;
+                var filenameObj = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/TextAndButtons");
                 filenameObj.transform.Find("MoveUpButton").GetComponent<Button>().onClick.AddListener(() => { MoveUpChoosenSceneEntry(filenameObj); });
                 filenameObj.transform.Find("RemoveButton").GetComponent<Button>().onClick.AddListener(() => { RemoveChoosenSceneEntry(filenameObj); });
-                Utils.PlaceElement(filenameObj, _choosenScenesList);
+                MenuUtils.PlaceElement(filenameObj, _choosenScenesList);
                 filenameObj.transform.Find("SceneName").GetComponent<Text>().text = GetFileNameOnly(filename);
             }
         }

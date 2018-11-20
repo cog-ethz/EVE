@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private Vector2 windowScrollPosition;
 
         //answer vars
-        private LoggingManager log;
+        private LoggingManager _log;
 
         private GameObject _map;
         //private PopUpEvaluationMap map;
@@ -37,18 +38,25 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private string[][] envs;
 
         private int showInfoIndex, showInfoSSNID;
+        private LaunchManager _launchManager;
+        private MenuManager _menuManager;
+
 
         // Use this for initialization
         void Start()
         {
-            var launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-            log = launchManager.GetLoggingManager();
+            _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
+            _menuManager = _launchManager.GetMenuManager();
+            _log = _launchManager.GetLoggingManager();
 
-            _map = Instantiate(Resources.Load("Prefabs/Menus/Evaluation/EvaluationMap")) as GameObject;
+            _map = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Evaluation/EvaluationMap");
 
-            //initialSkin = skin;
-            var experimentName = launchManager.GetExperimentName();
-            var s = log.getAllSessionsData(experimentName);
+        }
+
+        public void DisplayParticipants()
+        {
+            var experimentName = _launchManager.GetExperimentName();
+            var s = _log.getAllSessionsData(experimentName);
             session_ids = Array.ConvertAll(s[0], int.Parse);
             participant_ids = s[1];
             files = s[3];
@@ -67,35 +75,46 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             {
                 var sid = session_ids[i];
 
-                showRoutebutton[i] = log.getXYZ(sid).Any();
+                showRoutebutton[i] = _log.getXYZ(sid).Any();
                 showLabChartbutton[i] = File.Exists(@files[i]);
 
                 if (!showRoutebutton[i]) continue;
-                envs[i] = log.getListOfEnvironments(sid);
+                envs[i] = _log.getListOfEnvironments(sid);
                 timeSec[i] = new TimeSpan[envs[i].Length];
                 distances[i] = new float[envs[i].Length];
 
                 for (var k = 0; k < envs[i].Length; k++)
                 {
-                    var times = log.getSceneTime(k, sid);
+                    var times = _log.getSceneTime(k, sid);
                     timeSec[i][k] = TimeSpan.FromSeconds(0);
                     if (times[0] != null && times[1] != null)
-                        timeSec[i][k] = log.timeDifferenceTimespan(times[0], times[1]);
+                        timeSec[i][k] = _log.timeDifferenceTimespan(times[0], times[1]);
                     else if (times[0].Length > 0)
                     {
-                        //string abortTime = log.getAbortTime(sid, k);
+                        //string abortTime = _log.getAbortTime(sid, k);
                         //if (abortTime.Length > 0)
-                        //    timeSec[i][k] = log.timeDifferenceTimespan(times[0], abortTime);
+                        //    timeSec[i][k] = _log.timeDifferenceTimespan(times[0], abortTime);
                         //else
-                        timeSec[i][k] = log.timeDifferenceTimespan(times[0], times[0]); ;
+                        timeSec[i][k] = _log.timeDifferenceTimespan(times[0], times[0]); ;
                     }
-                    distances[i][k] = computeDistance(sid, k);
+                    var xyzTable = _log.getXYZ(sid, k);
+                    distances[i][k] = Utils.MenuUtils.ComputeParticipantPathDistance(xyzTable);
                 }
 
                 var pid = participant_ids[i];
 
-                var gObject = Instantiate(Resources.Load("Prefabs/Menus/EvaluationEntry")) as GameObject;
-                Utils.PlaceElement(gObject, dynamicField);
+                var gObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/EvaluationEntry");
+                gObject.transform.Find("DetailsButton").GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    ShowParticipantDetails(sid);
+
+                });
+                gObject.transform.Find("RemoveButton").GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    ShowParticipantDetails(sid);
+
+                });
+                Utils.MenuUtils.PlaceElement(gObject, dynamicField);
 
                 gObject.transform.Find("SessionId").GetComponent<Text>().text = sid.ToString();
                 gObject.transform.Find("ParticipantId").GetComponent<Text>().text = pid;
@@ -105,17 +124,32 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _map.GetComponent<PopUpEvaluationMap>().SetupMaps(envs);
         }
 
-        private float computeDistance(int sessionID, int sceneID)
+        /// <summary>
+        /// Opens participant details menu
+        /// </summary>
+        /// <param name="sid">Session Id of the participant</param>
+        public void ShowParticipantDetails(int sid)
         {
-            float distance = 0; ;
-            var xyz_table = log.getXYZ(sessionID, sceneID);
-            for (var i = 1; i < xyz_table[0].Count; i++)
-            {
-                var old = new Vector3(xyz_table[0][i - 1], xyz_table[1][i - 1], xyz_table[2][i - 1]);
-                var current = new Vector3(xyz_table[0][i], xyz_table[1][i], xyz_table[2][i]);
-                distance += (current - old).magnitude;
-            }
-            return distance;
+            _menuManager.ActiveSessionId = sid;
+            _menuManager.ShowMenu(GameObject.Find("Participant Menu").GetComponent<BaseMenu>());
+        }
+
+        /// <summary>
+        /// Open the Confirm Deletion Menu to ensure that a data point should be deleted.
+        /// </summary>
+        /// <param name="sid">Participant's session Id</param>
+        /// <param name="pid">Participant's id.</param>
+        /// <param name="item">List item that will be removed upon confirmation</param>
+        public void RemoveEvaluationEntry(int sid, string pid, GameObject item)
+        {
+
+            GameObject.Find("Delete Participant Menu").GetComponent<DeleteParticipantButtons>().SetSessionId(sid);
+            GameObject.Find("Delete Participant Menu").GetComponent<DeleteParticipantButtons>().SetParticipantId(pid);
+            GameObject.Find("Delete Participant Menu").GetComponent<DeleteParticipantButtons>().SetItem(item);
+            GameObject.Find("Delete Participant Menu").GetComponent<DeleteParticipantButtons>().DisplayDeleteQuestion();
+
+
+            GameObject.Find("Canvas").GetComponent<MenuManager>().ShowMenu(GameObject.Find("Delete Participant Menu").GetComponent<BaseMenu>());
         }
     }
 }

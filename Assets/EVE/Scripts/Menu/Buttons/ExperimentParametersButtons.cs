@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.EVE.Scripts.Utils;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.EVE.Scripts.Menu.Buttons
@@ -23,13 +24,15 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         public void DisplayExperimentParameters()
         {
+            MenuUtils.ClearList(_dynamicField);
+
             var experimentParameters = _menuManager.GetExperimentParameterList();
 
 
             foreach (var experimentParameter in experimentParameters)
             {
-                var gObject = Instantiate(Resources.Load("Prefabs/Menus/TextWithoutField")) as GameObject;
-                Utils.PlaceElement(gObject, _dynamicField);
+                var gObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/TextWithoutField");
+                MenuUtils.PlaceElement(gObject, _dynamicField);
                 gObject.transform.Find("FieldName").GetComponent<Text>().text = experimentParameter;
                 if (_launchManager.SessionParameters.ContainsKey(experimentParameter))
                     gObject.transform.Find("InputField").Find("Placeholder").GetComponent<Text>().text =

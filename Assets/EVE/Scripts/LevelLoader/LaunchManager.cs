@@ -18,40 +18,29 @@ public class LaunchManager : MonoBehaviour
     public ExperimentSettings ExperimentSettings;
     public GameObject FPC;
     public GameObject MenuCanvas;
-
-    //public Boolean debug = false;
-
+    
     private LoggingManager _log;
     private MenuManager _menuManager;
-    private string _subjectId = "";
-    private int _sessionId, _replaySessionId;
-   
-    //private List<String> sceneList;
-    private System.Timers.Timer _delayTimer;
-    private int currentScene = 0;
-    private string nextScene, activeSceneName;
-    private bool loadScene = false, labchartReady, initialized;
 
-    private string filePathRoot = "";// participant files
+    private int _replaySessionId, _currentScene;
+    private bool _loadScene, _initialized;
+    private string _nextScene, _activeSceneName, _questionnaireName, _participantId, _filePathParticipants;
 
-    private Dictionary<string,string> _sessionParameters;
+    public Dictionary<string, string> SessionParameters { get; private set; }
 
-
-    public Dictionary<string, string> SessionParameters
-    {
-        get
-        {
-            return _sessionParameters;
-        }
-    }
-
-    private string[] SCENESEXTENSIONS;
-    private string[] SCENESQUESTIONNAIREREALNAMES;
-    private string QuestionnaireName;
-
-    // Make objects of this class a singleton
+    /// <summary>
+    /// Make the LaunchManager a singleton.
+    /// </summary>
+    /// 
     private static LaunchManager _instance;
 
+    public int SessionId { get; set; }
+
+    public int GetCurrentSessionId()
+    {
+        return SessionId;
+    }
+    
     void Awake()
     {
         if (_instance)
@@ -78,25 +67,27 @@ public class LaunchManager : MonoBehaviour
         //WriteExperimentSettings(path);
 
 
-        filePathRoot = Application.persistentDataPath + "/participant_files/"; ;
-        DirectoryInfo dirInf = new DirectoryInfo(filePathRoot);
+        _filePathParticipants = Application.persistentDataPath + "/participant_files/"; ;
+        var dirInf = new DirectoryInfo(_filePathParticipants);
         if (!dirInf.Exists)
         {
             Debug.Log("Creating subdirectory for participant data"); dirInf.Create();
-            Debug.Log("Data stored at " + filePathRoot);
+            Debug.Log("Data stored at " + _filePathParticipants);
             dirInf.Create();
         }
         _log = new LoggingManager();
         _log.ConnectToServer(ExperimentSettings.DatabaseSettings);
-        initialized = false;
+        _initialized = false;
         _menuManager = MenuCanvas.GetComponent<MenuManager>();
-        _sessionParameters = new Dictionary<string, string>();
+        SessionParameters = new Dictionary<string, string>();
         LoadSettingsIntoDB();
 
         var _canvas = GameObject.Find("Canvas");
 
         _canvas.GetComponent<CanvasScaler>().referenceResolution = ExperimentSettings.UISettings.ReferenceResolution;
 
+
+        //THIS SECTION CAN TEST WRITING QUESTION SETS AND QUESTIONNAIRES
         /*var qs = new QuestionSet("TestSet");
         qs.Questions.Add(new InfoScreen("example_info", "People questionnaire:Perception of people in the neighborhood"));
         qs.Questions.Add(new TextQuestion("exercise", "What type of exercise have you done recently?"));
@@ -148,26 +139,26 @@ public class LaunchManager : MonoBehaviour
     //------------------------------------------
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        string previousSceneName = activeSceneName;
-        activeSceneName = SceneManager.GetActiveScene().name;
-        Debug.Log("Scene N " + currentScene);
-        if (!initialized)
+        var previousSceneName = _activeSceneName;
+        _activeSceneName = SceneManager.GetActiveScene().name;
+        Debug.Log("Scene N " + _currentScene);
+        if (!_initialized)
         {
-            initialized = true;
+            _initialized = true;
             return;
         }
         var sceneList = ExperimentSettings.SceneSettings.Scenes;
-        if (activeSceneName == "Loader" && previousSceneName != "Evaluation" && sceneList != null)
+        if (_activeSceneName == "Loader" && previousSceneName != "Evaluation" && sceneList != null)
         { //coming back from a scene
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             FPC.SetActive(false);
-            _log.LogSceneEnd(sceneList[currentScene]);
+            _log.LogSceneEnd(sceneList[_currentScene]);
             this.enabled = true;
 
-            if (currentScene < sceneList.Count - 1)
+            if (_currentScene < sceneList.Count - 1)
             {
-                currentScene++;
+                _currentScene++;
                 LoadCurrentScene();
             }
             else
@@ -176,26 +167,26 @@ public class LaunchManager : MonoBehaviour
                 _menuManager.ShowMenu(GameObject.Find("Finished").GetComponent<BaseMenu>());
             }
         }
-        else if (activeSceneName == "Loader" && previousSceneName == "Evaluation")
+        else if (_activeSceneName == "Loader" && previousSceneName == "Evaluation")
         {
             _menuManager.ShowMenu(GameObject.Find("Evaluation Menu").GetComponent<BaseMenu>());
         }
-        else if (activeSceneName == "Evaluation" && previousSceneName != "Loader")
+        else if (_activeSceneName == "Evaluation" && previousSceneName != "Loader")
         {
             Cursor.lockState = UnityEngine.CursorLockMode.None;
             Cursor.visible = true;
             FPC.SetActive(false);
             this.enabled = true;
-            _menuManager.setDetailsInt(_replaySessionId);
+            _menuManager.ActiveSessionId = _replaySessionId;
             _menuManager.ShowMenu(GameObject.Find("Evaluation Details").GetComponent<BaseMenu>());
         }
-        else if (activeSceneName == "Evaluation")
+        else if (_activeSceneName == "Evaluation")
         {
             Cursor.lockState = UnityEngine.CursorLockMode.None;
             Cursor.visible = true;
             FPC.SetActive(false);
         }
-        else if (activeSceneName == "Loader")
+        else if (_activeSceneName == "Loader")
         {
             Cursor.lockState = UnityEngine.CursorLockMode.None;
             Cursor.visible = true;
@@ -204,7 +195,7 @@ public class LaunchManager : MonoBehaviour
         else
         {          
             if (!FPC.GetComponentInChildren<ReplayRoute>().isActivated())
-                _log.LogSceneStart(sceneList[currentScene]);
+                _log.LogSceneStart(sceneList[_currentScene]);
             this.enabled = false;   
         }
     }
@@ -215,8 +206,8 @@ public class LaunchManager : MonoBehaviour
     //------------------------------------------	
     void Start()
     {         
-        _sessionId = _log.GetCurrentSessionID();
-        if (_sessionId < 0)
+        SessionId = _log.GetCurrentSessionID();
+        if (SessionId < 0)
         {
             var databaseSetupMenu = GameObject.Find("SetupDatabaseMenu").GetComponent<BaseMenu>();
             _menuManager.DisplayErrorMessage("Unable to connect to the database! Press ok to check the database status", databaseSetupMenu);
@@ -232,27 +223,22 @@ public class LaunchManager : MonoBehaviour
     /// The function resets the state of the participant for the next round
     /// </summary>
     public void SetCompletedAndReset() {
-        currentScene = 0;
+        _currentScene = 0;
         _log.updateParameters();
-        _sessionId = _log.GetCurrentSessionID();
+        SessionId = _log.GetCurrentSessionID();
     }
 
-    public void SetMenuManager(MenuManager menuManager)
-    {
-        _menuManager = menuManager;
-    }
-    
     // -----------------------------------------
     //			 Scene Loading
     //------------------------------------------	
     void Update()
     {
         //this is done in Update s.t. the loading screen has time to display
-        if (loadScene)
+        if (_loadScene)
         {
-            loadScene = false;
+            _loadScene = false;
             
-            SceneManager.LoadScene(nextScene);
+            SceneManager.LoadScene(_nextScene);
         }
     }
 
@@ -260,28 +246,23 @@ public class LaunchManager : MonoBehaviour
     {
         SynchroniseSceneListWithDB();
         var sceneList = ExperimentSettings.SceneSettings.Scenes;
-        LoadScene(sceneList[currentScene].Contains(".xml") ? "Questionnaire" : sceneList[currentScene]);
+        LoadScene(sceneList[_currentScene].Contains(".xml") ? "Questionnaire" : sceneList[_currentScene]);
     }
     private void LoadScene(string scene)
     {
         var scenes = ExperimentSettings.SceneSettings.Scenes;
-        if (scenes[currentScene].Contains(".xml"))
+        if (scenes[_currentScene].Contains(".xml"))
         {
-            var splittedFileName = scenes[currentScene].Split('.');
-            QuestionnaireName = splittedFileName[0];
+            var splittedFileName = scenes[_currentScene].Split('.');
+            _questionnaireName = splittedFileName[0];
 
             _log.CreateUserAnswer(_log.GetCurrentSessionID(), splittedFileName[0]);
             _log.setQuestionnaireName(splittedFileName[0]);
         }        
-        nextScene = scene;
-        loadScene = true;
+        _nextScene = scene;
+        _loadScene = true;
     }
   
-   public string getSubjectID()
-    {
-        return _subjectId;
-    }
-    
     /// <summary>
     /// Start experiment and checks errors.
     /// </summary>
@@ -290,11 +271,11 @@ public class LaunchManager : MonoBehaviour
     /// </remarks>
     public void StartExperiment() {
         
-        _subjectId = _menuManager.subjectId;
+        _participantId = _menuManager.ParticipantId;
 
-        if (_subjectId.Length < 1)
+        if (_participantId.Length < 1)
         {
-            BaseMenu originBaseMenu = GameObject.Find("Experiment Menu").GetComponent<BaseMenu>();
+            var originBaseMenu = GameObject.Find("Experiment Menu").GetComponent<BaseMenu>();
             _menuManager.DisplayErrorMessage("The Subject ID is invalid!", originBaseMenu);
         }
         else
@@ -303,30 +284,30 @@ public class LaunchManager : MonoBehaviour
 
             var sceneList = ExperimentSettings.SceneSettings.Scenes;
             Console.Write(sceneList.Count);
-            int nParameters = _menuManager.GetExperimentParameterList().Count;
+            var nParameters = _menuManager.GetExperimentParameterList().Count;
             if (sceneList.Count <= 0)
             {
-                BaseMenu originBaseMenu = GameObject.Find("Scene Configuration").GetComponent<BaseMenu>();
+                var originBaseMenu = GameObject.Find("Scene Configuration").GetComponent<BaseMenu>();
                 _menuManager.DisplayErrorMessage("No scenes selected!", originBaseMenu);
             }
             else
             {
-                if (_sessionParameters.Count != nParameters)
+                if (SessionParameters.Count != nParameters)
                 {
 
-                    BaseMenu originBaseMenu = GameObject.Find("Session Parameters Menu").GetComponent<BaseMenu>();
+                    var originBaseMenu = GameObject.Find("Session Parameters Menu").GetComponent<BaseMenu>();
                     _menuManager.DisplayErrorMessage("Session parameters are not set.",originBaseMenu);
                 }
                 else
                 {
-                    _log.LogSession(ExperimentSettings.Name, _subjectId);
-                    if (_sessionParameters.ContainsKey("Labchart File Name"))
-                        _log.SetLabChartFileName(_sessionParameters["Labchart File Name"]);
+                    _log.LogSession(ExperimentSettings.Name, _participantId);
+                    if (SessionParameters.ContainsKey("Labchart File Name"))
+                        _log.SetLabChartFileName(SessionParameters["Labchart File Name"]);
 
                     if (_log.getSensors().Contains("HL7Server"))
                         this.gameObject.GetComponent<HL7ServerStarter>().enabled = true;
                     StoreSessionParameters();
-                    BaseMenu startBaseMenu = GameObject.Find("Start Menu").GetComponent<BaseMenu>();
+                    var startBaseMenu = GameObject.Find("Start Menu").GetComponent<BaseMenu>();
                     _menuManager.ShowMenu(startBaseMenu);
                 }
             }
@@ -336,25 +317,18 @@ public class LaunchManager : MonoBehaviour
 
     private void StoreSessionParameters()
     {
-        foreach (KeyValuePair<string, string> entry in _sessionParameters)
+        foreach (var entry in SessionParameters)
         {
             _log.LogSessionParameter(entry.Key, entry.Value);
         }
     }
 
-    public int getCurrentSessionID() {
-        return _sessionId;
-    }
-
-    public void setSessionId(int id)
-    {
-        _sessionId = id;
-    }
+    
     
 
 
     public string GetQuestionnaireName() {
-        return QuestionnaireName;
+        return _questionnaireName;
     }
 
 
@@ -380,14 +354,14 @@ public class LaunchManager : MonoBehaviour
 
     public Dictionary<string,string> getSessionParameters()
     {
-        return _sessionParameters;
+        return SessionParameters;
     }
 
     public void changeSessionsParameter(string name, string value)
     {
-        if (_sessionParameters.ContainsKey(name))
-            _sessionParameters.Remove(name);
-        _sessionParameters.Add(name, value);
+        if (SessionParameters.ContainsKey(name))
+            SessionParameters.Remove(name);
+        SessionParameters.Add(name, value);
     }
 
     public int getReplaySessionId()
@@ -425,7 +399,7 @@ public class LaunchManager : MonoBehaviour
     /// </summary>
     public void ReadExperimentSettings()
     {
-        TextAsset ta = Resources.Load<TextAsset>("experiment_settings");
+        var ta = Resources.Load<TextAsset>("experiment_settings");
         var xmlSerializer = new XmlSerializer(typeof(ExperimentSettings));
         using (var stream = new StringReader(ta.text))
         {

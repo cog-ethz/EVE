@@ -26,7 +26,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         public void SetSessionId()
         {
-            SessionId.text = _launchManager.getCurrentSessionID().ToString();
+            SessionId.text = _launchManager.SessionId.ToString();
         }
 
         public void SetExperimentName()

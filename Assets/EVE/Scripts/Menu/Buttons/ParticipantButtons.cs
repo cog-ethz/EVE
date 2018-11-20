@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,12 +12,15 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private LoggingManager _log;
         private PopUpEvaluationMap _map;
         private LaunchManager _launchManager;
+        private Transform _dynamicField;
 
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
             _menumanager = _launchManager.GetMenuManager();
             _log = _launchManager.GetLoggingManager();
+            
+            _dynamicField = transform.Find("Panel").Find("Fields").Find("DynFieldsWithScrollbar").Find("DynFields");
 
             DisplayParticipantDetails();
         }
@@ -26,13 +30,15 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// </summary>
         public void DisplayParticipantDetails()
         {
-            _sessionId = _menumanager.getDetailsInt();
+            Utils.MenuUtils.ClearList(_dynamicField);
+
+            _sessionId = _menumanager.ActiveSessionId;
 
             var envs = _log.getListOfEnvironments(_sessionId);
             var timeSec = new TimeSpan[envs.Length];
 
             InstantiateElement("Session ID", _sessionId.ToString());
-
+            
             for (var k = 0; k < envs.Length; k++)
             {
                 InstantiateElement("Scene", "Scene " + k + ": " + envs[k]);
@@ -50,15 +56,15 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 }
                 InstantiateElement("Time", timeSec[k].TotalSeconds.ToString(),true);
 
-                if (_log.getXYZ(_sessionId, k)[0].Count > 0)
+                var xyzTable = _log.getXYZ(_sessionId, k);
+                if (xyzTable[0].Count > 0)
                 {
-                    var distance = ComputeDistance(_sessionId, k);
+                    var distance = Utils.MenuUtils.ComputeParticipantPathDistance(xyzTable);
                     InstantiateElement("Distance", distance.ToString(),true);
 
                     //make replay button
-                    var filenameObj = Instantiate(Resources.Load("Prefabs/Menus/TabTabAndReplayButton")) as GameObject;
-                    var dynamicField = GameObject.Find("Evaluation Details").GetComponent<BaseMenu>().getDynamicFields("DynFieldsA");
-                    Utils.PlaceElement(filenameObj, dynamicField);
+                    var filenameObj = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/TabTabAndReplayButton");
+                    MenuUtils.PlaceElement(filenameObj, _dynamicField);
                     var replayButton = filenameObj.transform.Find("Button").GetComponent<ReplayButton>();
                     replayButton.setreplaySceneID(k);
                     replayButton.setReplaySceneName(envs[k]);
@@ -67,8 +73,8 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                     //make show map button
                     _map = gameObject.GetComponent<PopUpEvaluationMap>();
                     //map.SetupMaps(envNumber);
-                    var filenameObj2 = Instantiate(Resources.Load("Prefabs/Menus/TabTabAndShowMapButton")) as GameObject;
-                    Utils.PlaceElement(filenameObj2, dynamicField);
+                    var filenameObj2 = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/TabTabAndShowMapButton");
+                    MenuUtils.PlaceElement(filenameObj2, _dynamicField);
                     var showMapButton = filenameObj2.transform.Find("Button").GetComponent<ShowMapButton>();
                     showMapButton.setupButton();
                     showMapButton.setEnvNumber(k);
@@ -79,29 +85,14 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             }
         }
 
-        public void InstantiateElement(string evalField, string evalValue,bool tab = false)
+        public void InstantiateElement(string evalField, string evalValue, bool tab = false)
         {
             var prefabType = tab ? "TextWithTextAndTab" : "TextWithText";
-            var filenameObj = Instantiate(Resources.Load("Prefabs/Menus/" + prefabType)) as GameObject;
+            var filenameObj = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + prefabType);
             var dynamicField = GameObject.Find("Participant Menu").GetComponent<BaseMenu>().getDynamicFields("DynFields");
-            Utils.PlaceElement(filenameObj, dynamicField);
+            Utils.MenuUtils.PlaceElement(filenameObj, dynamicField);
             filenameObj.transform.Find("evalField").GetComponent<Text>().text = evalField;
             filenameObj.transform.Find("evalValue").GetComponent<Text>().text = evalValue;
-        }
-
-        private float ComputeDistance(int sessionID, int sceneID)
-        {
-            float distance = 0;
-            var xyzTable = _log.getXYZ(sessionID, sceneID);
-
-            for (var i = 1; i < xyzTable[0].Count; i++)
-            {
-                var old = new Vector3(xyzTable[0][i - 1], xyzTable[1][i - 1], xyzTable[2][i - 1]);
-                var current = new Vector3(xyzTable[0][i], xyzTable[1][i], xyzTable[2][i]);
-                distance += (current - old).magnitude;
-            }
-
-            return distance;
         }
     }
 }

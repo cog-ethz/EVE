@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = System.Diagnostics.Debug;
 
 namespace Assets.EVE.Scripts.Menu.Buttons
 {
@@ -27,34 +30,37 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             DisplaySensorList();
         }
 
-        void DisplaySensorList()
+        /// <summary>
+        /// Display the current list of sensors.
+        /// </summary>
+        public void DisplaySensorList()
         {
-            if (_launchManager.getCurrentSessionID() >= 0)
+            if (_launchManager.SessionId < 0) return;
+
+            var sensors = _log.getSensors();
+
+            if (sensors.Contains("Labchart"))
             {
-                var sensors = _log.getSensors();
-
-                if (sensors.Contains("Labchart"))
-                {
-                    LabchartButton.isOn = true;
-                    sensors.Remove("Labchart");
-                }
-
-                if (sensors.Contains("HL7Server"))
-                {
-                    HL7ServerButton.isOn = true;
-                    sensors.Remove("HL7Server");
-                }
-
-                var dynamicField = LabchartButton.transform.parent.parent;
-                foreach (var sensorName in sensors)
-                {
-                    var sensorDisplay = Instantiate(Resources.Load("Prefabs/Menus/SensorDisplay")) as GameObject;
-                    sensorDisplay.transform.Find("RemoveSensor").GetComponent<Button>().onClick.AddListener(() => { RemoveSensor(sensorDisplay); });
-                    Utils.PlaceElement(sensorDisplay,dynamicField);
-                    sensorDisplay.transform.Find("SensorName").GetComponent<Text>().text = sensorName;
-                }
-                _launchManager.SynchroniseSensorListWithDB();
+                LabchartButton.isOn = true;
+                sensors.Remove("Labchart");
             }
+
+            if (sensors.Contains("HL7Server"))
+            {
+                HL7ServerButton.isOn = true;
+                sensors.Remove("HL7Server");
+            }
+
+            var dynamicField = LabchartButton.transform.parent.parent;
+            foreach (var sensorName in sensors)
+            {
+
+                var sensorDisplay = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/SensorDisplay");
+                sensorDisplay.transform.Find("RemoveSensor").GetComponent<Button>().onClick.AddListener(() => { RemoveSensor(sensorDisplay); });
+                MenuUtils.PlaceElement(sensorDisplay,dynamicField);
+                sensorDisplay.transform.Find("SensorName").GetComponent<Text>().text = sensorName;
+            }
+            _launchManager.SynchroniseSensorListWithDB();
         }
 
         public void LabchartToggle()

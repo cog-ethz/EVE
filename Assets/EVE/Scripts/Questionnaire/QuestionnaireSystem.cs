@@ -6,11 +6,11 @@ using System.Text.RegularExpressions;
 using Assets.EVE.Scripts.Questionnaire.Enums;
 using Assets.EVE.Scripts.Questionnaire.Questions;
 using Assets.EVE.Scripts.Questionnaire.Visitor;
+using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Question = Assets.EVE.Scripts.Questionnaire.Questions.Question;
-using MenuUtils = Assets.EVE.Scripts.Menu.Utils;
 
 namespace Assets.EVE.Scripts.Questionnaire
 {
@@ -79,7 +79,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             _canvas.GetComponent<CanvasScaler>().referenceResolution = launchManager.ExperimentSettings.UISettings.ReferenceResolution;
             _menuManager = _canvas.GetComponent<MenuManager>();
 
-            _oldQuestionPlaceholder = Instantiate(Resources.Load("Prefabs/Menus/QuestionPlaceholder")) as GameObject;
+            _oldQuestionPlaceholder = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/QuestionPlaceholder");
             MenuUtils.PlaceElement(_oldQuestionPlaceholder,_canvas.transform);
         }
 
@@ -111,7 +111,7 @@ namespace Assets.EVE.Scripts.Questionnaire
                 }
             
                 _menuManager.CloseMenu(_oldQuestionPlaceholder.GetComponent<Menu.BaseMenu>());
-                _questionPlaceholder = Instantiate(Resources.Load("Prefabs/Menus/QuestionPlaceholder")) as GameObject;
+                _questionPlaceholder = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/QuestionPlaceholder");
                 _questionPlaceholder.name = "QuestionPlaceholder";
                 _oldQuestionPlaceholder.name = "Old QuestionPlaceholder";
                 MenuUtils.PlaceElement(_questionPlaceholder, _canvas.transform);
@@ -245,7 +245,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         /// <returns>Returns the new label</returns>
         private GameObject AddLabelText(string labelType, string labelText, Transform parent)
         {
-            var label = Instantiate(Resources.Load("Prefabs/Menus/" + labelType)) as GameObject;
+            var label = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + labelType);
             MenuUtils.PlaceElement(label, parent);
             label.GetComponent<Text>().text = labelText;
             return label;
@@ -262,7 +262,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         /// <returns></returns>
         private GameObject AddLabelText(string labelType, string labelText, Transform parent, string subLabelType, float subLabelLength)
         {
-            var label = Instantiate(Resources.Load("Prefabs/Menus/" + labelType)) as GameObject;
+            var label = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + labelType);
             MenuUtils.PlaceElement(label, parent);
             var sublabel = label.transform.Find(subLabelType);
 
@@ -282,7 +282,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         /// <returns>Transform of created toggle</returns>
         private Transform CreateToggleElement(string toggleType, Transform parent, float width, float height)
         {
-            var toggleObject = Instantiate(Resources.Load("Prefabs/Menus/" + toggleType)) as GameObject;
+            var toggleObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + toggleType);
             toggleObject.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
             MenuUtils.PlaceElement(toggleObject, parent);
             var button = toggleObject.transform.Find("ToggleButtons");
@@ -358,7 +358,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         private static int GetMaxTextLength(IEnumerable<string> labels)
         {
-            var labelTextTmp = Instantiate(Resources.Load("Prefabs/Menus/ToggleTopLabel")) as GameObject;
+            var labelTextTmp = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ToggleTopLabel");
             var textTmp = labelTextTmp.GetComponent<Text>();
 
             var maxLength = labels.Select(t => CalculateLengthOfMessage(t, textTmp)).Concat(new[] {0}).Max();
@@ -371,7 +371,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         private static Vector2 ComputeTopLabelSize(int nColumns, IList<string> labels)
         {
             // find longest substring to set top label width
-            var labelTextTmp = Instantiate(Resources.Load("Prefabs/Menus/ToggleTopLabel")) as GameObject;
+            var labelTextTmp = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ToggleTopLabel");
             var textTmp = labelTextTmp.GetComponent<Text>(); ;
 
             float minWidth = 150;
@@ -430,7 +430,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             var nColumns = q.NColumns;
             var answernumber = 0;
 
-            var multiColObject = Instantiate(Resources.Load("Prefabs/Menus/ToggleMulticolLayoutEmpty")) as GameObject;
+            var multiColObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ToggleMulticolLayoutEmpty");
             MenuUtils.PlaceElement(multiColObject, _dynamicField);
             var isMultiple = q.Choice == Choice.Multiple;
         
@@ -438,7 +438,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             {
                 var cLabels = q.ColumnLabels.Select(l => l.Text).ToList();
 
-                var topRow = Instantiate(Resources.Load("Prefabs/Menus/TopRow")) as GameObject;
+                var topRow = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/TopRow");
 
                 MenuUtils.PlaceElement(topRow, _questionContent);
                 topRow.transform.SetSiblingIndex(1);
@@ -461,7 +461,7 @@ namespace Assets.EVE.Scripts.Questionnaire
                 for (var i = 0; i < nRows; i++)
                 {
                     //Set side labels
-                    var oneRow = Instantiate(Resources.Load("Prefabs/Menus/ToggleOneRow")) as GameObject;
+                    var oneRow = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ToggleOneRow");
                     var newParent = multiColObject.transform.Find("ResponseRows");
                     MenuUtils.PlaceElement(oneRow, newParent);
 
@@ -548,7 +548,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             var answernumber = 0;
             if (q.NRows == 1)
             {
-                var textInputField = Instantiate(Resources.Load("Prefabs/Menus/QuestionOnlyField")) as GameObject;
+                var textInputField = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/QuestionOnlyField");
                 MenuUtils.PlaceElement(textInputField, _dynamicField);
 
                 if (_oldAnswers == null || !_oldAnswers.ContainsKey(0)) return;
@@ -576,7 +576,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         public void Visit(LadderQuestion q)
         {
-            var ladder = Instantiate(Resources.Load("Prefabs/Menus/LadderContent")) as GameObject;
+            var ladder = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/LadderContent");
             _customContent = ladder.transform;
             MenuUtils.PlaceElement(ladder, _questionContent);
 
@@ -605,7 +605,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         {
             _dynamicFieldsWithScrollbar.gameObject.SetActive(false);
 
-            var manikin = Instantiate(Resources.Load("Prefabs/Menus/ManikinContent")) as GameObject;
+            var manikin = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ManikinContent");
             _customContent = manikin.transform;
             MenuUtils.PlaceElement(manikin, _questionContent);
 
@@ -686,16 +686,16 @@ namespace Assets.EVE.Scripts.Questionnaire
             _questionContent.GetComponent<RectTransform>().sizeDelta = new Vector2(5760, 1080);
             _questionContent.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
             
-            var fixationScreen = Instantiate(Resources.Load("Prefabs/Questionnaire/VisualStimuli/Fixation")) as GameObject;
+            var fixationScreen = GameObjectUtils.InstatiatePrefab("Prefabs/Questionnaire/VisualStimuli/Fixation");
             MenuUtils.PlaceElement(fixationScreen, _questionContent);
             fixationScreen.SetActive(false);
             rep.FixationSceen = fixationScreen;
-            var decisionScreen = Instantiate(Resources.Load("Prefabs/Questionnaire/VisualStimuli/Decision")) as GameObject;
+            var decisionScreen = GameObjectUtils.InstatiatePrefab("Prefabs/Questionnaire/VisualStimuli/Decision");
             MenuUtils.PlaceElement(decisionScreen, _questionContent);
             decisionScreen.SetActive(false);
             rep.DecisionScreen = decisionScreen;
             decisionScreen.GetComponentInChildren<Text>().text = q.Text;
-            var expositionScreen = Instantiate(Resources.Load("Prefabs/Questionnaire/VisualStimuli/Exposition")) as GameObject;
+            var expositionScreen = GameObjectUtils.InstatiatePrefab("Prefabs/Questionnaire/VisualStimuli/Exposition");
             MenuUtils.PlaceElement(expositionScreen, _questionContent);
             expositionScreen.SetActive(false);
             rep.ExpositionScreen = expositionScreen;
