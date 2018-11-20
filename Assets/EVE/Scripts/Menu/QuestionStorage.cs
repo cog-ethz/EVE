@@ -9,14 +9,14 @@ namespace Assets.EVE.Scripts.Questionnaire
     public class QuestionStorage : MonoBehaviour
     {
 
-        private Questions.Question _associatedQuestion;
+        private Question _associatedQuestion;
 
-        public void AssociateQuestion(Questions.Question associatedQuestion)
+        public void AssociateQuestion(Question associatedQuestion)
         {
-            this._associatedQuestion = associatedQuestion;
+            _associatedQuestion = associatedQuestion;
         }
 
-        public Questions.Question GetQuestion()
+        public Question GetQuestion()
         {
             return _associatedQuestion;
         }

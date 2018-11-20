@@ -434,9 +434,6 @@ namespace Assets.EVE.Scripts.Questionnaire
 			t.alignment = TextAnchor.MiddleLeft;
 
 			_dynamicFieldsWithScrollbar.gameObject.SetActive (false);
-			var r = _questionContent.GetComponent<RectTransform> ();
-			r.sizeDelta = new Vector2 (1500, 690);
-			r.position = new Vector3 (0, 0, 0);
 
 		}
 
