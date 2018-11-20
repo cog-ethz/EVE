@@ -25,7 +25,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         public void DisplaySessionParameters()
         {
-            Utils.MenuUtils.ClearList(_dynamicField);
+            MenuUtils.ClearList(_dynamicField);
 
             var experimentParameters = _menuManager.GetExperimentParameterList();
 
@@ -53,6 +53,15 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 return;
             }
             _launchManager.ChangeSessionsParameter(sessionParameter, value);
+        }
+
+
+        /// <summary>
+        /// Starts Experiment.
+        /// </summary>
+        public void StartExperiment()
+        {
+            _launchManager.StartExperiment();
         }
     }
 }

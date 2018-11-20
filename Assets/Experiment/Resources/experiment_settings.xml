@@ -10,7 +10,6 @@
     <Sensors>
       <Sensor>QuestionnaireSystem</Sensor>
       <Sensor>Fixation</Sensor>
-      <Sensor>LabChart</Sensor>
       <Sensor>Video</Sensor>
       <Sensor>Decision</Sensor>
       <Sensor>User_Choice</Sensor>
@@ -19,15 +18,6 @@
   </SensorSettings>
   <ParameterSettings>
     <Parameters>
-      <Parameter>training_stimuli_order</Parameter>
-      <Parameter>landscape_stimuli_order</Parameter>
-      <Parameter>perception_1_order</Parameter>
-      <Parameter>perception_2_order</Parameter>
-      <Parameter>perception_3_order</Parameter>
-      <Parameter>perception_4_order</Parameter>
-      <Parameter>perception_5_order</Parameter>
-      <Parameter>perception_6_order</Parameter>
-      <Parameter>researcher_id</Parameter>
       <Parameter>Labchart File Name</Parameter>
     </Parameters>
   </ParameterSettings>
@@ -43,13 +33,13 @@
     </Scenes>
   </SceneSettings>
   <LabchartSettings>
-    <Path>PathToLabchartFiles\\</Path>
     <Commenters>
       <Sensor>QuestionnaireSystem</Sensor>
       <Sensor>LabChart</Sensor>
     </Commenters>
+    <Path>PathToLabchartFiles\\</Path>
   </LabchartSettings>
-  <UISettings>  
+  <UISettings>
     <Resolution X="1920" Y="1080" />
   </UISettings>
 </ExperimentSettings>

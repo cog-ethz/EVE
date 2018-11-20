@@ -85,7 +85,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 Scale = (Scale)q.Vals[2];
                 LeftLabel = q.Labels[0];
                 RightLabel = q.Labels[1];
-                Image = q.Labels[2];
+                Image = q.Labels.Length<=2?null:q.Labels[2];
             }
             else
             {

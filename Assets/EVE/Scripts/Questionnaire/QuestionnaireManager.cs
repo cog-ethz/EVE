@@ -14,7 +14,7 @@ using Question = Assets.EVE.Scripts.Questionnaire.Questions.Question;
 
 namespace Assets.EVE.Scripts.Questionnaire
 {
-    public class QuestionnaireSystem : MonoBehaviour, IQuestionVisitor
+    public class QuestionnaireManager : MonoBehaviour, IQuestionVisitor
     {
         private LoggingManager _log;
         private MenuManager _menuManager;
@@ -46,19 +46,26 @@ namespace Assets.EVE.Scripts.Questionnaire
             _canvas;
 
         private List<string> _questionNames;
+        private LaunchManager _launchManager;
+        private QuestionnaireFactory _qf;
 
         // Use this for initialization
-        void Awake()
+        void Start()
         {
-            //creating for debugging reasons
-            var launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _log = launchManager.LoggingManager;
-        
-            var qf = new QuestionnaireFactory(_log,launchManager.ExperimentSettings);
-            var questionnaireName = launchManager.QuestionnaireName;
+            _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
+            _log = _launchManager.LoggingManager;
+            _qf = new QuestionnaireFactory(_log,_launchManager.ExperimentSettings);
+            
+            this.enabled = false;
+        }
 
-            var questionnaires = qf.ReadQuestionnairesFromDb(new List<string>() { questionnaireName});
-            _questionSets = qf.ReadQuestionSetsFromDb(questionnaires);
+        public void DisplayQuestionnaire()
+        {
+
+            var questionnaireName = _launchManager.QuestionnaireName;
+
+            var questionnaires = _qf.ReadQuestionnairesFromDb(new List<string>() { questionnaireName });
+            _questionSets = _qf.ReadQuestionSetsFromDb(questionnaires);
             _questionnaire = questionnaires.First();
 
             _log.InsertLiveSystemEvent("QuestionnaireSystem", "Start QuestionnaireSystem", null, _questionnaire.Name);
@@ -76,13 +83,12 @@ namespace Assets.EVE.Scripts.Questionnaire
 
             _canvas = GameObject.Find("Canvas");
 
-            _canvas.GetComponent<CanvasScaler>().referenceResolution = launchManager.ExperimentSettings.UISettings.ReferenceResolution;
+            _canvas.GetComponent<CanvasScaler>().referenceResolution = _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
             _menuManager = _canvas.GetComponent<MenuManager>();
 
             _oldQuestionPlaceholder = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/QuestionPlaceholder");
-            MenuUtils.PlaceElement(_oldQuestionPlaceholder,_canvas.transform);
+            MenuUtils.PlaceElement(_oldQuestionPlaceholder, _canvas.transform);
         }
-
 
         void OnGUI()
         {
@@ -93,7 +99,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             }
             if (e.type == EventType.KeyDown && e.control && e.keyCode == KeyCode.End)
             {
-                SceneManager.LoadScene("Loader");
+                CloseQuestionnaire();
             }
         }
 
@@ -152,14 +158,25 @@ namespace Assets.EVE.Scripts.Questionnaire
                 {
                     if (_once) return;
                     _once = true;
-                    _log.InsertLiveSystemEvent("Questionnaire", "Complete Questionnaire", null, _questionnaire.Name);
-                    SceneManager.LoadScene("Loader");
+                    CloseQuestionnaire();
                 }
                 else
                 {
                     LoadQuestionSetAt(++_questionSetIndex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Logs the end of a questionnaire, puts the questionnaire manager to
+        /// sleep and manually moves to the next scene.
+        /// </summary>
+        private void CloseQuestionnaire()
+        {
+            _log.InsertLiveSystemEvent("Questionnaire", "Complete Questionnaire", null, _questionnaire.Name);
+            _launchManager.MenuManager.CloseCurrentMenu();
+            this.enabled = false;
+            _launchManager.ManualContinueToNextScene();
         }
 
         /// <summary>

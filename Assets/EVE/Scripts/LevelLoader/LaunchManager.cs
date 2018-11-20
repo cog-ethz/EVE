@@ -41,6 +41,8 @@ public class LaunchManager : MonoBehaviour
 
     public MenuManager MenuManager { get; private set; }
 
+    public QuestionnaireManager QuestionnaireManager { get; private set; }
+
     public int ReplaySessionId { get; set; }
 
     void Awake()
@@ -81,14 +83,12 @@ public class LaunchManager : MonoBehaviour
         LoggingManager.ConnectToServer(ExperimentSettings.DatabaseSettings);
         _initialized = false;
         MenuManager = MenuCanvas.GetComponent<MenuManager>();
+        QuestionnaireManager = gameObject.GetComponent<QuestionnaireManager>();
         SessionParameters = new Dictionary<string, string>();
         LoadSettingsIntoDB();
 
-        var _canvas = GameObject.Find("Canvas");
-
-        _canvas.GetComponent<CanvasScaler>().referenceResolution = ExperimentSettings.UISettings.ReferenceResolution;
-
-
+        MenuCanvas.GetComponent<CanvasScaler>().referenceResolution = ExperimentSettings.UISettings.ReferenceResolution;
+        
         //THIS SECTION CAN TEST WRITING QUESTION SETS AND QUESTIONNAIRES
         /*var qs = new QuestionSet("TestSet");
         qs.Questions.Add(new InfoScreen("example_info", "People questionnaire:Perception of people in the neighborhood"));
@@ -247,6 +247,8 @@ public class LaunchManager : MonoBehaviour
                 break;
             case "Questionnaire":
                 _inQuestionnaire = true;
+                QuestionnaireManager.enabled = true;
+                QuestionnaireManager.DisplayQuestionnaire();
                 ManualContinueToNextScene();
                 break;
             default:
@@ -265,7 +267,7 @@ public class LaunchManager : MonoBehaviour
         
         _participantId = MenuManager.ParticipantId;
 
-        if (_participantId.Length < 1)
+        if (string.IsNullOrEmpty(_participantId))
         {
             var originBaseMenu = GameObject.Find("Experiment Menu").GetComponent<BaseMenu>();
             MenuManager.DisplayErrorMessage("The Subject ID is invalid!", originBaseMenu);

@@ -35,7 +35,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         private Sprite[] _imgLocs;
         private RawImage _rawImage;
         private VideoPlayer _videoPlayer;
-        private QuestionnaireSystem _qSystem;
+        private QuestionnaireManager _qSystem;
         private int _currentDecision;
 
         private Coroutine previousCoroutine;
@@ -108,7 +108,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         /// Setup up its representation in the questionnaire system.
         /// </summary>
         /// <param name="qSystem"></param>
-        public override void InitialiseRepresentation(QuestionnaireSystem qSystem)
+        public override void InitialiseRepresentation(QuestionnaireManager qSystem)
         {
             _qSystem = qSystem;
             _rawImage = ExpositionScreen.GetComponentInChildren<RawImage>();
