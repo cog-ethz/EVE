@@ -26,7 +26,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         public void AddLabchartComments()
         {
-            var sessionId = _log.GetCurrentSessionID() - 1;
+            var sessionId = _log.CurrentSessionID- 1;
 
             var file = _log.getSessionData(sessionId)[3];
 

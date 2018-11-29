@@ -312,7 +312,7 @@ public class MySQLConnector : DatabaseConnector
                     cmd.ExecuteNonQuery();
                 }
             }
-            Debug.Log("Created new session");
+            Debug.Log("Created new session for " + subjectId);
 
 
 

@@ -13,7 +13,6 @@ public class LoggingManager
 {
     //setup values for session
 
-    private int _currentSessionId = 0;
     private string _currentQuestionnaireName;
     private string _labChartFilePath = "";
 
@@ -26,7 +25,7 @@ public class LoggingManager
     /// </summary>
     public LoggingManager()
     {
-        
+        CurrentSessionID = 0;
     }
 
     public void ConnectToServerAndCreateSchema(DatabaseSettings dbSettings)
@@ -36,13 +35,15 @@ public class LoggingManager
         ConnectToServer(dbSettings);
     }
 
-    public void ConnectToServer(DatabaseSettings settings)
+    public bool ConnectToServer(DatabaseSettings settings)
     {
+        var success = false;
         try
         {
             _dbConnector = new MySQLConnector();
             _dbConnector.ConnectToServer(settings.Server, settings.Schema, settings.User, settings.Password);
-            _currentSessionId = _dbConnector.GetNextSessionId();
+            CurrentSessionID = _dbConnector.GetNextSessionId();
+            success = true;
         }
         catch (MySql.Data.MySqlClient.MySqlException mysqlEx)
         {
@@ -51,22 +52,22 @@ public class LoggingManager
             {                  
                 //http://dev.mysql.com/doc/refman/5.0/en/error-messages-server.html
                 case 1042: // Unable to connect to any of the specified MySQL hosts (Check Server,Port)
-                    _currentSessionId = -2;
+                    CurrentSessionID = -2;
                     break;
                 case 0: // Access denied (Check DB name,username,password)
                     if (mysqlEx.Message.Contains("Unknown database"))
-                        _currentSessionId = -4;
+                        CurrentSessionID = -4;
                     else
-                        _currentSessionId = -3;
+                        CurrentSessionID = -3;
                     break;
             }
-
         }
         catch (System.Exception ex)
         {
             Debug.LogError(ex.ToString());
-            _currentSessionId = -1;
+            CurrentSessionID = -1;
         }
+        return success;
     }
 
     public void ConnectToServer(string server, string user, string password)
@@ -75,13 +76,13 @@ public class LoggingManager
         {
             _dbConnector = new MySQLConnector();
             _dbConnector.ConnectToServer(server, user, password);
-            _currentSessionId = _dbConnector.GetNextSessionId();
+            CurrentSessionID = _dbConnector.GetNextSessionId();
         }
         
         catch (System.Exception ex)
         {
             Debug.LogError(ex.ToString());
-            _currentSessionId = -1;
+            CurrentSessionID = -1;
         }
     }
 
@@ -98,17 +99,17 @@ public class LoggingManager
     /// <param name="selectedIndeces"> Which answers where selected, and the values of them</param>
     public void InsertAnswer(string questionName, string questionSetName, KeyValuePair<int, string>[] selectedIndeces)
     {
-        _dbConnector.InsertAnswer(questionName, questionSetName, _currentQuestionnaireName, _currentSessionId, selectedIndeces);
+        _dbConnector.InsertAnswer(questionName, questionSetName, _currentQuestionnaireName, CurrentSessionID, selectedIndeces);
     }
     
     public int[] readAnswerIndex(int questionId)
     {
-        return _dbConnector.readAnswerIndex(questionId, _currentSessionId);        
+        return _dbConnector.readAnswerIndex(questionId, CurrentSessionID);        
     }
 
     public Dictionary<int,string> readAnswer(string questionName)
     {
-        return _dbConnector.readAnswer(questionName, _currentSessionId);
+        return _dbConnector.readAnswer(questionName, CurrentSessionID);
     }
 
     private object[] readAllAnswerValues(string valueTypeName, int questionID, int sessionID, int valueCount)
@@ -221,7 +222,7 @@ public class LoggingManager
     /// <param name="value"> Value of the described parameter</param>
     public void LogSessionParameter(string parameterDescription, string value)
     {
-        _dbConnector.LogSessionParameter(_currentSessionId, parameterDescription, value);
+        _dbConnector.LogSessionParameter(CurrentSessionID, parameterDescription, value);
     }
 
     /// <summary>
@@ -230,7 +231,7 @@ public class LoggingManager
     /// <param name="fileName"> fileName </param>
     public void LogLabChartFileName(string fileName)
     {
-        _dbConnector.AddLabchartFileName(_currentSessionId, fileName);
+        _dbConnector.AddLabchartFileName(CurrentSessionID, fileName);
     }
 
     public void RecordLabChartStartTime()
@@ -238,7 +239,7 @@ public class LoggingManager
         // NEW NAME AddLabchartStartTime
         var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
 
-        _dbConnector.AddLabchartStartTime(_currentSessionId, timestamp);
+        _dbConnector.AddLabchartStartTime(CurrentSessionID, timestamp);
     }
 
     private int getNextSessionID()
@@ -253,7 +254,7 @@ public class LoggingManager
 
     public string getParameterValue(string parameterDescription)
     {
-        return _dbConnector.GetSessionParameter(this._currentSessionId, parameterDescription);
+        return _dbConnector.GetSessionParameter(this.CurrentSessionID, parameterDescription);
     }
 
     // -----------------------------------------
@@ -640,7 +641,7 @@ public class LoggingManager
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
-        _dbConnector.AddSensorData(deviceName, outputDescription, value, time, _currentSessionId);
+        _dbConnector.AddSensorData(deviceName, outputDescription, value, time, CurrentSessionID);
     }
 
     public void insertLiveMeasurement(String deviceName, String[] outputDescriptions, String[] units, String[] values)
@@ -651,7 +652,7 @@ public class LoggingManager
         {
             _dbConnector.AddDataOutput(deviceName, outputDescriptions[i]);
             _dbConnector.AddDataUnit(deviceName, outputDescriptions[i], units[i]);
-            _dbConnector.AddSensorData(deviceName, outputDescriptions[i], values[i], timestamp, _currentSessionId);
+            _dbConnector.AddSensorData(deviceName, outputDescriptions[i], values[i], timestamp, CurrentSessionID);
         }              
     }
 
@@ -661,7 +662,7 @@ public class LoggingManager
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
-        _dbConnector.AddSensorData(deviceName, outputDescription, value, timestamp, _currentSessionId);
+        _dbConnector.AddSensorData(deviceName, outputDescription, value, timestamp, CurrentSessionID);
     }
 
     public void insert3DMeasurement(String deviceName, String outputDescription, String unit, String valueX, String valueY, String valueZ, String time)
@@ -669,7 +670,7 @@ public class LoggingManager
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
-        _dbConnector.AddSensorData(deviceName, outputDescription, valueX, valueY, valueZ, time, _currentSessionId);
+        _dbConnector.AddSensorData(deviceName, outputDescription, valueX, valueY, valueZ, time, CurrentSessionID);
     }
 
     public void insertLive3DMeasurement(String deviceName, String outputDescription, String unit, String valueX, String valueY, String valueZ)
@@ -678,7 +679,7 @@ public class LoggingManager
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
-        _dbConnector.AddSensorData(deviceName, outputDescription, valueX, valueY, valueZ, timestamp, _currentSessionId);
+        _dbConnector.AddSensorData(deviceName, outputDescription, valueX, valueY, valueZ, timestamp, CurrentSessionID);
     }
 
     public void InsertSystemEvent(String deviceName, String outputDescription, String unit, String value, String time)
@@ -686,7 +687,7 @@ public class LoggingManager
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
-        _dbConnector.AddSystemData(deviceName, outputDescription, value, time, _currentSessionId);
+        _dbConnector.AddSystemData(deviceName, outputDescription, value, time, CurrentSessionID);
     }
 
     public void InsertLiveSystemEvent(String deviceName, String outputDescription, String unit, String value)
@@ -695,7 +696,7 @@ public class LoggingManager
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
-        _dbConnector.AddSystemData(deviceName, outputDescription, value, timestamp, _currentSessionId);
+        _dbConnector.AddSystemData(deviceName, outputDescription, value, timestamp, CurrentSessionID);
     }
 
     // -----------------------------------------
@@ -779,17 +780,29 @@ public class LoggingManager
     public void updateParameters()
     {
         //same as in setup in constructor
-        _currentSessionId = getNextSessionID();
+        CurrentSessionID = getNextSessionID();
     }
 
     // -----------------------------------------
     //			get logging variables
     //------------------------------------------
 
-    public int GetCurrentSessionID()
-    {
-        return _currentSessionId;
-    }
+    /// <summary>
+    /// The current session id is managed by EVE.
+    ///
+    /// It either consists of the id provided by the
+    /// database or an error id indicating the problem
+    /// currently encountered with the database.
+    /// </summary>
+    /// <remarks>
+    /// Error ids:
+    /// 
+    /// -4 = unknown schema
+    /// -3 = other database error
+    /// -2 = no mysql connection
+    /// -1 = not mysql related error
+    /// </remarks>
+    public int CurrentSessionID { get; private set; }
 
     public void SetLabChartFileName(string path)
     {

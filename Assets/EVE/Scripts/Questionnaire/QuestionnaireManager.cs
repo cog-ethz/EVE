@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Assets.EVE.Scripts.Menu.Buttons;
 using Assets.EVE.Scripts.Questionnaire.Enums;
 using Assets.EVE.Scripts.Questionnaire.Questions;
 using Assets.EVE.Scripts.Questionnaire.Visitor;
@@ -84,7 +85,8 @@ namespace Assets.EVE.Scripts.Questionnaire
             _canvas = GameObject.Find("Canvas");
 
             _canvas.GetComponent<CanvasScaler>().referenceResolution = _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
-            _menuManager = _canvas.GetComponent<MenuManager>();
+            _menuManager = _launchManager.MenuManager;
+            _menuManager.CloseCurrentMenu();
 
             _oldQuestionPlaceholder = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/QuestionPlaceholder");
             MenuUtils.PlaceElement(_oldQuestionPlaceholder, _canvas.transform);
@@ -121,8 +123,10 @@ namespace Assets.EVE.Scripts.Questionnaire
                 _questionPlaceholder.name = "QuestionPlaceholder";
                 _oldQuestionPlaceholder.name = "Old QuestionPlaceholder";
                 MenuUtils.PlaceElement(_questionPlaceholder, _canvas.transform);
-                LinkQuestionControlButtons();
 
+                var questionMenuButtons = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
+                questionMenuButtons.AddBackAndNextButtons(GoBackOneQuestion, GoToNextQuestion);
+                
                 _questionContent = _questionPlaceholder.transform
                     .Find("Panel")
                     .Find("QuestionContent").transform;
@@ -229,7 +233,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         /// </summary>
         private void SetupQuestionDisplay()
         {
-            _questionPlaceholder.GetComponent<QuestionStorage>().AssociateQuestion(_question);
+            _questionPlaceholder.GetComponent<QuestionMenuButtons>().AssociatedQuestion = _question;
             var title = "";//"Question: " + (showedQuestions);
             _questionPlaceholder
                 .transform.Find("Panel")
@@ -414,15 +418,6 @@ namespace Assets.EVE.Scripts.Questionnaire
             Destroy(labelTextTmp);
             return new Vector2(minWidth, height);
         }
-    
-        private void LinkQuestionControlButtons()
-        {
-            var questionControl = _questionPlaceholder.transform.Find("Panel").Find("QuestionControlButtons");
-            var backButton = questionControl.Find("BackButton").GetComponent<Button>();
-            var nextButton = questionControl.Find("NextButton").GetComponent<Button>();
-            backButton.onClick.AddListener(GoBackOneQuestion);
-            nextButton.onClick.AddListener(GoToNextQuestion);
-        }
 
         public void Visit(Question q)
         {
@@ -443,6 +438,8 @@ namespace Assets.EVE.Scripts.Questionnaire
             var nRows = q.NRows;
             var nColumns = q.NColumns;
             var answernumber = 0;
+
+            var qmb = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
 
             var multiColObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ToggleMulticolLayoutEmpty");
             MenuUtils.PlaceElement(multiColObject, _dynamicField);
@@ -494,12 +491,16 @@ namespace Assets.EVE.Scripts.Questionnaire
                             100) : CreateToggleElement("ToggleLayoutObjectMultipleChoice", oneRow.transform,
                             topLabelSize.x,
                             100);
-                        if(!isMultiple) button.GetComponent<ToggleExtended>().group = oneRow.GetComponent<ToggleGroup>();
-                        button.GetComponent<StoreAnswer>().SetPositionOffset(answernumber);
-                        if (_oldAnswers != null && _oldAnswers.ContainsKey(answernumber))
+                        var btn = button.GetComponent<ToggleExtended>();
+                        if (!isMultiple) btn.group = oneRow.GetComponent<ToggleGroup>();
+
+
+                        var iLocal = answernumber;
+                        btn.onValueChanged.AddListener(isOn =>
                         {
-                            button.GetComponent<ToggleExtended>().isOn = true;
-                        }
+                            qmb.SetAnswerInt(iLocal, isOn ? 1 : 0);
+                        });
+                        btn.isOn = _oldAnswers != null && _oldAnswers.ContainsKey(i);
                         answernumber++;
                     }
                 }
@@ -534,19 +535,38 @@ namespace Assets.EVE.Scripts.Questionnaire
                     var toggleObject = oneRow.transform.Find("ToggleLayoutObject").gameObject;
                     toggleObject.GetComponent<RectTransform>().sizeDelta = new Vector2(40, 50);
 
-                    var button = toggleObject.transform.Find("ToggleButtons");
-                    if(!isMultiple) button.GetComponent<ToggleExtended>().group = newParent.GetComponent<ToggleGroup>();
-                
-                    button.GetComponent<StoreAnswer>().SetPositionOffset(answernumber);
+                    var btn = toggleObject.transform.Find("ToggleButtons").GetComponent<ToggleExtended>();
+                    if (!isMultiple) btn.group = newParent.GetComponent<ToggleGroup>();
+
+
+
+                    var iLocal = answernumber;
+                    btn.onValueChanged.AddListener(isOn =>
+                    {
+                        qmb.SetAnswerInt(iLocal, isOn ? 1 : 0);
+                    });
+                    btn.isOn = false;
+
                     if (hasText)
                     {
-                        oneRow.transform.Find("InputField").GetComponent<StoreAnswer>().SetPositionOffset(answernumber);
-                        button.GetComponent<StoreAnswer>().SetActiveDisableTextField(true);
+                        var inpt = oneRow.transform.Find("InputField").GetComponent<InputField>();
+
+                        inpt.onEndEdit.AddListener(answer =>
+                        {
+                            qmb.SetAnswerString(iLocal, answer);
+                        });
+                        if (_oldAnswers != null && _oldAnswers.ContainsKey(answernumber))
+                        {
+                            inpt.text = _oldAnswers[answernumber];
+                        }
+                        qmb.SetActiveDisableTextField(answernumber,false);
                     }
+
                     if (_oldAnswers != null && _oldAnswers.ContainsKey(answernumber)) { 
-                        button.GetComponent<ToggleExtended>().isOn = true;
+                        btn.isOn = true;
                         if (hasText)
                         {
+                            qmb.SetActiveDisableTextField(answernumber, true);
                             oneRow.transform.Find("InputField").GetComponent<InputField>().text = _oldAnswers[answernumber];
                         }
                     
@@ -559,14 +579,19 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         public void Visit(TextQuestion q)
         {
+            var qmb = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
             var answernumber = 0;
             if (q.NRows == 1)
             {
                 var textInputField = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/QuestionOnlyField");
                 MenuUtils.PlaceElement(textInputField, _dynamicField);
 
-                if (_oldAnswers == null || !_oldAnswers.ContainsKey(0)) return;
                 var inpt = textInputField.transform.Find("InputField").GetComponent<InputField>();
+                inpt.onEndEdit.AddListener(answer =>
+                {
+                    qmb.SetAnswerString(0, answer);
+                });
+                if (_oldAnswers == null || !_oldAnswers.ContainsKey(0)) return;
                 inpt.text = _oldAnswers[0];
             }
             else
@@ -575,12 +600,19 @@ namespace Assets.EVE.Scripts.Questionnaire
                 float length = GetMaxTextLength(rLabels);
                 for (var index = 0; index < q.RowLabels.Count; index++)
                 {
+
+                    var iLocal = index;
+
                     var labelAndField = AddLabelText("QuestionChoiceLabelAndField", q.RowLabels[index].Text, _dynamicField, "Label", length);
-                    labelAndField.transform.Find("InputField").GetComponent<StoreAnswer>().SetPositionOffset(index);
-                    //set answer number                           
+
+                    var inpt = labelAndField.transform.Find("InputField").GetComponent<InputField>();
+
+                    inpt.onEndEdit.AddListener(answer =>
+                    {
+                        qmb.SetAnswerString(iLocal, answer);
+                    });                        
                     if (_oldAnswers != null && _oldAnswers.ContainsKey(answernumber))
                     {
-                        var inpt = labelAndField.transform.Find("InputField").GetComponent<InputField>();
                         inpt.text = _oldAnswers[answernumber];
                     }
                     answernumber++;
@@ -599,19 +631,17 @@ namespace Assets.EVE.Scripts.Questionnaire
             _customContent.Find("LadderLabel").gameObject.GetComponent<Text>().text = q.LadderText;
             var ladderButtons = _customContent.Find("Buttons");
 
+            var qmb = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
             for (var i = 9; i >= 0; i--)
             {
-                var ladderToggle = ladderButtons.Find("ToggleButtons" + i);
-                var btn = ladderToggle.GetComponent<Toggle>();
+                var btn = ladderButtons.Find("ToggleButtons" + i).GetComponent<Toggle>();
 
-                ladderToggle.GetComponent<StoreAnswer>().SetPositionOffset(-1);
-                btn.isOn = false;
-                ladderToggle.GetComponent<StoreAnswer>().SetPositionOffset(i);
-
-                if (_oldAnswers != null && _oldAnswers.ContainsKey(i))
+                var iLocal = i;
+                btn.onValueChanged.AddListener(isOn =>
                 {
-                    btn.isOn = true;
-                }
+                    qmb.SetAnswerInt(iLocal, isOn ? 1 : 0);
+                });
+                btn.isOn = _oldAnswers != null && _oldAnswers.ContainsKey(i);
             }
         }
 
@@ -625,25 +655,25 @@ namespace Assets.EVE.Scripts.Questionnaire
 
             //Load image
             var image = _customContent.Find("Image");
-            var questionName = q.Name;
             var imageSource = "Textures/questionline";
-            if (q.Scale==Scale.Pleasure)
+            switch (q.Scale)
             {
-                imageSource = "Textures/SAM-V-5";
-            }
-            else if (q.Scale == Scale.Arousal)
-            {
-                imageSource = "Textures/SAM-A-5";
-            }
-            else if (q.Scale == Scale.Dominance)
-            {
-                imageSource = "Textures/SAM-D-5";
-            } else if (q.Scale == Scale.Custom)
-            {
-                imageSource = q.Image;
+                case Scale.Pleasure:
+                    imageSource = "Textures/SAM-V-5";
+                    break;
+                case Scale.Arousal:
+                    imageSource = "Textures/SAM-A-5";
+                    break;
+                case Scale.Dominance:
+                    imageSource = "Textures/SAM-D-5";
+                    break;
+                case Scale.Custom:
+                    imageSource = q.Image;
+                    break;
             }
             image.GetComponent<Image>().overrideSprite = Resources.Load<Sprite>(imageSource);
 
+            var qmb = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
 
             //Set label
             _customContent.Find("extremesText").Find("extreme1").gameObject.GetComponent<Text>().text = q.LeftLabel;
@@ -652,16 +682,14 @@ namespace Assets.EVE.Scripts.Questionnaire
             var buttons = _customContent.Find("Buttons");
             for (var i = 0; i < q.NColumns; i++)
             {
-                var mainikinToggle = buttons.Find("ToggleButtons" + i);
-                var btn = mainikinToggle.GetComponent<Toggle>();
-                mainikinToggle.GetComponent<StoreAnswer>().SetPositionOffset(-1);
-                btn.isOn = false;
-                mainikinToggle.GetComponent<StoreAnswer>().SetPositionOffset(i);
+                var btn = buttons.Find("ToggleButtons" + i).GetComponent<Toggle>();
 
-                if (_oldAnswers != null && _oldAnswers.ContainsKey(i))
+                var iLocal = i;
+                btn.onValueChanged.AddListener(isOn =>
                 {
-                    btn.isOn = true;
-                }
+                    qmb.SetAnswerInt(iLocal, isOn?1:0);
+                });
+                btn.isOn = _oldAnswers != null && _oldAnswers.ContainsKey(i);
             }
         }
 

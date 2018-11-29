@@ -98,7 +98,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             if (qsCreated)
             {
                 var qs = ReadQuestionSetFromXml(questionSet);
-                qs.WriteToDatabase(_log);
+                qs.WriteQuestionsToDatabase(_log);
             }
         }
 

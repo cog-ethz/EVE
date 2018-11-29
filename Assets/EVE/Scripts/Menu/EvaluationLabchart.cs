@@ -28,7 +28,7 @@ public class EvaluationLabchart : MonoBehaviour {
     /// </remarks>
     public void addLabchartComments()
     {
-		var sessionId = _log.GetCurrentSessionID()-1;
+		var sessionId = _log.CurrentSessionID-1;
 
         var file = _log.getSessionData(sessionId)[3];
 

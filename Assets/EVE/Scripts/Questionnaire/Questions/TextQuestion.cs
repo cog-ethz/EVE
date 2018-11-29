@@ -97,7 +97,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
 
         public override bool IsAnswered()
         {
-            return true;
+            return _temporaryStringAnswers.All(answer => !string.IsNullOrEmpty(answer));
         }
 
         public override void RetainAnswer(string internalAnswer)

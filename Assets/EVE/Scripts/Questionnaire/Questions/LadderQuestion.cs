@@ -75,9 +75,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         {
             return _temporaryIntAnswer > -1;
         }
-        public override void RetainAnswer(int internalnumber)
+        public override void RetainAnswer(int answer)
         {
-            _temporaryIntAnswer = internalnumber;
+            _temporaryIntAnswer = answer;
         }
 
         public override string GetJumpDestination()

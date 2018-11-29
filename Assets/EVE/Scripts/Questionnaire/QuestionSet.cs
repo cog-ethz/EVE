@@ -29,9 +29,8 @@ namespace Assets.EVE.Scripts.Questionnaire
             Questions = new List<Question>();
         }
 
-        public void WriteToDatabase(LoggingManager log)
+        public void WriteQuestionsToDatabase(LoggingManager log)
         {
-            log.CreateQuestionSet(Name);
             Questions.ForEach(q =>
             {
                 log.InsertQuestionToDB(q.AsDatabaseQuestion(Name));

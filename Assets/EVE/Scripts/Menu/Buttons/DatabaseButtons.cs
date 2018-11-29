@@ -37,7 +37,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         private void CheckDatabase()
         {
-            var currentSessionId = _log.GetCurrentSessionID();
+            var currentSessionId = _log.CurrentSessionID;
             switch (currentSessionId)
             {
 
@@ -84,7 +84,8 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             _log.ConnectToServerAndCreateSchema(_dbSettings);
             _log.LogExperiment(_launchManager.ExperimentName);
-            _launchManager.SessionId = _log.GetCurrentSessionID();
+            _launchManager.SessionId = _log.CurrentSessionID;
+            _launchManager.LoadSettingsIntoDB();
             CheckDatabase();
         }
 

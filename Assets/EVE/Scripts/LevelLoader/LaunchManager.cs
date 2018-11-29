@@ -79,15 +79,27 @@ public class LaunchManager : MonoBehaviour
             Debug.Log("Data stored at " + _filePathParticipants);
             dirInf.Create();
         }
-        LoggingManager = new LoggingManager();
-        LoggingManager.ConnectToServer(ExperimentSettings.DatabaseSettings);
-        _initialized = false;
         MenuManager = MenuCanvas.GetComponent<MenuManager>();
-        QuestionnaireManager = gameObject.GetComponent<QuestionnaireManager>();
-        SessionParameters = new Dictionary<string, string>();
-        LoadSettingsIntoDB();
-
         MenuCanvas.GetComponent<CanvasScaler>().referenceResolution = ExperimentSettings.UISettings.ReferenceResolution;
+        QuestionnaireManager = gameObject.GetComponent<QuestionnaireManager>();
+
+        SessionParameters = new Dictionary<string, string>();
+
+
+        LoggingManager = new LoggingManager();
+        var connected = LoggingManager.ConnectToServer(ExperimentSettings.DatabaseSettings);
+        _initialized = false;
+        if (!connected)
+        {
+            var databaseSetupMenu = GameObject.Find("Database Configuration Menu").GetComponent<BaseMenu>();
+            MenuManager.DisplayErrorMessage("Unable to connect to the database! Press ok to check the database status", databaseSetupMenu);
+        }
+        else
+        {
+            LoadSettingsIntoDB();
+            SessionId = LoggingManager.CurrentSessionID;
+        }
+
         
         //THIS SECTION CAN TEST WRITING QUESTION SETS AND QUESTIONNAIRES
         /*var qs = new QuestionSet("TestSet");
@@ -203,16 +215,7 @@ public class LaunchManager : MonoBehaviour
     //------------------------------------------	
     void Start()
     {         
-        SessionId = LoggingManager.GetCurrentSessionID();
-        if (SessionId < 0)
-        {
-            var databaseSetupMenu = GameObject.Find("SetupDatabaseMenu").GetComponent<BaseMenu>();
-            MenuManager.DisplayErrorMessage("Unable to connect to the database! Press ok to check the database status", databaseSetupMenu);
-        }
-        else
-        {
-            LoadSettingsIntoDB();
-        }
+        
     }
 
     /// <summary>
@@ -221,7 +224,7 @@ public class LaunchManager : MonoBehaviour
     public void SetCompletedAndReset() {
         _currentScene = 0;
         LoggingManager.updateParameters();
-        SessionId = LoggingManager.GetCurrentSessionID();
+        SessionId = LoggingManager.CurrentSessionID;
     }
     
     public void LoadCurrentScene()
@@ -233,7 +236,7 @@ public class LaunchManager : MonoBehaviour
         {
             QuestionnaireName = scene.Split('.')[0];
 
-            LoggingManager.CreateUserAnswer(LoggingManager.GetCurrentSessionID(), QuestionnaireName);
+            LoggingManager.CreateUserAnswer(LoggingManager.CurrentSessionID, QuestionnaireName);
             LoggingManager.setQuestionnaireName(QuestionnaireName);
 
             scene = "Questionnaire";
@@ -376,13 +379,13 @@ public class LaunchManager : MonoBehaviour
 
     public void SynchroniseSceneListWithDB()
     {
-        if (LoggingManager.GetCurrentSessionID() > -1)
+        if (LoggingManager.CurrentSessionID> -1)
             ExperimentSettings.SceneSettings.Scenes = new List<string>(LoggingManager.getSceneNamesInOrder(ExperimentSettings.Name));
     }
 
     public void SynchroniseSensorListWithDB()
     {
-        if (LoggingManager.GetCurrentSessionID() > -1)
+        if (LoggingManager.CurrentSessionID> -1)
         {
             var sensors = new List<string>(LoggingManager.getSensors());
             if (sensors.Contains("Labchart"))

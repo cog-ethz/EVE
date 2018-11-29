@@ -2,34 +2,26 @@
 <ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Energyscape">
   <DatabaseSettings>
     <Server>localhost</Server>
-    <Schema>energyscape_eve</Schema>
+    <Schema>eve</Schema>
     <User>energyscape</User>
     <Password>MainExperiment2018</Password>
   </DatabaseSettings>
-  <SensorSettings Labchart="true" H7Server="false">
+  <SensorSettings Labchart="false" H7Server="false">
     <Sensors>
       <Sensor>QuestionnaireSystem</Sensor>
-      <Sensor>Fixation</Sensor>
-      <Sensor>Video</Sensor>
-      <Sensor>Decision</Sensor>
-      <Sensor>User_Choice</Sensor>
-      <Sensor>Questionnaire</Sensor>
     </Sensors>
   </SensorSettings>
   <ParameterSettings>
-    <Parameters>
-      <Parameter>Labchart File Name</Parameter>
-    </Parameters>
+    <Parameters />
   </ParameterSettings>
   <QuestionnaireSettings>
     <Questionnaires>
-      <Questionnaire>energyscape_pre</Questionnaire>
+      <Questionnaire>ExampleQuestionnaire</Questionnaire>
     </Questionnaires>
   </QuestionnaireSettings>
   <SceneSettings>
     <Scenes>
-      <Scene>LabchartStartScene</Scene>
-      <Scene>energyscape_pre.xml</Scene>
+      <Scene>ExampleQuestionnaire.xml</Scene>
     </Scenes>
   </SceneSettings>
   <LabchartSettings>

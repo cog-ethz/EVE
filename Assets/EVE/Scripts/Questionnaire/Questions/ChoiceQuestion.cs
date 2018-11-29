@@ -290,7 +290,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             }
         }
 
-        public override void RetainAnswer(int internalnumber)
+        public override void RetainAnswer(int answer)
         {
             if (Choice == Choice.Single )
             {
@@ -300,7 +300,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 }
                 else
                 {
-                    var lowerBound = internalnumber - internalnumber%NColumns;
+                    var lowerBound = answer - answer%NColumns;
                     var upperBound = lowerBound + NColumns;
                     for (var i = lowerBound; i < upperBound; i++)
                     {
@@ -311,19 +311,50 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                     }
                 }
             }
-            if (_answers.Contains(internalnumber))
+            if (_answers.Contains(answer))
             {
-                _answers.Remove(internalnumber);
+                _answers.Remove(answer);
             }
             else
             {
-                _answers.Add(internalnumber);
+                _answers.Add(answer);
             }
         }
 
-        public override void RetainAnswer(int number, string internalAnswer)
+        public virtual void RetainAnswer(int positionOffset, int answer)
         {
-            _answerStrings[number] = internalAnswer;
+            if (Choice == Choice.Single)
+            {
+                if (NColumns == 1)
+                {
+                    _answers = new List<int>();
+                }
+                else
+                {
+                    var lowerBound = answer - answer % NColumns;
+                    var upperBound = lowerBound + NColumns;
+                    for (var i = lowerBound; i < upperBound; i++)
+                    {
+                        if (_answers.Contains(i))
+                        {
+                            _answers.Remove(i);
+                        }
+                    }
+                }
+            }
+            if (_answers.Contains(answer))
+            {
+                _answers.Remove(answer);
+            }
+            else
+            {
+                _answers.Add(answer);
+            }
+        }
+
+        public override void RetainAnswer(int positionOffset, string answer)
+        {
+            _answerStrings[positionOffset] = answer;
         }
 
         public override string GetJumpDestination()
