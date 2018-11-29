@@ -21,4 +21,8 @@ The menu is standardised to make expansion and use more simple
 - All menus are instantiated instead of kept in the background
 - All function used within one menu panel are now on the Menu Game Object
 
+###LaunchManager Overhaul
+
+- The Awake function is cleaned up so that now the first database connection does not require a restart of EVE.
+
 
