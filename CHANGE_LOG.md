@@ -2,15 +2,15 @@
 
 Find an overview of all new additions.
 
-##EVE1.1
+## EVE1.1
 
-###Energyscape integration
+### Energyscape integration
 
 New features for the energyscape experiments
 
 - New Question Type: VisualStimuli
 
-###Menu Overhaul
+### Menu Overhaul
 
 The menu is standardised to make expansion and use more simple
 
@@ -21,7 +21,7 @@ The menu is standardised to make expansion and use more simple
 - All menus are instantiated instead of kept in the background
 - All function used within one menu panel are now on the Menu Game Object
 
-###LaunchManager Overhaul
+### LaunchManager Overhaul
 
 - The Awake function is cleaned up so that now the first database connection does not require a restart of EVE.
 
