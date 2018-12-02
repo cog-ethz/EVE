@@ -24,5 +24,9 @@ The menu is standardised to make expansion and use more simple
 ### LaunchManager Overhaul
 
 - The Awake function is cleaned up so that now the first database connection does not require a restart of EVE.
+- Add OSC to enable high quality audio with external audio system.
 
+### Community Request
 
+- Add custom images option for scale questions
+  - See Experiment/Resources/QuestionSets/TestSet.xml for details

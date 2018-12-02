@@ -189,8 +189,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         /// <returns>A list describing the order of items.</returns>
         public List<int> RandomisationOrder(Dictionary<string, string> experimentParameters)
         {
-            return experimentParameters[ExternalRandomisation].Split(',').Select(int.Parse).ToList();
+            return Configuration.Randomisation == Randomisation.ExperimentParameter ?
+                experimentParameters[ExternalRandomisation].Split(',').Select(int.Parse).ToList() :
+                Enumerable.Range(0, Stimuli.Count-1).ToList();
         }
-
     }
 }

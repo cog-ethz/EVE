@@ -118,7 +118,6 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             _currentDecision = 0;
             _randomisationOrder = Question.RandomisationOrder(_experimentParameters).ToArray();
 
-
             if (Question.Configuration.Type == Type.Image)
             {
                 _imgLocs = new Sprite[Question.Stimuli.Count];
@@ -157,7 +156,6 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
         private IEnumerator SwitchToFixation(float time)
         {
-
 			var message = new OscMessage (); //L
 			message.address = Question.Stimuli[_randomisationOrder[_currentIndex]]; //L
 			message.values.Add (0); //L

@@ -195,6 +195,18 @@
       <Text><![CDATA[Swiss comparison of social status]]></Text>
       <LadderText><![CDATA[At the TOP of the ladder are the people who are the best off. The lower you are, the closer you are to the people at the very bottom. Where would you place yourself on this ladder, compared to all the other people in Switzerland?]]></LadderText>
     </LadderQuestion>
+	<VisualStimuli Name="test_stimuli" NColumns="1" NRows="1">
+      <Text><![CDATA[Which stimulus is more pleasing?
+
+Press "1" for the first or "2" for the second.]]></Text>
+      <Stimuli>
+        <Stimulus>Images/test_image</Stimulus>
+        <Stimulus>Images/test_image</Stimulus>
+      </Stimuli>
+      <Configuration Separator="FixationCross" Choice="ArrowKeys" Randomisation="None" Type="Image" SeparatorFirst="false" />
+      <ExternalRandomisation>none</ExternalRandomisation>
+      <Times Fixation="20" Exposition="30" Decision="10" />
+    </VisualStimuli>
     <ChoiceQuestion Name="flu_med" NColumns="1" NRows="2" Choice="Single">
       <Jumps>
         <Jump Destination="inflam_med" Activator="FT" />
@@ -229,17 +241,5 @@
     <TextQuestion Name="inflam_med_name" NColumns="1" NRows="1">
       <Text><![CDATA[Which medication(s)?]]></Text>
     </TextQuestion>
-    <VisualStimuli Name="test_stimuli" NColumns="1" NRows="1">
-      <Text><![CDATA[Which stimulus is more pleasing?
-
-Press "1" for the first or "2" for the second.]]></Text>
-      <Stimuli>
-        <Stimulus>Images/test_image</Stimulus>
-        <Stimulus>Images/test_image</Stimulus>
-      </Stimuli>
-      <Configuration Separator="FixationCross" Choice="ArrowKeys" Randomisation="ExperimentParameter" Type="Image" SeparatorFirst="false" />
-      <ExternalRandomisation>test_stimuli_order</ExternalRandomisation>
-      <Times Fixation="20" Exposition="30" Decision="10" />
-    </VisualStimuli>
   </Questions>
 </QuestionSet>
