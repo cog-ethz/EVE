@@ -80,13 +80,18 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             _temporaryIntAnswer = answer;
         }
 
+        public override void RetainAnswer(int positionOffset, int answer)
+        {
+            _temporaryIntAnswer = positionOffset;
+        }
+
         public override string GetJumpDestination()
         {
-            var answerB = new StringBuilder(new string('F', NRows * NColumns));
-            answerB[_temporaryIntAnswer] = 'T';
-            var answer = answerB.ToString();
             if (Jumps != null)
             {
+                var answerB = new StringBuilder(new string('F', NRows * NColumns));
+                answerB[_temporaryIntAnswer] = 'T';
+                var answer = answerB.ToString();
                 return
                 (from jump in Jumps
                  where jump.Activator.Equals("*") || jump.Activator.Equals(answer)

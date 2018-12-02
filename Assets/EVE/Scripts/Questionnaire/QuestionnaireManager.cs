@@ -629,7 +629,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             _dynamicFieldsWithScrollbar.gameObject.SetActive(false);
 
             _customContent.Find("LadderLabel").gameObject.GetComponent<Text>().text = q.LadderText;
-            var ladderButtons = _customContent.Find("Buttons");
+            var ladderButtons = _customContent.Find("LadderGroup").Find("Buttons");
 
             var qmb = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
             for (var i = 9; i >= 0; i--)

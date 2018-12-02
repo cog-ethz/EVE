@@ -321,7 +321,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             }
         }
 
-        public virtual void RetainAnswer(int positionOffset, int answer)
+        public override void RetainAnswer(int positionOffset, int answer)
         {
             if (Choice == Choice.Single)
             {
@@ -331,7 +331,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 }
                 else
                 {
-                    var lowerBound = answer - answer % NColumns;
+                    var lowerBound = positionOffset - positionOffset % NColumns;
                     var upperBound = lowerBound + NColumns;
                     for (var i = lowerBound; i < upperBound; i++)
                     {
@@ -342,13 +342,13 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                     }
                 }
             }
-            if (_answers.Contains(answer))
+            if (_answers.Contains(positionOffset))
             {
-                _answers.Remove(answer);
+                _answers.Remove(positionOffset);
             }
             else
             {
-                _answers.Add(answer);
+                _answers.Add(positionOffset);
             }
         }
 

@@ -191,7 +191,7 @@
       <RightLabel>Strongest experience ever felt</RightLabel>
       <Image>Textures/questionline</Image>
     </ScaleQuestion>
-    <LadderQuestion Name="swiss_status" NColumns="1" NRows="1">
+    <LadderQuestion Name="swiss_status" NColumns="1" NRows="10">
       <Text><![CDATA[Swiss comparison of social status]]></Text>
       <LadderText><![CDATA[At the TOP of the ladder are the people who are the best off. The lower you are, the closer you are to the people at the very bottom. Where would you place yourself on this ladder, compared to all the other people in Switzerland?]]></LadderText>
     </LadderQuestion>
