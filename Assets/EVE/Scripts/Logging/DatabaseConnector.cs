@@ -504,6 +504,8 @@ public abstract class DatabaseConnector
 
     public abstract void CreateSchema();
 
+    public abstract void DropSchema();
+
     public abstract void AddJumps(Question question1, string questionSetName);
     public abstract int GetQuestionIdByName(string name);
     public abstract string GetQuestionNameById(int id);

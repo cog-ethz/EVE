@@ -35,6 +35,14 @@ public class LoggingManager
         ConnectToServer(dbSettings);
     }
 
+    public void ConnectToServerAndResetSchema(DatabaseSettings dbSettings)
+    {
+        ConnectToServer(dbSettings.Server, dbSettings.User, dbSettings.Password);
+        DropSchema();
+        CreateSchema();
+        ConnectToServer(dbSettings);
+    }
+
     public bool ConnectToServer(DatabaseSettings settings)
     {
         var success = false;
@@ -771,6 +779,11 @@ public class LoggingManager
     public void CreateSchema()
     {
         _dbConnector.CreateSchema();
+    }
+
+    public void DropSchema()
+    {
+        _dbConnector.DropSchema();
     }
 
 

@@ -191,7 +191,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         {
             return Configuration.Randomisation == Randomisation.ExperimentParameter ?
                 experimentParameters[ExternalRandomisation].Split(',').Select(int.Parse).ToList() :
-                Enumerable.Range(0, Stimuli.Count-1).ToList();
+                Enumerable.Range(0, Stimuli.Count).ToList();
         }
     }
 }

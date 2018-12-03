@@ -18,6 +18,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private Text _questionText;
         private Button _setupButton;
         private Button _questionButton;
+        private Button _resetButton;
 
         // Use this for initialization
         void Start () {
@@ -29,8 +30,12 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _checkConnection = content.Find("ConnectionState").Find("Response").GetComponent<Text>();
             _dbSchema = content.Find("SchemaState").Find("Response").GetComponent<Text>();
             _questionText = content.Find("QuestionnaireState").Find("Response").GetComponent<Text>();
-            _setupButton = content.Find("SetupDatabaseTables").GetComponent<Button>();
+            _setupButton = content.Find("TableButtons").Find("SetupDatabaseTables").GetComponent<Button>();
+            _resetButton = content.Find("TableButtons").Find("ResetDatabaseTables").GetComponent<Button>();
             _questionButton = content.Find("SetupQuestionnaires").GetComponent<Button>();
+
+
+            _resetButton.onClick.AddListener(ResetDbSchema);
 
             CheckDatabase();
         }
@@ -86,6 +91,15 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _log.LogExperiment(_launchManager.ExperimentName);
             _launchManager.SessionId = _log.CurrentSessionID;
             _launchManager.LoadSettingsIntoDB();
+            CheckDatabase();
+        }
+
+        /// <summary>
+        /// Drops the database and resets it completely.
+        /// </summary>
+        public void ResetDbSchema()
+        {
+            _launchManager.MenuManager.ShowMenu(GameObject.Find("Delete Database Menu").GetComponent<BaseMenu>());
             CheckDatabase();
         }
 

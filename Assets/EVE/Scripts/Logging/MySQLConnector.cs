@@ -22,7 +22,7 @@ public class MySQLConnector : DatabaseConnector
 
     public override void ConnectToServer(string server, string database, string user, string password)
     {
-        string constr = "Server=" + server + ";Database=" + database + ";User ID=" + user + ";Password=" + password + ";Pooling=true";
+        var constr = "Server=" + server + ";Database=" + database + ";User ID=" + user + ";Password=" + password + ";Pooling=true";
         con = new MySqlConnection(constr);
         con.Open();
         Debug.Log("Connection State: " + con.State);
@@ -30,7 +30,7 @@ public class MySQLConnector : DatabaseConnector
 
     public override void ConnectToServer(string server, string user, string password)
     {
-        string constr = "Server=" + server + ";User ID=" + user + ";Password=" + password + ";Pooling=true";
+        var constr = "Server=" + server + ";User ID=" + user + ";Password=" + password + ";Pooling=true";
         con = new MySqlConnection(constr);
         con.Open();
         Debug.Log("Connection State: " + con.State);
@@ -38,8 +38,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override void InsertAnswer(string questionName, string questionSetName, string questionnaireName, int sessionId, KeyValuePair<int,string>[] selectedIndeces)
     {
-        string query = string.Empty;
-        int answerID = -1;
+        var query = string.Empty;
+        var answerID = -1;
 
         try
         {
@@ -55,10 +55,10 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?question_name", MySqlDbType.VarChar); oParam0.Value = questionName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?session_id", MySqlDbType.Int32); oParam1.Value = sessionId;
-                    MySqlParameter oParam2 = cmd.Parameters.Add("?setName", MySqlDbType.VarChar); oParam2.Value = questionSetName;
-                    MySqlParameter oParam3 = cmd.Parameters.Add("?questionnaire_name", MySqlDbType.VarChar); oParam3.Value = questionnaireName;
+                    var oParam0 = cmd.Parameters.Add("?question_name", MySqlDbType.VarChar); oParam0.Value = questionName;
+                    var oParam1 = cmd.Parameters.Add("?session_id", MySqlDbType.Int32); oParam1.Value = sessionId;
+                    var oParam2 = cmd.Parameters.Add("?setName", MySqlDbType.VarChar); oParam2.Value = questionSetName;
+                    var oParam3 = cmd.Parameters.Add("?questionnaire_name", MySqlDbType.VarChar); oParam3.Value = questionnaireName;
 
                     cmd.ExecuteNonQuery();
                 }
@@ -69,17 +69,17 @@ public class MySQLConnector : DatabaseConnector
             // ============ string values ==============
             if (selectedIndeces != null)
             {
-                for (int i = 0; i < selectedIndeces.Length; i++)
+                for (var i = 0; i < selectedIndeces.Length; i++)
                 {
-                    int insert_id = -1;
+                    var insert_id = -1;
                     query = "INSERT INTO store_strings (pos, val) VALUES (?pos, ?val)";
                     if (!con.State.Equals(ConnectionState.Open)) con.Open();
                     using (con)
                     {
                         using (cmd = new MySqlCommand(query, con))
                         {
-                            MySqlParameter oParam0 = cmd.Parameters.Add("?pos", MySqlDbType.Int32); oParam0.Value = selectedIndeces[i].Key;
-                            MySqlParameter oParam1 = cmd.Parameters.Add("?val", MySqlDbType.VarChar); oParam1.Value = selectedIndeces[i].Value;
+                            var oParam0 = cmd.Parameters.Add("?pos", MySqlDbType.Int32); oParam0.Value = selectedIndeces[i].Key;
+                            var oParam1 = cmd.Parameters.Add("?val", MySqlDbType.VarChar); oParam1.Value = selectedIndeces[i].Value;
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -92,8 +92,8 @@ public class MySQLConnector : DatabaseConnector
                     {
                         using (cmd = new MySqlCommand(query, con))
                         {
-                            MySqlParameter oParam0 = cmd.Parameters.Add("?answer_id", MySqlDbType.Int32); oParam0.Value = answerID;
-                            MySqlParameter oParam1 = cmd.Parameters.Add("?insert_id", MySqlDbType.Int32); oParam1.Value = insert_id;
+                            var oParam0 = cmd.Parameters.Add("?answer_id", MySqlDbType.Int32); oParam0.Value = answerID;
+                            var oParam1 = cmd.Parameters.Add("?insert_id", MySqlDbType.Int32); oParam1.Value = insert_id;
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -109,8 +109,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override int[] readAnswerIndex(int questionId, int sessionId)
     {
-        string query = string.Empty;
-        List<int> val = new List<int>();
+        var query = string.Empty;
+        var val = new List<int>();
 
         try
         {
@@ -124,8 +124,8 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?questionId", MySqlDbType.Int32); oParam0.Value = questionId;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
+                    var oParam0 = cmd.Parameters.Add("?questionId", MySqlDbType.Int32); oParam0.Value = questionId;
+                    var oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -148,8 +148,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override Dictionary<int,string> readAnswer(string questionName, int sessionId)
     {
-        string query = string.Empty;
-        Dictionary<int, string> result = new Dictionary<int, string>();
+        var query = string.Empty;
+        var result = new Dictionary<int, string>();
 
         try
         {
@@ -163,8 +163,8 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?questionName", MySqlDbType.VarChar); oParam0.Value = questionName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
+                    var oParam0 = cmd.Parameters.Add("?questionName", MySqlDbType.VarChar); oParam0.Value = questionName;
+                    var oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -194,13 +194,13 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "DELETE FROM sessions WHERE session_id =?sessionId";
+            var query = "DELETE FROM sessions WHERE session_id =?sessionId";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
+                    var oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -224,13 +224,13 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "DELETE FROM scene WHERE scene_name = ?sceneName";
+            var query = "DELETE FROM scene WHERE scene_name = ?sceneName";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?sceneName", MySqlDbType.VarChar); oParam0.Value = sceneName;
+                    var oParam0 = cmd.Parameters.Add("?sceneName", MySqlDbType.VarChar); oParam0.Value = sceneName;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -244,20 +244,20 @@ public class MySQLConnector : DatabaseConnector
 
     public override void SetExperimentSceneOrder(string experimentName, string[] scenes)
     {
-        for (int i = 0; i < scenes.Length; i++)
+        for (var i = 0; i < scenes.Length; i++)
         {
             try
             {
-                string query = "Insert INTO experiment_scene_order (scenes_id, experiment_id, experiment_order) VALUES" +
+                var query = "Insert INTO experiment_scene_order (scenes_id, experiment_id, experiment_order) VALUES" +
                     "((SELECT id FROM scene WHERE scene_name = ?sceneName),(SELECT id FROM experiment WHERE experiment_name = ?experimentName),?orderNumber)";
                 if (!con.State.Equals(ConnectionState.Open)) con.Open();
                 using (con)
                 {
                     using (cmd = new MySqlCommand(query, con))
                     {
-                        MySqlParameter oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
-                        MySqlParameter oParam1 = cmd.Parameters.Add("?sceneName", MySqlDbType.VarChar); oParam1.Value = scenes[i];
-                        MySqlParameter oParam2 = cmd.Parameters.Add("?orderNumber", MySqlDbType.Int32); oParam2.Value = i;
+                        var oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
+                        var oParam1 = cmd.Parameters.Add("?sceneName", MySqlDbType.VarChar); oParam1.Value = scenes[i];
+                        var oParam2 = cmd.Parameters.Add("?orderNumber", MySqlDbType.Int32); oParam2.Value = i;
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -278,13 +278,13 @@ public class MySQLConnector : DatabaseConnector
     public override void RemoveExperimentSceneOrder(string experimentName) {
         try
         {
-            string query = "DELETE FROM experiment_scene_order WHERE experiment_id = (SELECT id FROM experiment WHERE experiment_name = ?experimentName)";
+            var query = "DELETE FROM experiment_scene_order WHERE experiment_id = (SELECT id FROM experiment WHERE experiment_name = ?experimentName)";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
+                    var oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -300,15 +300,15 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "INSERT INTO sessions(experiment_id, subject_id)" +
+            var query = "INSERT INTO sessions(experiment_id, subject_id)" +
                 "VALUES ((SELECT id FROM experiment WHERE experiment_name = ?experimentName), ?subjectId)";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?subjectId", MySqlDbType.VarChar); oParam1.Value = subjectId;
+                    var oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
+                    var oParam1 = cmd.Parameters.Add("?subjectId", MySqlDbType.VarChar); oParam1.Value = subjectId;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -327,14 +327,14 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "UPDATE sessions SET labchart_file = ?labchart_file WHERE session_id = ?sessionId";
+            var query = "UPDATE sessions SET labchart_file = ?labchart_file WHERE session_id = ?sessionId";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?labchart_file", MySqlDbType.VarChar); oParam1.Value = fileName;
+                    var oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
+                    var oParam1 = cmd.Parameters.Add("?labchart_file", MySqlDbType.VarChar); oParam1.Value = fileName;
 
                     cmd.ExecuteNonQuery();
                 }
@@ -351,14 +351,14 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "UPDATE sessions SET labchart_timestamp = ?labchart_timestamp WHERE session_id = ?sessionId";
+            var query = "UPDATE sessions SET labchart_timestamp = ?labchart_timestamp WHERE session_id = ?sessionId";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?labchart_timestamp", MySqlDbType.VarChar); oParam1.Value = timestamp;
+                    var oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
+                    var oParam1 = cmd.Parameters.Add("?labchart_timestamp", MySqlDbType.VarChar); oParam1.Value = timestamp;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -372,17 +372,17 @@ public class MySQLConnector : DatabaseConnector
 
     public override string GetLabChartStartTime(int sessionId)
     {
-        string result = "";
+        var result = "";
 
         try
         {
-            string query = "SELECT * FROM sessions WHERE session_id = ?sessionId";
+            var query = "SELECT * FROM sessions WHERE session_id = ?sessionId";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
+                    var oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -403,15 +403,15 @@ public class MySQLConnector : DatabaseConnector
 
     public override int GetNextSessionId()
     {
-        string query = string.Empty;
-        int nextID = -1;
+        var query = string.Empty;
+        var nextID = -1;
 
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             query = "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = 'sessions' AND table_schema = DATABASE( );";
             cmd = new MySqlCommand(query, con);
-            object result = cmd.ExecuteScalar();
+            var result = cmd.ExecuteScalar();
             if (result != null) nextID = int.Parse(result.ToString());
         }
         catch (System.Exception ex)
@@ -426,14 +426,14 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "INSERT INTO user_answers(session_id, questionnaire_id) VALUES(?session_id,(SELECT id FROM questionnaires WHERE name = ?questionnaireName))";
+            var query = "INSERT INTO user_answers(session_id, questionnaire_id) VALUES(?session_id,(SELECT id FROM questionnaires WHERE name = ?questionnaireName))";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?session_id", MySqlDbType.VarChar); oParam1.Value = sessionId;
-                    MySqlParameter oParam2 = cmd.Parameters.Add("?questionnaireName", MySqlDbType.VarChar); oParam2.Value = questionnaireName;
+                    var oParam1 = cmd.Parameters.Add("?session_id", MySqlDbType.VarChar); oParam1.Value = sessionId;
+                    var oParam2 = cmd.Parameters.Add("?questionnaireName", MySqlDbType.VarChar); oParam2.Value = questionnaireName;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -448,8 +448,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override List<string> GetExperimentScenes(int experimentId)
     {
-        string query = string.Empty;
-        List<string> result = new List<string>();
+        var query = string.Empty;
+        var result = new List<string>();
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -459,7 +459,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?experimentId", MySqlDbType.Int32); oParam0.Value = experimentId;
+                    var oParam0 = cmd.Parameters.Add("?experimentId", MySqlDbType.Int32); oParam0.Value = experimentId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                     {
@@ -491,11 +491,11 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?name", MySqlDbType.VarChar);
+                    var oParam0 = cmd.Parameters.Add("?name", MySqlDbType.VarChar);
                     oParam0.Value = question.QuestionName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?question", MySqlDbType.VarChar);
+                    var oParam1 = cmd.Parameters.Add("?question", MySqlDbType.VarChar);
                     oParam1.Value = question.QuestionText;
-                    MySqlParameter oParam2 = cmd.Parameters.Add("?type", MySqlDbType.Int32);
+                    var oParam2 = cmd.Parameters.Add("?type", MySqlDbType.Int32);
                     oParam2.Value = question.QuestionType;                  
 
                     cmd.ExecuteNonQuery();
@@ -503,12 +503,12 @@ public class MySQLConnector : DatabaseConnector
             }
             Debug.Log("Inserted question:" + question.QuestionName);
 
-            int questionID = (int)cmd.LastInsertedId;            
+            var questionID = (int)cmd.LastInsertedId;            
             
             // SECOND: insert vals
             if (question.Vals != null)
             {
-                for (int i = 0; i <= question.Vals.Length-1; i++)
+                for (var i = 0; i <= question.Vals.Length-1; i++)
                 {
                     query = "INSERT INTO store_strings (pos, val) VALUES (?pos, ?val)";
                     if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -516,9 +516,9 @@ public class MySQLConnector : DatabaseConnector
                     {
                         using (cmd = new MySqlCommand(query, con))
                         {
-                            MySqlParameter oParam0 = cmd.Parameters.Add("?pos", MySqlDbType.Int32);
+                            var oParam0 = cmd.Parameters.Add("?pos", MySqlDbType.Int32);
                             oParam0.Value = i;
-                            MySqlParameter oParam1 = cmd.Parameters.Add("?val", MySqlDbType.VarChar);
+                            var oParam1 = cmd.Parameters.Add("?val", MySqlDbType.VarChar);
                             oParam1.Value = question.Vals[i].ToString();
                             cmd.ExecuteNonQuery();
                         }
@@ -529,7 +529,7 @@ public class MySQLConnector : DatabaseConnector
                     {
                         using (cmd = new MySqlCommand(query, con))
                         {
-                            MySqlParameter oParam0 = cmd.Parameters.Add("?question_id", MySqlDbType.Int32); oParam0.Value = questionID;
+                            var oParam0 = cmd.Parameters.Add("?question_id", MySqlDbType.Int32); oParam0.Value = questionID;
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -540,7 +540,7 @@ public class MySQLConnector : DatabaseConnector
             // THIRD: insert labels
             if (question.Labels != null)
             {
-                for (int i = 0; i <= question.Labels.Length-1; i++)
+                for (var i = 0; i <= question.Labels.Length-1; i++)
                 {
                     query = "INSERT INTO store_strings (pos, val) VALUES (?pos, ?val)";
                     if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -548,9 +548,9 @@ public class MySQLConnector : DatabaseConnector
                     {
                         using (cmd = new MySqlCommand(query, con))
                         {
-                            MySqlParameter oParam0 = cmd.Parameters.Add("?pos", MySqlDbType.Int32);
+                            var oParam0 = cmd.Parameters.Add("?pos", MySqlDbType.Int32);
                             oParam0.Value = i;
-                            MySqlParameter oParam1 = cmd.Parameters.Add("?val", MySqlDbType.VarChar);
+                            var oParam1 = cmd.Parameters.Add("?val", MySqlDbType.VarChar);
                             oParam1.Value = question.Labels[i];
                             cmd.ExecuteNonQuery();
                         }
@@ -561,7 +561,7 @@ public class MySQLConnector : DatabaseConnector
                     {
                         using (cmd = new MySqlCommand(query, con))
                         {
-                            MySqlParameter oParam0 = cmd.Parameters.Add("?question_id", MySqlDbType.Int32); oParam0.Value = questionID;
+                            var oParam0 = cmd.Parameters.Add("?question_id", MySqlDbType.Int32); oParam0.Value = questionID;
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -577,8 +577,8 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?question_id", MySqlDbType.VarChar); oParam0.Value = questionID;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?setName", MySqlDbType.VarChar); oParam1.Value = question.QuestionSet;
+                    var oParam0 = cmd.Parameters.Add("?question_id", MySqlDbType.VarChar); oParam0.Value = questionID;
+                    var oParam1 = cmd.Parameters.Add("?setName", MySqlDbType.VarChar); oParam1.Value = question.QuestionSet;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -587,7 +587,7 @@ public class MySQLConnector : DatabaseConnector
             // Add the ouput coding to the database
             if (question.Output != null)
             {
-                for (int i = 0; i <= question.Output.Length-1; i++)
+                for (var i = 0; i <= question.Output.Length-1; i++)
                 {
                     query = "INSERT INTO store_strings (pos, val) VALUES (?pos, ?val)";
                     if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -595,9 +595,9 @@ public class MySQLConnector : DatabaseConnector
                     {
                         using (cmd = new MySqlCommand(query, con))
                         {
-                            MySqlParameter oParam0 = cmd.Parameters.Add("?pos", MySqlDbType.Int32);
+                            var oParam0 = cmd.Parameters.Add("?pos", MySqlDbType.Int32);
                             oParam0.Value = i;
-                            MySqlParameter oParam1 = cmd.Parameters.Add("?val", MySqlDbType.VarChar);
+                            var oParam1 = cmd.Parameters.Add("?val", MySqlDbType.VarChar);
                             oParam1.Value = question.Output[i].ToString();
                             cmd.ExecuteNonQuery();
                         }
@@ -608,7 +608,7 @@ public class MySQLConnector : DatabaseConnector
                     {
                         using (cmd = new MySqlCommand(query, con))
                         {
-                            MySqlParameter oParam0 = cmd.Parameters.Add("?question_id", MySqlDbType.Int32); oParam0.Value = questionID;
+                            var oParam0 = cmd.Parameters.Add("?question_id", MySqlDbType.Int32); oParam0.Value = questionID;
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -625,17 +625,17 @@ public class MySQLConnector : DatabaseConnector
 
     public override bool CreateQuestionSet(string name)
     {
-        bool success = false;
+        var success = false;
         try
         {
-            string query = "INSERT INTO question_sets (name) " +
+            var query = "INSERT INTO question_sets (name) " +
                 "VALUES (?name)";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?name", MySqlDbType.VarChar); oParam0.Value = name;
+                    var oParam0 = cmd.Parameters.Add("?name", MySqlDbType.VarChar); oParam0.Value = name;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -692,10 +692,10 @@ public class MySQLConnector : DatabaseConnector
             // First insert the jumps
             try
             {
-                for (int i = 0; i < q.Jumps.Count; i++)
+                for (var i = 0; i < q.Jumps.Count; i++)
                 {
                     var jump = q.Jumps[i];
-                    string query = "INSERT INTO jumps (question_set, origin_id, dest_id) " +
+                    var query = "INSERT INTO jumps (question_set, origin_id, dest_id) " +
                                    "VALUES ((SELECT id FROM question_sets WHERE name = ?setName),((SELECT tmp.id FROM (SELECT qs.id,qs.name,qset.name AS qsetName FROM questions AS qs " +
                                    "INNER JOIN question_question_sets AS qqs ON qs.id = qqs.question_id " +
                                    "INNER JOIN question_sets AS qset ON  qqs.question_set_id = qset.id) AS tmp " +
@@ -708,11 +708,11 @@ public class MySQLConnector : DatabaseConnector
                     {
                         using (cmd = new MySqlCommand(query, con))
                         {
-                            MySqlParameter oParam0 = cmd.Parameters.Add("?setName", MySqlDbType.VarChar);
+                            var oParam0 = cmd.Parameters.Add("?setName", MySqlDbType.VarChar);
                             oParam0.Value = questionSetName;
-                            MySqlParameter oParam1 = cmd.Parameters.Add("?origin_name", MySqlDbType.VarChar);
+                            var oParam1 = cmd.Parameters.Add("?origin_name", MySqlDbType.VarChar);
                             oParam1.Value = q.Name;
-                            MySqlParameter oParam2 = cmd.Parameters.Add("?dest_name", MySqlDbType.VarChar);
+                            var oParam2 = cmd.Parameters.Add("?dest_name", MySqlDbType.VarChar);
                             oParam2.Value = jump.Destination;
                             cmd.ExecuteNonQuery();
                         }
@@ -727,7 +727,7 @@ public class MySQLConnector : DatabaseConnector
 
                     if (conditions.Length > 1)
                     {
-                        for (int j = 0; j < conditions.Length; j++)
+                        for (var j = 0; j < conditions.Length; j++)
                         {
                             query = "INSERT INTO jump_conditions (jump_id, option_id, assign) " +
                                     "VALUES (" + jumpId + "," + j + "," + (conditions[j] == 'T') + ")";
@@ -763,7 +763,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?jumpId", MySqlDbType.Int32); oParam0.Value = jumpId;
+                    var oParam0 = cmd.Parameters.Add("?jumpId", MySqlDbType.Int32); oParam0.Value = jumpId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -788,10 +788,10 @@ public class MySQLConnector : DatabaseConnector
     public override bool[,] GetJumpConditions(List<int> jumpIds)
     {
         // Get both dimensions
-        int sizeI = jumpIds.Count;
-        int sizeJ = 0;
+        var sizeI = jumpIds.Count;
+        var sizeJ = 0;
 
-        string query = string.Empty;
+        var query = string.Empty;
 
         try
         {
@@ -801,7 +801,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?jumpId", MySqlDbType.Int32); oParam0.Value = jumpIds[0];
+                    var oParam0 = cmd.Parameters.Add("?jumpId", MySqlDbType.Int32); oParam0.Value = jumpIds[0];
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -819,9 +819,9 @@ public class MySQLConnector : DatabaseConnector
 
         if (sizeJ > 0)
         {
-            bool[,] conds = new bool[sizeI, sizeJ];
+            var conds = new bool[sizeI, sizeJ];
 
-            for (int i = 0; i < jumpIds.Count; i++)
+            for (var i = 0; i < jumpIds.Count; i++)
             {
                 try
                 {
@@ -831,12 +831,12 @@ public class MySQLConnector : DatabaseConnector
                     {
                         using (cmd = new MySqlCommand(query, con))
                         {
-                            MySqlParameter oParam0 = cmd.Parameters.Add("?jumpId", MySqlDbType.Int32); oParam0.Value = jumpIds[0];
+                            var oParam0 = cmd.Parameters.Add("?jumpId", MySqlDbType.Int32); oParam0.Value = jumpIds[0];
                             rdr = cmd.ExecuteReader();
                             if (rdr.HasRows)
                                 while (rdr.Read())
                                 {
-                                    int j = int.Parse(rdr["option_id"].ToString());
+                                    var j = int.Parse(rdr["option_id"].ToString());
                                     conds[i, j] = bool.Parse(rdr["assign"].ToString());
                                 }
                             rdr.Dispose();
@@ -867,7 +867,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?questionName", MySqlDbType.VarChar); oParam0.Value = name;
+                    var oParam0 = cmd.Parameters.Add("?questionName", MySqlDbType.VarChar); oParam0.Value = name;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -896,7 +896,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?questionId", MySqlDbType.VarChar); oParam0.Value = id;
+                    var oParam0 = cmd.Parameters.Add("?questionId", MySqlDbType.VarChar); oParam0.Value = id;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -916,9 +916,9 @@ public class MySQLConnector : DatabaseConnector
 
     public override List<int> GetQuestionsOfSet(string questionSetName)
     {
-        string query = string.Empty;
+        var query = string.Empty;
 
-        List<int> questionInSet = new List<int>();
+        var questionInSet = new List<int>();
 
         try
         {
@@ -928,7 +928,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?questionSetName", MySqlDbType.VarChar); oParam0.Value = questionSetName;
+                    var oParam0 = cmd.Parameters.Add("?questionSetName", MySqlDbType.VarChar); oParam0.Value = questionSetName;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -948,9 +948,9 @@ public class MySQLConnector : DatabaseConnector
 
     public override List<int> GetJumpIds(int questionId)
     {
-        string query = string.Empty;
+        var query = string.Empty;
 
-        List<int> jumpIds = new List<int>();
+        var jumpIds = new List<int>();
 
         try
         {
@@ -960,7 +960,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?questionId", MySqlDbType.Int32); oParam0.Value = questionId;
+                    var oParam0 = cmd.Parameters.Add("?questionId", MySqlDbType.Int32); oParam0.Value = questionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -980,9 +980,9 @@ public class MySQLConnector : DatabaseConnector
 
     public override int GetJumpDest(int jumpId)
     {
-        string query = string.Empty;
+        var query = string.Empty;
 
-        int destID = 0;
+        var destID = 0;
 
         try
         {
@@ -992,7 +992,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?jumpId", MySqlDbType.Int32); oParam0.Value = jumpId;
+                    var oParam0 = cmd.Parameters.Add("?jumpId", MySqlDbType.Int32); oParam0.Value = jumpId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -1022,15 +1022,15 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "INSERT INTO questionnaire_question_sets (questionnaire_id, question_set_id) " +
+            var query = "INSERT INTO questionnaire_question_sets (questionnaire_id, question_set_id) " +
                 "VALUES ((SELECT id FROM questionnaires WHERE name = ?questionnaireName), (SELECT id FROM question_sets WHERE name = ?question_set))";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?questionnaireName", MySqlDbType.VarChar); oParam0.Value = questionnaireName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?question_set", MySqlDbType.VarChar); oParam1.Value = questionSetName;
+                    var oParam0 = cmd.Parameters.Add("?questionnaireName", MySqlDbType.VarChar); oParam0.Value = questionnaireName;
+                    var oParam1 = cmd.Parameters.Add("?question_set", MySqlDbType.VarChar); oParam1.Value = questionSetName;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -1043,9 +1043,9 @@ public class MySQLConnector : DatabaseConnector
 
     public override List<string> GetQuestionSets(string questionnaireName)
     {
-        string query = string.Empty;
+        var query = string.Empty;
 
-        List<string> qsNames = new List<string>();
+        var qsNames = new List<string>();
 
         try
         {
@@ -1057,7 +1057,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?name", MySqlDbType.VarChar); oParam0.Value = questionnaireName;
+                    var oParam0 = cmd.Parameters.Add("?name", MySqlDbType.VarChar); oParam0.Value = questionnaireName;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -1077,9 +1077,9 @@ public class MySQLConnector : DatabaseConnector
 
     public override List<string> GetQuestionSets(int questionnaireId)
     {
-        string query = string.Empty;
+        var query = string.Empty;
 
-        List<string> qsNames = new List<string>();
+        var qsNames = new List<string>();
 
         try
         {
@@ -1090,7 +1090,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?questionnaireId", MySqlDbType.Int32); oParam0.Value = questionnaireId;
+                    var oParam0 = cmd.Parameters.Add("?questionnaireId", MySqlDbType.Int32); oParam0.Value = questionnaireId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -1110,16 +1110,16 @@ public class MySQLConnector : DatabaseConnector
 
     public override object[] GetQuestionVars(int internalQuestionId)
     {
-        object[] result = new object[3];
+        var result = new object[3];
         try
         {
-            string query = "SELECT *  FROM questions WHERE id = ?internalQuestionId";
+            var query = "SELECT *  FROM questions WHERE id = ?internalQuestionId";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
+                    var oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -1148,14 +1148,14 @@ public class MySQLConnector : DatabaseConnector
         int[] vals = null;
         try
         {
-            int float_count = 0;
-            string query = "SELECT Count(*) FROM questions_stored_strings WHERE questions_id = ?internalQuestionId AND type =  \"float\" ";
+            var float_count = 0;
+            var query = "SELECT Count(*) FROM questions_stored_strings WHERE questions_id = ?internalQuestionId AND type =  \"float\" ";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
+                    var oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -1171,7 +1171,7 @@ public class MySQLConnector : DatabaseConnector
 
                 vals = new int[float_count];
 
-                int i = 0;
+                var i = 0;
 
                 query = "SELECT val FROM store_strings INNER JOIN (SELECT string_id FROM questions_stored_strings WHERE questions_id = ?internalQuestionId AND type =  \"float\" )" +
                         " AS questions_stored_string ON (questions_stored_string.string_id = store_strings.id)";
@@ -1180,7 +1180,7 @@ public class MySQLConnector : DatabaseConnector
                 {                    
                     using (cmd = new MySqlCommand(query, con))
                     {
-                        MySqlParameter oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
+                        var oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
                         rdr = cmd.ExecuteReader();
                         if (rdr.HasRows)
                             while (rdr.Read())
@@ -1207,15 +1207,15 @@ public class MySQLConnector : DatabaseConnector
         string[] labels = null;
         try
         {
-            int strings_count = 0;
+            var strings_count = 0;
 
-            string query = "SELECT Count(*) FROM questions_stored_strings WHERE questions_id = ?internalQuestionId AND type = \"string\"";
+            var query = "SELECT Count(*) FROM questions_stored_strings WHERE questions_id = ?internalQuestionId AND type = \"string\"";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
+                    var oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -1229,7 +1229,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 labels = new string[strings_count];
 
-                int i = 0;
+                var i = 0;
 
                 query = "SELECT val FROM store_strings INNER JOIN (SELECT string_id FROM questions_stored_strings WHERE questions_id = ?internalQuestionId AND type =  \"string\" )" +
                         " AS questions_stored_string ON (questions_stored_string.string_id = store_strings.id)";
@@ -1238,7 +1238,7 @@ public class MySQLConnector : DatabaseConnector
                 {
                     using (cmd = new MySqlCommand(query, con))
                     {
-                        MySqlParameter oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
+                        var oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
                         rdr = cmd.ExecuteReader();
                         if (rdr.HasRows)
                             while (rdr.Read())
@@ -1260,16 +1260,16 @@ public class MySQLConnector : DatabaseConnector
 
     public override string GetQuestionsSetName(int internalQuestionId)
     {
-        string questionSetName = "";
+        var questionSetName = "";
         try
         {
-            string query = "SELECT name FROM question_sets WHERE id = (SELECT question_set_id FROM question_question_sets WHERE question_id = ?internalQuestionId )";
+            var query = "SELECT name FROM question_sets WHERE id = (SELECT question_set_id FROM question_question_sets WHERE question_id = ?internalQuestionId )";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
+                    var oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -1292,15 +1292,15 @@ public class MySQLConnector : DatabaseConnector
         int[] output = null;
         try
         {
-            int output_code_count = 0;
+            var output_code_count = 0;
             // Get output codes from database
-            string query = "SELECT Count(*) FROM questions_coded_output WHERE questions_id = (SELECT id FROM questions WHERE id = ?internalQuestionId )";
+            var query = "SELECT Count(*) FROM questions_coded_output WHERE questions_id = (SELECT id FROM questions WHERE id = ?internalQuestionId )";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
+                    var oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -1314,7 +1314,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 output = new int[output_code_count];
 
-                int i = 0;
+                var i = 0;
 
                 query = "SELECT val FROM store_strings INNER JOIN (SELECT string_id FROM questions_coded_output WHERE questions_id = " +
                         " (SELECT id FROM questions WHERE id = ?internalQuestionId )) AS questions_code ON (questions_code.string_id = store_strings.id)";
@@ -1323,7 +1323,7 @@ public class MySQLConnector : DatabaseConnector
                 {
                     using (cmd = new MySqlCommand(query, con))
                     {
-                        MySqlParameter oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
+                        var oParam0 = cmd.Parameters.Add("?internalQuestionId", MySqlDbType.Int32); oParam0.Value = internalQuestionId;
                         rdr = cmd.ExecuteReader();
                         if (rdr.HasRows)
                             while (rdr.Read())
@@ -1345,10 +1345,10 @@ public class MySQLConnector : DatabaseConnector
 
     public override string[] GetSessionData(int sessionID)
     {
-        int data_number = 4;
+        var data_number = 4;
 
-        string[] result = new string[data_number];
-        string query = string.Empty;
+        var result = new string[data_number];
+        var query = string.Empty;
 
         try
         {
@@ -1357,7 +1357,7 @@ public class MySQLConnector : DatabaseConnector
 
             using (cmd = new MySqlCommand(query, con))
             {
-                MySqlParameter oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionID;
+                var oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionID;
                 rdr = cmd.ExecuteReader();
                 if (rdr.HasRows)
                     while (rdr.Read())
@@ -1382,12 +1382,12 @@ public class MySQLConnector : DatabaseConnector
 
     public override string[][] GetAllSessionsData(string experimentName)
     {
-        int data_number = 4;
-        string[][] result = new string[data_number][];
+        var data_number = 4;
+        var result = new string[data_number][];
 
-        List<string>[] session_ids = new List<string>[data_number];
-        for (int i = 0; i < data_number; i++) session_ids[i] = new List<string>();
-        string query = string.Empty;
+        var session_ids = new List<string>[data_number];
+        for (var i = 0; i < data_number; i++) session_ids[i] = new List<string>();
+        var query = string.Empty;
 
         try
         {
@@ -1397,7 +1397,7 @@ public class MySQLConnector : DatabaseConnector
 
             using (cmd = new MySqlCommand(query, con))
             {
-                MySqlParameter oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
+                var oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
                 rdr = cmd.ExecuteReader();
                 if (rdr.HasRows)
                     while (rdr.Read())
@@ -1410,11 +1410,11 @@ public class MySQLConnector : DatabaseConnector
                 rdr.Dispose();
             }
 
-            for (int j = 0; j < data_number; j++)
+            for (var j = 0; j < data_number; j++)
                 result[j] = new string[session_ids[0].Count];
 
-            for (int i = 0; i < session_ids[0].Count; i++)
-                for (int j = 0; j < data_number; j++)
+            for (var i = 0; i < session_ids[0].Count; i++)
+                for (var j = 0; j < data_number; j++)
                     result[j][i] = session_ids[j][i];
 
             return result;
@@ -1429,8 +1429,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override int getExperimentId(int sessionId)
     {
-        string query = string.Empty;
-        int result = -1;
+        var query = string.Empty;
+        var result = -1;
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -1441,7 +1441,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
+                    var oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                     {
@@ -1463,8 +1463,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override int getExperimentId(string experimentName)
     {
-        string query = string.Empty;
-        int result = -1;
+        var query = string.Empty;
+        var result = -1;
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -1475,7 +1475,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
+                    var oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                     {
@@ -1497,15 +1497,15 @@ public class MySQLConnector : DatabaseConnector
 
     public override int[] GetAnsweredQuestionnaireIds(int[] sessionsIds)
     {
-        string query = string.Empty;
-        List<int> questionnaire_ids = new List<int>();
+        var query = string.Empty;
+        var questionnaire_ids = new List<int>();
 
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
 
             query = "SELECT DISTINCT (questionnaire_id) AS questionnaire_id FROM user_answers WHERE session_id = " + sessionsIds[0];
-            for (int i = 1; i < sessionsIds.Length; i++)
+            for (var i = 1; i < sessionsIds.Length; i++)
             {
                 query += " OR session_id = " + sessionsIds[i];
             }
@@ -1532,14 +1532,14 @@ public class MySQLConnector : DatabaseConnector
 
     public override List<int>[] GetAnswerIds(int[] questionnaireIds, int[] sessionsIds)
     {
-        string query = string.Empty;
-        List<int>[] answer_IDs = new List<int>[questionnaireIds.Length];
-        for (int i = 0; i < questionnaireIds.Length; i++)
+        var query = string.Empty;
+        var answer_IDs = new List<int>[questionnaireIds.Length];
+        for (var i = 0; i < questionnaireIds.Length; i++)
             answer_IDs[i] = new List<int>();
 
-        for (int i = 0; i < questionnaireIds.Length; i++)
+        for (var i = 0; i < questionnaireIds.Length; i++)
         {
-            int questionnaireId = questionnaireIds[i];
+            var questionnaireId = questionnaireIds[i];
 
             try
             {
@@ -1548,7 +1548,7 @@ public class MySQLConnector : DatabaseConnector
                 query = "SELECT id FROM questions INNER JOIN (" +
                             "SELECT DISTINCT(question_id)  FROM store_answers INNER JOIN (SELECT id FROM user_answers WHERE questionnaire_id = " + questionnaireId +
                             " AND session_id = " + questionnaireIds[0];
-                for (int j = 1; j < questionnaireIds.Length; j++)
+                for (var j = 1; j < questionnaireIds.Length; j++)
                 {
                     query += " OR session_id = " + questionnaireIds[j];
                 }
@@ -1607,10 +1607,10 @@ public class MySQLConnector : DatabaseConnector
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
-            string query = "SELECT * FROM data_origin WHERE device_name = ?originName";
+            var query = "SELECT * FROM data_origin WHERE device_name = ?originName";
             cmd = new MySqlCommand(query, con);
-            MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-            object result = cmd.ExecuteScalar();
+            var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+            var result = cmd.ExecuteScalar();
             if (result == null)
             {
                 query = "INSERT INTO data_origin (device_name) VALUES (?originName)";
@@ -1619,7 +1619,7 @@ public class MySQLConnector : DatabaseConnector
                 {
                     using (cmd = new MySqlCommand(query, con))
                     {
-                        MySqlParameter oParam1 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam1.Value = originName;
+                        var oParam1 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam1.Value = originName;
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -1638,10 +1638,10 @@ public class MySQLConnector : DatabaseConnector
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
-            string query = "SELECT * FROM data_origin WHERE device_name = ?originName";
+            var query = "SELECT * FROM data_origin WHERE device_name = ?originName";
             cmd = new MySqlCommand(query, con);
-            MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-            object result = cmd.ExecuteScalar();
+            var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+            var result = cmd.ExecuteScalar();
             if (result != null)
             {
                 query = "DELETE FROM data_origin WHERE device_name = ?originName";
@@ -1650,7 +1650,7 @@ public class MySQLConnector : DatabaseConnector
                 {
                     using (cmd = new MySqlCommand(query, con))
                     {
-                        MySqlParameter oParam1 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam1.Value = originName;
+                        var oParam1 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam1.Value = originName;
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -1669,11 +1669,11 @@ public class MySQLConnector : DatabaseConnector
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
-            string query = "SELECT * FROM data_description WHERE device_id = (SELECT id FROM data_origin WHERE device_name = ?originName) AND  description = ?outputDescription";
+            var query = "SELECT * FROM data_description WHERE device_id = (SELECT id FROM data_origin WHERE device_name = ?originName) AND  description = ?outputDescription";
             cmd = new MySqlCommand(query, con);
-            MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-            MySqlParameter oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
-            object result = cmd.ExecuteScalar();
+            var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+            var oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
+            var result = cmd.ExecuteScalar();
             if (result == null)
             {
 
@@ -1703,15 +1703,15 @@ public class MySQLConnector : DatabaseConnector
         // adds a data unit if it has not been added yet
         try
         {
-            string query = "SELECT * FROM data_units WHERE description_id = (SELECT id FROM data_description WHERE device_id = (SELECT id FROM data_origin WHERE device_name = ?originName ) AND"
+            var query = "SELECT * FROM data_units WHERE description_id = (SELECT id FROM data_description WHERE device_id = (SELECT id FROM data_origin WHERE device_name = ?originName ) AND"
                            + " description = ?outputDescription) AND unit = ?unitName";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             object result = null;
             using (cmd = new MySqlCommand(query, con))
             {
-                MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                MySqlParameter oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
-                MySqlParameter oParam2 = cmd.Parameters.Add("?unitName", MySqlDbType.VarChar); oParam2.Value = unitName;
+                var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                var oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
+                var oParam2 = cmd.Parameters.Add("?unitName", MySqlDbType.VarChar); oParam2.Value = unitName;
                 result = cmd.ExecuteScalar();
             }
             if (result == null)
@@ -1724,9 +1724,9 @@ public class MySQLConnector : DatabaseConnector
                 {
                     using (cmd = new MySqlCommand(query, con))
                     {
-                        MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                        MySqlParameter oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
-                        MySqlParameter oParam2 = cmd.Parameters.Add("?unitName", MySqlDbType.VarChar); oParam2.Value = unitName;
+                        var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                        var oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
+                        var oParam2 = cmd.Parameters.Add("?unitName", MySqlDbType.VarChar); oParam2.Value = unitName;
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -1744,7 +1744,7 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "INSERT INTO sensor_data (data_description_id, session_id, value,time) VALUES" +
+            var query = "INSERT INTO sensor_data (data_description_id, session_id, value,time) VALUES" +
                        "((SELECT id FROM data_description WHERE device_id = (SELECT id FROM data_origin WHERE device_name = ?originName) AND"
                           + " description = ?outputDescription),?sessionId,?value,?time)";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -1752,11 +1752,11 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
-                    MySqlParameter oParam2 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam2.Value = sessionId;
-                    MySqlParameter oParam3 = cmd.Parameters.Add("?value", MySqlDbType.VarChar); oParam3.Value = value;
-                    MySqlParameter oParam4 = cmd.Parameters.Add("?time", MySqlDbType.VarChar); oParam4.Value = time;
+                    var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                    var oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
+                    var oParam2 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam2.Value = sessionId;
+                    var oParam3 = cmd.Parameters.Add("?value", MySqlDbType.VarChar); oParam3.Value = value;
+                    var oParam4 = cmd.Parameters.Add("?time", MySqlDbType.VarChar); oParam4.Value = time;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -1772,7 +1772,7 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "INSERT INTO sensor_data_3d (data_description_id, session_id, x, y, z, time) VALUES" +
+            var query = "INSERT INTO sensor_data_3d (data_description_id, session_id, x, y, z, time) VALUES" +
                        "((SELECT id FROM data_description WHERE device_id = (SELECT id FROM data_origin WHERE device_name = ?originName) AND"
                           + " description = ?outputDescription),?sessionId,?valueX, ?valueY, ?valueZ,?time)";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -1780,13 +1780,13 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
-                    MySqlParameter oParam2 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam2.Value = sessionId;
-                    MySqlParameter oParam3 = cmd.Parameters.Add("?valueX", MySqlDbType.VarChar); oParam3.Value = valueX;
-                    MySqlParameter oParam4 = cmd.Parameters.Add("?valueY", MySqlDbType.VarChar); oParam4.Value = valueY;
-                    MySqlParameter oParam5 = cmd.Parameters.Add("?valueZ", MySqlDbType.VarChar); oParam5.Value = valueZ;
-                    MySqlParameter oParam6 = cmd.Parameters.Add("?time", MySqlDbType.VarChar); oParam6.Value = time;
+                    var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                    var oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
+                    var oParam2 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam2.Value = sessionId;
+                    var oParam3 = cmd.Parameters.Add("?valueX", MySqlDbType.VarChar); oParam3.Value = valueX;
+                    var oParam4 = cmd.Parameters.Add("?valueY", MySqlDbType.VarChar); oParam4.Value = valueY;
+                    var oParam5 = cmd.Parameters.Add("?valueZ", MySqlDbType.VarChar); oParam5.Value = valueZ;
+                    var oParam6 = cmd.Parameters.Add("?time", MySqlDbType.VarChar); oParam6.Value = time;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -1802,7 +1802,7 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "INSERT INTO system_data (data_description_id, session_id, value,time) VALUES" +
+            var query = "INSERT INTO system_data (data_description_id, session_id, value,time) VALUES" +
                        "((SELECT id FROM data_description WHERE device_id = (SELECT id FROM data_origin WHERE device_name = ?originName) AND"
                           + " description = ?outputDescription),?sessionId,?value,?time)";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -1810,11 +1810,11 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
-                    MySqlParameter oParam2 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam2.Value = sessionId;
-                    MySqlParameter oParam3 = cmd.Parameters.Add("?value", MySqlDbType.VarChar); oParam3.Value = value;
-                    MySqlParameter oParam4 = cmd.Parameters.Add("?time", MySqlDbType.VarChar); oParam4.Value = time;
+                    var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                    var oParam1 = cmd.Parameters.Add("?outputDescription", MySqlDbType.VarChar); oParam1.Value = outputDescription;
+                    var oParam2 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam2.Value = sessionId;
+                    var oParam3 = cmd.Parameters.Add("?value", MySqlDbType.VarChar); oParam3.Value = value;
+                    var oParam4 = cmd.Parameters.Add("?time", MySqlDbType.VarChar); oParam4.Value = time;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -1828,8 +1828,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override Dictionary<DateTime, string[]> Get3DMeasuredDataByTime(string originName, string description, int sessionId)
     {
-        string query = string.Empty;
-        Dictionary<DateTime, string[]> result = new Dictionary<DateTime, string[]>();
+        var query = string.Empty;
+        var result = new Dictionary<DateTime, string[]>();
 
         try
         {
@@ -1842,15 +1842,15 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
-                    MySqlParameter oParam2 = cmd.Parameters.Add("?description", MySqlDbType.VarChar); oParam2.Value = description;
+                    var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                    var oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
+                    var oParam2 = cmd.Parameters.Add("?description", MySqlDbType.VarChar); oParam2.Value = description;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
                         {
-                            string timeString = rdr["time"].ToString();
-                            DateTime aDate = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss.fff", new CultureInfo("de-DE"));
+                            var timeString = rdr["time"].ToString();
+                            var aDate = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss.fff", new CultureInfo("de-DE"));
                             if (result.ContainsKey(aDate))
                             {
                                 if (rdr["unit"].ToString().Length > 0)
@@ -1872,7 +1872,7 @@ public class MySQLConnector : DatabaseConnector
                             {
                                 if (rdr["unit"].ToString().Length > 0)
                                 {
-                                    string[] tmp = new string[3];
+                                    var tmp = new string[3];
                                     tmp[0] = rdr["x"].ToString() + " " + rdr["unit"].ToString();
                                     tmp[1] = rdr["y"].ToString() + " " + rdr["unit"].ToString();
                                     tmp[2] = rdr["z"].ToString() + " " + rdr["unit"].ToString();
@@ -1880,7 +1880,7 @@ public class MySQLConnector : DatabaseConnector
                                 }
                                 else
                                 {
-                                    string[] tmp = new string[3];
+                                    var tmp = new string[3];
                                     tmp[0] = rdr["x"].ToString();
                                     tmp[1] = rdr["y"].ToString();
                                     tmp[2] = rdr["z"].ToString();
@@ -1901,8 +1901,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override Dictionary<DateTime, Dictionary<string, string>> GetMeasuredDataByTime(string originName, int sessionId)
     {
-        string query = string.Empty;
-        Dictionary<DateTime, Dictionary<string, string>> result = new Dictionary<DateTime, Dictionary<string, string>>();
+        var query = string.Empty;
+        var result = new Dictionary<DateTime, Dictionary<string, string>>();
 
         try
         {
@@ -1915,14 +1915,14 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
+                    var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                    var oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
                         {
-                            string timeString = rdr["time"].ToString();
-                            DateTime aDate = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss.fff", new CultureInfo("de-DE"));
+                            var timeString = rdr["time"].ToString();
+                            var aDate = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss.fff", new CultureInfo("de-DE"));
                             if (result.ContainsKey(aDate))
                             {
                                 if (rdr["unit"].ToString().Length > 0)
@@ -1932,7 +1932,7 @@ public class MySQLConnector : DatabaseConnector
                             }
                             else
                             {
-                                Dictionary<string, string> tmp = new Dictionary<string, string>();
+                                var tmp = new Dictionary<string, string>();
                                 if (rdr["unit"].ToString().Length > 0)
                                     tmp.Add(rdr["description"].ToString(), rdr["value"].ToString() + " " + rdr["unit"].ToString());
                                 else
@@ -1954,8 +1954,8 @@ public class MySQLConnector : DatabaseConnector
     public override Dictionary<string, Dictionary<string, List<DateTime>>> GetMeasuredDataByName(string originName, int sessionId)
     {
 
-        string query = string.Empty;
-        Dictionary<string, Dictionary<string, List<DateTime>>> result = new Dictionary<string, Dictionary<string, List<DateTime>>>();
+        var query = string.Empty;
+        var result = new Dictionary<string, Dictionary<string, List<DateTime>>>();
 
         try
         {
@@ -1968,35 +1968,35 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
+                    var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                    var oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
                         {
-                            string description = rdr["description"].ToString();
+                            var description = rdr["description"].ToString();
 
                             if (result.ContainsKey(description))
                             {
-                                string timeString = rdr["time"].ToString();
-                                DateTime aDate = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss.fff", new CultureInfo("de-DE"));
+                                var timeString = rdr["time"].ToString();
+                                var aDate = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss.fff", new CultureInfo("de-DE"));
                                 if (result[description].ContainsKey(rdr["value"].ToString()))
                                 {
                                     result[description][rdr["value"].ToString()].Add(aDate);
                                 }
                                 else
                                 {
-                                    List<DateTime> dateList = new List<DateTime>();
+                                    var dateList = new List<DateTime>();
                                     dateList.Add(aDate);
                                     result[description].Add(rdr["value"].ToString(), dateList);
                                 }
                             }
                             else
                             {
-                                string timeString = rdr["time"].ToString();
-                                DateTime aDate = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss.fff", new CultureInfo("de-DE"));
-                                List<DateTime> dateList = new List<DateTime>();
-                                Dictionary<string, List<DateTime>> tmp = new Dictionary<string, List<DateTime>>();
+                                var timeString = rdr["time"].ToString();
+                                var aDate = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss.fff", new CultureInfo("de-DE"));
+                                var dateList = new List<DateTime>();
+                                var tmp = new Dictionary<string, List<DateTime>>();
                                 dateList.Add(aDate);
                                 tmp.Add(rdr["value"].ToString() + " " + rdr["unit"].ToString(), dateList);
                                 result.Add(description, tmp);
@@ -2015,8 +2015,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override Dictionary<DateTime, Dictionary<string, string>> GetSystemDataByTime(string originName, string description, int sessionId)
     {
-        string query = string.Empty;
-        Dictionary<DateTime, Dictionary<string, string>> result = new Dictionary<DateTime, Dictionary<string, string>>();
+        var query = string.Empty;
+        var result = new Dictionary<DateTime, Dictionary<string, string>>();
 
         try
         {
@@ -2029,15 +2029,15 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
-                    MySqlParameter oParam2 = cmd.Parameters.Add("?description", MySqlDbType.VarChar); oParam2.Value = description;
+                    var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                    var oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
+                    var oParam2 = cmd.Parameters.Add("?description", MySqlDbType.VarChar); oParam2.Value = description;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
                         {
-                            string timeString = rdr["time"].ToString();
-                            DateTime aDate = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss.fff", new CultureInfo("de-DE"));
+                            var timeString = rdr["time"].ToString();
+                            var aDate = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss.fff", new CultureInfo("de-DE"));
                             if (result.ContainsKey(aDate))
                             {
                                 if (rdr["unit"].ToString().Length > 0)
@@ -2047,7 +2047,7 @@ public class MySQLConnector : DatabaseConnector
                             }
                             else
                             {
-                                Dictionary<string, string> tmp = new Dictionary<string, string>();
+                                var tmp = new Dictionary<string, string>();
                                 if (rdr["unit"].ToString().Length > 0)
                                     tmp.Add(rdr["description"].ToString(), rdr["value"].ToString() + " " + rdr["unit"].ToString());
                                 else
@@ -2069,8 +2069,8 @@ public class MySQLConnector : DatabaseConnector
     public override List<string>[] GetSystemData(string originName, int sessionId)
     {
 
-        string query = string.Empty;
-        List<string>[] result = new List<string>[3];
+        var query = string.Empty;
+        var result = new List<string>[3];
 
         result[0] = new List<string>();
         result[1] = new List<string>();
@@ -2087,8 +2087,8 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
+                    var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                    var oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -2110,8 +2110,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override List<string>[] GetSystemData(string originName, string description, int sessionId)
     {
-        string query = string.Empty;
-        List<string>[] result = new List<string>[2];
+        var query = string.Empty;
+        var result = new List<string>[2];
         result[0] = new List<string>();
         result[1] = new List<string>();
 
@@ -2126,9 +2126,9 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
-                    MySqlParameter oParam2 = cmd.Parameters.Add("?description", MySqlDbType.VarChar); oParam2.Value = description;
+                    var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                    var oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
+                    var oParam2 = cmd.Parameters.Add("?description", MySqlDbType.VarChar); oParam2.Value = description;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -2149,8 +2149,8 @@ public class MySQLConnector : DatabaseConnector
 
     public override List<string>[] GetMeasurmentsDataAsString(string originName, int sessionId)
     {
-        string query = string.Empty;
-        List<string>[] result = new List<string>[2];
+        var query = string.Empty;
+        var result = new List<string>[2];
         result[0] = new List<string>();
         result[1] = new List<string>();
 
@@ -2165,8 +2165,8 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
+                    var oParam0 = cmd.Parameters.Add("?originName", MySqlDbType.VarChar); oParam0.Value = originName;
+                    var oParam1 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam1.Value = sessionId;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -2199,15 +2199,15 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "INSERT INTO experiment_parameter(experiment_id, parameter_description)" +
+            var query = "INSERT INTO experiment_parameter(experiment_id, parameter_description)" +
                 "VALUES((SELECT id FROM experiment WHERE experiment_name = ?experimentName), ?parameterDescription)";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?parameterDescription", MySqlDbType.VarChar); oParam1.Value = parameterDescription;
+                    var oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
+                    var oParam1 = cmd.Parameters.Add("?parameterDescription", MySqlDbType.VarChar); oParam1.Value = parameterDescription;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -2230,14 +2230,14 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "DELETE FROM experiment_parameter WHERE experiment_id = (SELECT id FROM experiment WHERE experiment_name = ?experimentName) AND parameter_description = ?parameterName";
+            var query = "DELETE FROM experiment_parameter WHERE experiment_id = (SELECT id FROM experiment WHERE experiment_name = ?experimentName) AND parameter_description = ?parameterName";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?parameterName", MySqlDbType.VarChar); oParam0.Value = parameterName;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam1.Value = experimentName;
+                    var oParam0 = cmd.Parameters.Add("?parameterName", MySqlDbType.VarChar); oParam0.Value = parameterName;
+                    var oParam1 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam1.Value = experimentName;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -2252,17 +2252,17 @@ public class MySQLConnector : DatabaseConnector
 
     public override List<string> GetExperimentParameters(string experimentName)
     {
-        List<string> result = new List<string>();
+        var result = new List<string>();
 
         try
         {
-            string query = "SELECT parameter_description FROM experiment_parameter WHERE experiment_id = (SELECT id FROM experiment WHERE experiment_name = ?experimentName)";
+            var query = "SELECT parameter_description FROM experiment_parameter WHERE experiment_id = (SELECT id FROM experiment WHERE experiment_name = ?experimentName)";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
+                    var oParam0 = cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                         while (rdr.Read())
@@ -2285,16 +2285,16 @@ public class MySQLConnector : DatabaseConnector
     {
         try
         {
-            string query = "INSERT INTO session_parameter_values(session_id, experiment_parameter_id, value) " +
+            var query = "INSERT INTO session_parameter_values(session_id, experiment_parameter_id, value) " +
                 "VALUES(?sessionId, (SELECT id FROM experiment_parameter WHERE parameter_description = ?parameterDescription), ?parameterValue)";
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
             using (con)
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
-                    MySqlParameter oParam1 = cmd.Parameters.Add("?parameterDescription", MySqlDbType.VarChar); oParam1.Value = parameterDescription;
-                    MySqlParameter oParam2 = cmd.Parameters.Add("?parameterValue", MySqlDbType.VarChar); oParam2.Value = parameterValue;
+                    var oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
+                    var oParam1 = cmd.Parameters.Add("?parameterDescription", MySqlDbType.VarChar); oParam1.Value = parameterDescription;
+                    var oParam2 = cmd.Parameters.Add("?parameterValue", MySqlDbType.VarChar); oParam2.Value = parameterValue;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -2309,17 +2309,17 @@ public class MySQLConnector : DatabaseConnector
 
     public override string GetSessionParameter(int sessionId, string parameterName)
     {
-        string result = "";
+        var result = "";
 
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
-            string query = "SELECT value FROM session_parameter_values WHERE session_id = ?sessionId AND "
+            var query = "SELECT value FROM session_parameter_values WHERE session_id = ?sessionId AND "
                 + "experiment_parameter_id = (SELECT id FROM experiment_parameter WHERE parameter_description = ?parameterName AND experiment_id = (SELECT experiment_id FROM sessions WHERE session_id = ?sessionId))";
             using (cmd = new MySqlCommand(query, con))
             {
-                MySqlParameter oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
-                MySqlParameter oParam1 = cmd.Parameters.Add("?parameterName", MySqlDbType.VarChar); oParam1.Value = parameterName;
+                var oParam0 = cmd.Parameters.Add("?sessionId", MySqlDbType.Int32); oParam0.Value = sessionId;
+                var oParam1 = cmd.Parameters.Add("?parameterName", MySqlDbType.VarChar); oParam1.Value = parameterName;
                 rdr = cmd.ExecuteReader();
                 if (rdr.HasRows)
                     while (rdr.Read())
@@ -2340,7 +2340,7 @@ public class MySQLConnector : DatabaseConnector
 
     public override bool CheckSchemaExists(string schemaName)
     {
-        string query = string.Empty;
+        var query = string.Empty;
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -2351,7 +2351,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?schemaName", MySqlDbType.VarChar); oParam0.Value = schemaName;
+                    var oParam0 = cmd.Parameters.Add("?schemaName", MySqlDbType.VarChar); oParam0.Value = schemaName;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                     {
@@ -2378,7 +2378,7 @@ public class MySQLConnector : DatabaseConnector
 
     public override bool CheckQuestionnaireExists(string questionnaireName)
     {
-        string query = string.Empty;
+        var query = string.Empty;
         try
         {
             if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -2388,7 +2388,7 @@ public class MySQLConnector : DatabaseConnector
             {
                 using (cmd = new MySqlCommand(query, con))
                 {
-                    MySqlParameter oParam0 = cmd.Parameters.Add("?questionnaireName", MySqlDbType.VarChar); oParam0.Value = questionnaireName;
+                    var oParam0 = cmd.Parameters.Add("?questionnaireName", MySqlDbType.VarChar); oParam0.Value = questionnaireName;
                     rdr = cmd.ExecuteReader();
                     if (rdr.HasRows)
                     {
@@ -2416,12 +2416,21 @@ public class MySQLConnector : DatabaseConnector
     public override void CreateSchema()
     {
         if (!con.State.Equals(ConnectionState.Open)) con.Open();
-        TextAsset txt = (TextAsset)Resources.Load("Setup_EVE_DB", typeof(TextAsset));
-        MySqlScript script = new MySqlScript(con, txt.text);
+        var txt = (TextAsset)Resources.Load("Setup_EVE_DB", typeof(TextAsset));
+        var script = new MySqlScript(con, txt.text);
         script.Delimiter = "$$";
         script.Execute();
         con.Close();
     }
+
+    public override void DropSchema()
+    {
+        if (!con.State.Equals(ConnectionState.Open)) con.Open();
+        var query = "DROP DATABASE IF EXISTS EVE";
+        cmd = new MySqlCommand(query, con);
+        cmd.ExecuteNonQuery();
+    }
+
     private bool IsInserted(string value, string table, string variable)
     {
         if (!con.State.Equals(ConnectionState.Open)) con.Open();
@@ -2471,7 +2480,7 @@ public class MySQLConnector : DatabaseConnector
             Debug.LogError("Tried to insert the wrong number of values");
             return;
         }
-        string vars = variables[0] + ", " + variables[1] + "," + variables[2];
+        var vars = variables[0] + ", " + variables[1] + "," + variables[2];
         var query = "INSERT INTO " + table + " (" + vars + ") VALUES (?value0ToAdd, ?value1ToAdd, ?value2ToAdd)";
         if (!con.State.Equals(ConnectionState.Open)) con.Open();
         using (con)

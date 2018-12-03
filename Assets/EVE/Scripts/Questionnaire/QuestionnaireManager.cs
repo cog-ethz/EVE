@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -88,7 +87,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             _menuManager = _launchManager.MenuManager;
             _menuManager.CloseCurrentMenu();
 
-            _oldQuestionPlaceholder = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/QuestionPlaceholder");
+            _oldQuestionPlaceholder = GameObjectUtils.InstatiatePrefab("Prefabs/Questionnaire/QuestionPlaceholder");
             MenuUtils.PlaceElement(_oldQuestionPlaceholder, _canvas.transform);
         }
 
@@ -119,7 +118,7 @@ namespace Assets.EVE.Scripts.Questionnaire
                 }
             
                 _menuManager.CloseMenu(_oldQuestionPlaceholder.GetComponent<Menu.BaseMenu>());
-                _questionPlaceholder = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/QuestionPlaceholder");
+                _questionPlaceholder = GameObjectUtils.InstatiatePrefab("Prefabs/Questionnaire/QuestionPlaceholder");
                 _questionPlaceholder.name = "QuestionPlaceholder";
                 _oldQuestionPlaceholder.name = "Old QuestionPlaceholder";
                 MenuUtils.PlaceElement(_questionPlaceholder, _canvas.transform);
@@ -725,8 +724,8 @@ namespace Assets.EVE.Scripts.Questionnaire
                 AddComponent<Representations.VisualStimuli>();
             rep.Question = q;
 
-            _questionContent.GetComponent<RectTransform>().sizeDelta = new Vector2(5760, 1080);
-            _questionContent.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
+            _questionContent.GetComponent<RectTransform>().sizeDelta =
+                _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
             
             var fixationScreen = GameObjectUtils.InstatiatePrefab("Prefabs/Questionnaire/VisualStimuli/Fixation");
             MenuUtils.PlaceElement(fixationScreen, _questionContent);
@@ -742,7 +741,8 @@ namespace Assets.EVE.Scripts.Questionnaire
             expositionScreen.SetActive(false);
             rep.ExpositionScreen = expositionScreen;
 
-            expositionScreen.GetComponent<RectTransform>().sizeDelta = new Vector2(5760,1080);
+            expositionScreen.GetComponent<RectTransform>().sizeDelta =
+                _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
 
             _questionContent.gameObject.SetActive(true);
 
