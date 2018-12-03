@@ -22,6 +22,8 @@ public class MenuManager : MonoBehaviour {
     /// </summary>
     public string ParticipantId { get; set; }
 
+    private Dictionary<string,string> _menuState;
+
 
     public BaseMenu CurrentMenu;
     private LaunchManager _launchManager;
@@ -76,6 +78,7 @@ public class MenuManager : MonoBehaviour {
         _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
         _errorBaseMenu = GameObject.Find("ErrorMenu").GetComponent<ErrorMenuButtons>();
         _experimentParameters = new List<string>();
+        _menuState = new Dictionary<string, string>();
     }
 
     public void Start() {        

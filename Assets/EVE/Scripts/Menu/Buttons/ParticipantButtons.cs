@@ -1,6 +1,7 @@
 ﻿using System;
 using Assets.EVE.Scripts.Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.EVE.Scripts.Menu.Buttons
@@ -13,15 +14,18 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private PopUpEvaluationMap _map;
         private LaunchManager _launchManager;
         private Transform _dynamicField;
+        private LabchartUtils _labchart;
 
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
             _menumanager = _launchManager.MenuManager;
             _log = _launchManager.LoggingManager;
+            _labchart = _launchManager.gameObject.GetComponent<LabchartUtils>();
             
             _dynamicField = transform.Find("Panel").Find("Fields").Find("DynFieldsWithScrollbar").Find("DynFields");
-
+            var btn = transform.Find("Panel").Find("Fields").Find("Labchart Button").GetComponent<Button>();
+            btn.onClick.AddListener(AddLabchartComments);
             DisplayParticipantDetails();
         }
 
@@ -65,10 +69,11 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                     //make replay button
                     var filenameObj = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/TabTabAndReplayButton");
                     MenuUtils.PlaceElement(filenameObj, _dynamicField);
-                    var replayButton = filenameObj.transform.Find("Button").GetComponent<ReplayButton>();
-                    replayButton.setreplaySceneID(k);
-                    replayButton.setReplaySceneName(envs[k]);
-                    replayButton.setReplaySessionId(_sessionId);
+                    var replayButton = filenameObj.transform.Find("Button").GetComponent<Button>();
+                    var localSceneId = k;
+                    var localSceneName = envs[k];
+                    var localSessionId = _sessionId;
+                    replayButton.onClick.AddListener(() => Replay(localSceneId, localSceneName, localSessionId));
 
                     //make show map button
                     _map = gameObject.GetComponent<PopUpEvaluationMap>();
@@ -90,9 +95,22 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             var prefabType = tab ? "TextWithTextAndTab" : "TextWithText";
             var filenameObj = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + prefabType);
             var dynamicField = GameObject.Find("Participant Menu").GetComponent<BaseMenu>().getDynamicFields("DynFields");
-            Utils.MenuUtils.PlaceElement(filenameObj, dynamicField);
+            MenuUtils.PlaceElement(filenameObj, dynamicField);
             filenameObj.transform.Find("evalField").GetComponent<Text>().text = evalField;
             filenameObj.transform.Find("evalValue").GetComponent<Text>().text = evalValue;
+        }
+
+        public void AddLabchartComments()
+        {
+            _labchart.AddLabchartComments();
+        }
+
+        public void Replay(int sessionId, string sceneName, int sceneId)
+        {
+            GameObject FPC = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>().FPC;
+            ReplayRoute replay = FPC.GetComponentInChildren<ReplayRoute>();
+            replay.activateReplay(sessionId, sceneName, sceneId);
+            SceneManager.LoadScene(sceneName);
         }
     }
 }

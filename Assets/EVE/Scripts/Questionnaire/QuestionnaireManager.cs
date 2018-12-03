@@ -357,31 +357,12 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         }
 
-        private static int CalculateLengthOfMessage(string message, Text tex)
-        {
-            var totalLength = 0;
-            tex.font.RequestCharactersInTexture(message, tex.fontSize, tex.fontStyle);
-            var myFont = tex.font; 
-
-            var arr = message.ToCharArray();
-
-            foreach (var c in arr)
-            {
-                CharacterInfo characterInfo;
-                myFont.GetCharacterInfo(c, out characterInfo, tex.fontSize);
-                totalLength += characterInfo.advance;
-            }
-
-            return totalLength;
-        }
-
-
         private static int GetMaxTextLength(IEnumerable<string> labels)
         {
             var labelTextTmp = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ToggleTopLabel");
             var textTmp = labelTextTmp.GetComponent<Text>();
 
-            var maxLength = labels.Select(t => CalculateLengthOfMessage(t, textTmp)).Concat(new[] {0}).Max();
+            var maxLength = labels.Select(t => MenuUtils.MessagePixelLength(t, textTmp)).Concat(new[] {0}).Max();
 
             Destroy(textTmp);
             Destroy(labelTextTmp);
@@ -480,7 +461,7 @@ namespace Assets.EVE.Scripts.Questionnaire
                     var tex = filenameObj.GetComponent<Text>();
 
                     var count = Regex.Split(tex.text, "\n").Length - 1;
-                    var labelLength = CalculateLengthOfMessage(tex.text, tex);
+                    var labelLength = MenuUtils.MessagePixelLength(tex.text, tex);
                     var rowHeight = (int) (Math.Ceiling(labelLength/sideLabelWidth) + count)*32;
                     filenameObj.GetComponent<RectTransform>().sizeDelta = new Vector2(sideLabelWidth, rowHeight);
 

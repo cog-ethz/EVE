@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.EVE.Scripts.Menu.Buttons
 {
     public class ConfigureLabchartButtons : MonoBehaviour {
 
+        private LaunchManager _launchManager;
         private LoggingManager _log;
         private string _starterPath;
         private string _path;
@@ -12,15 +14,20 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         // Use this for initialization
         void Start()
         {
-            var launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-            _path = launchManager.ExperimentSettings.LabchartSettings.Path;
+            _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+            _path = _launchManager.ExperimentSettings.LabchartSettings.Path;
             _starterPath = _path + "StartData\\DriveChart.exe";
-            _log = launchManager.LoggingManager;
+            _log = _launchManager.LoggingManager;
+
+            var btn = transform.Find("Panel").Find("Fields").Find("MeasureButton").GetComponent<Button>();
+            btn.onClick.AddListener(StartLabchartMeasuring);
         }
 
         public void StartLabchartMeasuring()
         {
             StartLabChart();
+            _launchManager.MenuManager.CloseCurrentMenu();
+            _launchManager.ManualContinueToNextScene();
         }
 
         /// <summary>

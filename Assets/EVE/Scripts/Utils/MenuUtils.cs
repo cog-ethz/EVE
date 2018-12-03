@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Assets.EVE.Scripts.Utils
@@ -50,6 +51,28 @@ namespace Assets.EVE.Scripts.Utils
                 old = current;
             }
             return distance;
+        }
+
+        /// <summary>
+        /// Computes the length of a message in pixel.
+        /// </summary>
+        /// <param name="message">String to be messured</param>
+        /// <param name="tex">Text element providing formatting</param>
+        /// <returns>Length in pixel</returns>
+        public static int MessagePixelLength(string message, Text tex)
+        {
+            var totalLength = 0;
+            var myFont = tex.font;
+            var arr = message.ToCharArray();
+
+            for (var index = 0; index < arr.Length; index++)
+            {
+                CharacterInfo characterInfo;
+                myFont.GetCharacterInfo(arr[index], out characterInfo, tex.fontSize);
+                totalLength += characterInfo.advance;
+            }
+
+            return totalLength;
         }
 
     }
