@@ -1,26 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.EVE.Scripts.Menu;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ErrorMenuButtons : BaseMenu {
+namespace Assets.EVE.Scripts.Menu.Buttons
+{
+    public class ErrorMenuButtons : MonoBehaviour{
 
-    BaseMenu _originBaseMenu = null;
+        private BaseMenu _originBaseMenu;
+        private LaunchManager _launchManager;
 
-    public void setErrorText(string errorText)
-    {
-        GameObject errorMessageObj=GameObject.Find("ErrorMessage");
-        errorMessageObj.GetComponent<UnityEngine.UI.Text>().text = errorText;
+        void Start()
+        {
+            _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+        }
+
+        public void SetErrorText(string errorText)
+        {
+            var errorMessageObj=GameObject.Find("ErrorMessage");
+            errorMessageObj.GetComponent<UnityEngine.UI.Text>().text = errorText;
+        }
+
+        public void SetErrorOriginMenu(BaseMenu originBaseMenu)
+        {
+            this._originBaseMenu = originBaseMenu;
+        }
+
+        public void ShowOriginMenu() {
+            _launchManager.MenuManager.ShowMenu(_originBaseMenu);
+        }
     }
-
-    public void setErrorOriginMenu(BaseMenu originBaseMenu)
-    {
-        this._originBaseMenu = originBaseMenu;
-    }
-
-    public void showOriginMenu() {
-        GameObject.Find("Canvas").GetComponent<MenuManager>().ShowMenu(_originBaseMenu);
-    }
-
-
 }

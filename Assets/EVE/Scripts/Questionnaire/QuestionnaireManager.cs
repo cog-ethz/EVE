@@ -8,7 +8,6 @@ using Assets.EVE.Scripts.Questionnaire.Questions;
 using Assets.EVE.Scripts.Questionnaire.Visitor;
 using Assets.EVE.Scripts.Utils;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Question = Assets.EVE.Scripts.Questionnaire.Questions.Question;
 

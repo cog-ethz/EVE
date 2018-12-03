@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.EVE.Scripts.Menu;
+using Assets.EVE.Scripts.Menu.Buttons;
 using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using Assets.EVE.Scripts.XML;
@@ -200,16 +201,16 @@ public class MenuManager : MonoBehaviour {
     
     public void DisplayErrorMessage(string errorMessage)
     {
-        _errorBaseMenu.setErrorOriginMenu(CurrentMenu);
-        _errorBaseMenu.setErrorText(errorMessage);
-        ShowMenu(_errorBaseMenu);
+        _errorBaseMenu.SetErrorOriginMenu(CurrentMenu);
+        _errorBaseMenu.SetErrorText(errorMessage);
+        ShowMenu(_errorBaseMenu.gameObject.GetComponent<BaseMenu>());
     }
 
     public void DisplayErrorMessage(string errorMessage, BaseMenu originBaseMenu)
     {
-        _errorBaseMenu.setErrorOriginMenu(originBaseMenu);
-        _errorBaseMenu.setErrorText(errorMessage);
-        ShowMenu(_errorBaseMenu);
+        _errorBaseMenu.SetErrorOriginMenu(originBaseMenu);
+        _errorBaseMenu.SetErrorText(errorMessage);
+        ShowMenu(_errorBaseMenu.gameObject.GetComponent<BaseMenu>());
     }
     
     /// <summary>
