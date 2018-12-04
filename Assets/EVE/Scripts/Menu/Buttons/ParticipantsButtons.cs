@@ -40,6 +40,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private int showInfoIndex, showInfoSSNID;
         private LaunchManager _launchManager;
         private MenuManager _menuManager;
+        private Transform _dynFields;
 
 
         // Use this for initialization
@@ -51,11 +52,20 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
             _map = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Evaluation/EvaluationMap");
 
+
+
+            var fields = transform.Find("Panel").Find("Fields");
+            fields.Find("BackButton").GetComponent<Button>().onClick.AddListener(() => { _menuManager.InstantiateAndShowMenu("Evaluation Menu", "Launcher"); });
+
+            _dynFields = fields.Find("DynFieldsWithScrollbar").Find("DynFields");
+
             DisplayParticipants();
         }
 
         public void DisplayParticipants()
         {
+            //MenuUtils.ClearList(_dynFields);
+
             var experimentName = _launchManager.ExperimentName;
             var s = _log.getAllSessionsData(experimentName);
             session_ids = Array.ConvertAll(s[0], int.Parse);
@@ -68,10 +78,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             timeSec = new TimeSpan[session_ids.Length][];
             distances = new float[session_ids.Length][];
             envs = new string[session_ids.Length][];
-
-
-            var dynamicField = GameObject.Find("Participants Menu").GetComponent<BaseMenu>().getDynamicFields("DynFields");
-
+            
             for (var i = 0; i < session_ids.Length; i++)
             {
                 var sid = session_ids[i];
@@ -105,7 +112,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
                 var pid = participant_ids[i];
 
-                var gObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/EvaluationEntry");
+                var gObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Lists/EvaluationEntry");
                 gObject.transform.Find("DetailsButton").GetComponent<Button>().onClick.AddListener(() =>
                 {
                     ShowParticipantDetails(sid);
@@ -116,7 +123,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                     RemoveEvaluationEntry(sid, pid, gObject);
 
                 });
-                MenuUtils.PlaceElement(gObject, dynamicField);
+                MenuUtils.PlaceElement(gObject, _dynFields);
 
                 gObject.transform.Find("SessionId").GetComponent<Text>().text = sid.ToString();
                 gObject.transform.Find("ParticipantId").GetComponent<Text>().text = pid;

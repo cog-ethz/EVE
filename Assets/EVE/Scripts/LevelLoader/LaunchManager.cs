@@ -304,8 +304,9 @@ public class LaunchManager : MonoBehaviour
                     if (LoggingManager.getSensors().Contains("HL7Server"))
                         this.gameObject.GetComponent<HL7ServerStarter>().enabled = true;
                     StoreSessionParameters();
-                    var startBaseMenu = GameObject.Find("Start Menu").GetComponent<BaseMenu>();
-                    MenuManager.ShowMenu(startBaseMenu);
+                    MenuManager.InstantiateAndShowMenu("Start Menu","Launcher");
+                    //var startBaseMenu = GameObject.Find("Start Menu").GetComponent<BaseMenu>();
+                    //MenuManager.ShowMenu(startBaseMenu);
                 }
             }
         }

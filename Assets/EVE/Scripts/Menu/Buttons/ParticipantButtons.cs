@@ -94,7 +94,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             var prefabType = tab ? "TextWithTextAndTab" : "TextWithText";
             var filenameObj = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + prefabType);
-            var dynamicField = GameObject.Find("Participant Menu").GetComponent<BaseMenu>().getDynamicFields("DynFields");
+            var dynamicField = GameObject.Find("Participant Menu").GetComponent<BaseMenu>().GetDynamicFields("DynFields");
             MenuUtils.PlaceElement(filenameObj, dynamicField);
             filenameObj.transform.Find("evalField").GetComponent<Text>().text = evalField;
             filenameObj.transform.Find("evalValue").GetComponent<Text>().text = evalValue;

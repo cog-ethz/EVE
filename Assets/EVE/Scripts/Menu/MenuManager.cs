@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.EVE.Scripts.Menu;
 using Assets.EVE.Scripts.Menu.Buttons;
@@ -30,7 +31,6 @@ public class MenuManager : MonoBehaviour {
     private LaunchManager _launchManager;
     private LoggingManager _log;
     private SceneSettings _sceneSettings;
-    private ErrorMenuButtons _errorBaseMenu;
     private List<string> _experimentParameters;
     private string _sceneFilePath;
     private GameObject _menuObject;
@@ -77,13 +77,13 @@ public class MenuManager : MonoBehaviour {
     public void Awake()
     {
         _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        _errorBaseMenu = GameObject.Find("ErrorMenu").GetComponent<ErrorMenuButtons>();
         _experimentParameters = new List<string>();
         _menuState = new Dictionary<string, string>();
     }
 
     public void Start() {        
-        ShowMenu(CurrentMenu);
+        //ShowMenu(CurrentMenu);
+        InstantiateAndShowMenu("Main Menu", "Launcher");
         _log = _launchManager.LoggingManager;
         _sceneSettings = _launchManager.ExperimentSettings.SceneSettings;
     }
@@ -103,7 +103,9 @@ public class MenuManager : MonoBehaviour {
     {
         if (CurrentMenu != null) CloseCurrentMenu();
         _menuObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + menuContext + "/" + menu);
+        MenuUtils.PlaceElement(_menuObject.gameObject,transform);
         CurrentMenu = _menuObject.GetComponent<BaseMenu>();
+        CurrentMenu.isOpen = true;
     }
 
     public void CloseMenu(BaseMenu baseMenu)
@@ -114,8 +116,14 @@ public class MenuManager : MonoBehaviour {
 
     public void CloseCurrentMenu()
     {
-
+        StartCoroutine(RemoveWithDelay(CurrentMenu.gameObject,1));
         CurrentMenu.isOpen = false;
+    }
+
+    private IEnumerator RemoveWithDelay(GameObject currentMenu, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(currentMenu);
     }
 
     public void AddExperimentParameter(string experimentParameter)
@@ -146,11 +154,8 @@ public class MenuManager : MonoBehaviour {
         _log.CreateExperimentParameter(_launchManager.ExperimentSettings.Name, attributeName);
     }
     
-
-    public void SetSubjectId(string subjectId)
-    {
-        this.ParticipantId = string.IsNullOrEmpty(subjectId) ? "" : subjectId;
-    }
+    
+    
     
     //no longer used?
     //public void deleteParentObject(GameObject deleteButton) {
@@ -199,18 +204,18 @@ public class MenuManager : MonoBehaviour {
         return _experimentParameters;
     }
     
-    public void DisplayErrorMessage(string errorMessage)
+    /// <summary>
+    /// Display an error message in the menu system.
+    /// </summary>
+    /// <param name="errorMessage">The text to be displayed</param>
+    /// <param name="originBaseMenu">Optional: set a return point other then the currently active menu.</param>
+    public void DisplayErrorMessage(string errorMessage, BaseMenu originBaseMenu = null)
     {
-        _errorBaseMenu.SetErrorOriginMenu(CurrentMenu);
-        _errorBaseMenu.SetErrorText(errorMessage);
-        ShowMenu(_errorBaseMenu.gameObject.GetComponent<BaseMenu>());
-    }
-
-    public void DisplayErrorMessage(string errorMessage, BaseMenu originBaseMenu)
-    {
-        _errorBaseMenu.SetErrorOriginMenu(originBaseMenu);
-        _errorBaseMenu.SetErrorText(errorMessage);
-        ShowMenu(_errorBaseMenu.gameObject.GetComponent<BaseMenu>());
+        var errorMenu = GameObjectUtils.InstatiatePrefab("Prefabs/Menu/ErrorMenu");
+        var errorBaseMenu = errorMenu.GetComponent<ErrorMenuButtons>();
+        errorBaseMenu.SetErrorOriginMenu(originBaseMenu == null ? CurrentMenu : originBaseMenu);
+        errorBaseMenu.SetErrorText(errorMessage);
+        ShowMenu(errorBaseMenu.gameObject.GetComponent<BaseMenu>());
     }
     
     /// <summary>

@@ -145,7 +145,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
                 if (_showedQuestions <= _lastValidQuestion)
                     _menuManager.CurrentMenu
-                        .getDynamicFields("BackButton")
+                        .GetDynamicFields("BackButton")
                         .gameObject
                         .GetComponent<Button>()
                         .interactable = false;

@@ -20,6 +20,10 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
             _dynamicField = gameObject.transform.Find("Panel").Find("Fields").Find("DynFieldsWithScrollbar").Find("DynFields");
 
+            var fields = transform.Find("Panel").Find("Fields");
+            fields.Find("StartButton").GetComponent<Button>().onClick.AddListener(() => { _launchManager.StartExperiment(); });
+            fields.Find("BackButton").GetComponent<Button>().onClick.AddListener(() => { _menuManager.InstantiateAndShowMenu("Experiment Menu", "Launcher"); });
+
             DisplaySessionParameters();
         }
 
@@ -32,12 +36,12 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
             foreach (var experimentParameter in experimentParameters)
             {
-                var gObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/TextAndFieldNoXButton");
-                gObject.GetComponentInChildren<InputField>().onEndEdit.AddListener((string text) =>
+                var gObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Lists/EditableSessionParameter");
+                gObject.GetComponentInChildren<InputField>().onEndEdit.AddListener((text) =>
                 {
                     StoreSessionParameter(experimentParameter,text);
                 });
-                Utils.MenuUtils.PlaceElement(gObject, _dynamicField);
+                MenuUtils.PlaceElement(gObject, _dynamicField);
                 gObject.transform.Find("FieldName").GetComponent<Text>().text = experimentParameter;
                 if (_launchManager.SessionParameters.ContainsKey(experimentParameter))
                     gObject.transform.Find("InputField").Find("Placeholder").GetComponent<Text>().text =
@@ -53,15 +57,6 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 return;
             }
             _launchManager.ChangeSessionsParameter(sessionParameter, value);
-        }
-
-
-        /// <summary>
-        /// Starts Experiment.
-        /// </summary>
-        public void StartExperiment()
-        {
-            _launchManager.StartExperiment();
         }
     }
 }

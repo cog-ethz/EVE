@@ -45,11 +45,11 @@ namespace Assets.EVE.Scripts.Menu
 
         //a menu can have a panel called DynFields which contains all dynamically created fields
         //if no Object with the name "DynFields" exists, null is returned
-        public Transform getDynamicFields(string dynamicFieldName) {
+        public Transform GetDynamicFields(string dynamicFieldName) {
             Transform dynf = null;
             List<Transform> listOfChilds = new List<Transform>();
             listOfChilds.Add(transform);
-            getAllChilds(transform,listOfChilds);
+            GetAllChildren(transform,listOfChilds);
             foreach (var child in listOfChilds) {
                 if (child.Find(dynamicFieldName) != null) {
                     dynf = child.Find(dynamicFieldName);
@@ -58,12 +58,12 @@ namespace Assets.EVE.Scripts.Menu
             return dynf;
         }
 
-        private void getAllChilds(Transform transform, List<Transform> listOfChilds)
+        private void GetAllChildren(Transform transform, List<Transform> listOfChilds)
         {
             for (int i = 0; i < transform.childCount; i++)
             {
                 listOfChilds.Add(transform.GetChild(i));
-                getAllChilds(transform.GetChild(i), listOfChilds);
+                GetAllChildren(transform.GetChild(i), listOfChilds);
             }
         }
 
