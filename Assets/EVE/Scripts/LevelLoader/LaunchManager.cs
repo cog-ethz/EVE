@@ -91,8 +91,7 @@ public class LaunchManager : MonoBehaviour
         _initialized = false;
         if (!connected)
         {
-            var databaseSetupMenu = GameObject.Find("Database Configuration Menu").GetComponent<BaseMenu>();
-            MenuManager.DisplayErrorMessage("Unable to connect to the database! Press ok to check the database status", databaseSetupMenu);
+            MenuManager.DisplayErrorMessage("Unable to connect to the database! Press ok to check the database status", "Database Configuration Menu","Launcher");
         }
         else
         {
@@ -272,8 +271,7 @@ public class LaunchManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(_participantId))
         {
-            var originBaseMenu = GameObject.Find("Experiment Menu").GetComponent<BaseMenu>();
-            MenuManager.DisplayErrorMessage("The Subject ID is invalid!", originBaseMenu);
+            MenuManager.DisplayErrorMessage("The Subject ID is invalid!", "Experiment Menu","Launcher");
         }
         else
         {
@@ -284,16 +282,13 @@ public class LaunchManager : MonoBehaviour
             var nParameters = MenuManager.GetExperimentParameterList().Count;
             if (sceneList.Count <= 0)
             {
-                var originBaseMenu = GameObject.Find("Scene Configuration").GetComponent<BaseMenu>();
-                MenuManager.DisplayErrorMessage("No scenes selected!", originBaseMenu);
+                MenuManager.DisplayErrorMessage("No scenes selected!", "Scene Configuration", "Launcher");
             }
             else
             {
                 if (SessionParameters.Count != nParameters)
                 {
-
-                    var originBaseMenu = GameObject.Find("Session Parameters Menu").GetComponent<BaseMenu>();
-                    MenuManager.DisplayErrorMessage("Session parameters are not set.",originBaseMenu);
+                    MenuManager.DisplayErrorMessage("Session parameters are not set.", "Session Parameters Menu","Launcher");
                 }
                 else
                 {

@@ -196,17 +196,19 @@ public class MenuManager : MonoBehaviour {
     {
         return _experimentParameters;
     }
-    
+
     /// <summary>
     /// Display an error message in the menu system.
     /// </summary>
     /// <param name="errorMessage">The text to be displayed</param>
     /// <param name="originBaseMenu">Optional: set a return point other then the currently active menu.</param>
-    public void DisplayErrorMessage(string errorMessage, BaseMenu originBaseMenu = null)
+    /// <param name="originContext">Optional context of active menu</param>
+    public void DisplayErrorMessage(string errorMessage, string originBaseMenu, string originContext)
     {
-        var errorMenu = GameObjectUtils.InstatiatePrefab("Prefabs/Menu/ErrorMenu");
+        var errorMenu = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ErrorMenu");
+        MenuUtils.PlaceElement(errorMenu.gameObject, transform);
         var errorBaseMenu = errorMenu.GetComponent<ErrorMenuButtons>();
-        errorBaseMenu.SetErrorOriginMenu(originBaseMenu == null ? CurrentMenu : originBaseMenu);
+        errorBaseMenu.SetErrorOriginMenu(originBaseMenu,originContext);
         errorBaseMenu.SetErrorText(errorMessage);
         ShowMenu(errorBaseMenu.gameObject.GetComponent<BaseMenu>());
     }

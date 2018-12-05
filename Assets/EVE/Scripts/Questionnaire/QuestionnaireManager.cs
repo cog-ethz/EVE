@@ -351,7 +351,8 @@ namespace Assets.EVE.Scripts.Questionnaire
             }
             else
             {
-                _menuManager.DisplayErrorMessage("Please answer the question!");
+                //TODO FIX THIS ERROR CALL
+                _menuManager.DisplayErrorMessage("Please answer the question!","QuestionnaireManager","Questionnaire");
             }
 
         }

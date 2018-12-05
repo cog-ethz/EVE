@@ -5,7 +5,8 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 {
     public class ErrorMenuButtons : MonoBehaviour{
 
-        private BaseMenu _originBaseMenu;
+        private string _originBaseMenu;
+        private string _originContext;
         private LaunchManager _launchManager;
 
         void Start()
@@ -29,16 +30,17 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// Menu which to display when closing the error message.
         /// </summary>
         /// <param name="originBaseMenu">Menu to be displayed.</param>
-        public void SetErrorOriginMenu(BaseMenu originBaseMenu)
+        public void SetErrorOriginMenu(string originBaseMenu, string originContext)
         {
             _originBaseMenu = originBaseMenu;
+            _originContext = originContext;
         }
 
         /// <summary>
         /// Returns to previous menu.
         /// </summary>
         public void ShowOriginMenu() {
-            _launchManager.MenuManager.ShowMenu(_originBaseMenu);
+            _launchManager.MenuManager.InstantiateAndShowMenu(_originBaseMenu, _originContext);
         }
     }
 }
