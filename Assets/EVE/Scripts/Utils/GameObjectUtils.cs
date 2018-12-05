@@ -16,8 +16,7 @@ namespace Assets.EVE.Scripts.Utils
             yield return new WaitForSeconds(delay);
             Object.Destroy(gameObject);
         }
-
-
+        
         /// <summary>
         /// Instantiates prefab and asserts that it exists
         /// </summary>

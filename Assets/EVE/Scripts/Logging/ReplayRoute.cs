@@ -51,8 +51,8 @@ public class ReplayRoute : MonoBehaviour {
         launchManager.ReplaySessionId = sessionID;
         log = launchManager.LoggingManager;
         pos_logger.enabled = false;
-        xyz = log.getXYZ(sessionID, sceneID);
-        xyzT = log.getXYZtimestamp(sessionID, sceneID);
+        xyz = log.GetPath(sessionID, sceneID);
+        xyzT = log.GetPathAndTime(sessionID, sceneID);
         input = log.getAllInput(sessionID, sceneID);
         sceneTime = log.getSceneTime(sceneID, sessionID);
 

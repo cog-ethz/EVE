@@ -185,7 +185,7 @@ public class LaunchManager : MonoBehaviour
                 }
                 else
                 {
-                    MenuManager.ShowMenu(GameObject.Find("Finish Menu").GetComponent<BaseMenu>());
+                    MenuManager.InstantiateAndShowMenu("Finish Menu","Launcher");
                 }
             }
         }

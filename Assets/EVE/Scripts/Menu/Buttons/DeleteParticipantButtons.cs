@@ -15,21 +15,24 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
             _menuManager = _launchManager.MenuManager;
+
+            var fields = transform.Find("Panel").Find("Fields");
+            fields.Find("YesButton").GetComponent<Button>().onClick.AddListener(ConfirmDelete);
+            fields.Find("NoButton").GetComponent<Button>().onClick.AddListener(()=>_menuManager.InstantiateAndShowMenu("Participants Menu","Launcher"));
+
             DisplayDeleteQuestion();
         }
         
         public void DisplayDeleteQuestion() {
             _sid = _menuManager.ActiveSessionId;
             _pid = _menuManager.ActiveParticipantId;
-            _item = _menuManager.ActiveListItem;
 
             gameObject.transform.Find("Panel").Find("Fields").Find("Participant Details").GetComponent<Text>().text="Session: " + _sid + " Participant: " + _pid;
         }
 
         public void ConfirmDelete() {
-            Destroy(_item);
-            _launchManager.MenuManager.ShowMenu(GameObject.Find("Participants Menu").GetComponent<BaseMenu>());
             _launchManager.LoggingManager.removeSession(_sid);
+            _launchManager.MenuManager.InstantiateAndShowMenu("Participants Menu", "Launcher");
         }
     }
 }

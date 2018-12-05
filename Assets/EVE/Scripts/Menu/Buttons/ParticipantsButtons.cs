@@ -64,7 +64,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         public void DisplayParticipants()
         {
-            //MenuUtils.ClearList(_dynFields);
+            MenuUtils.ClearList(_dynFields);
 
             var experimentName = _launchManager.ExperimentName;
             var s = _log.getAllSessionsData(experimentName);
@@ -83,7 +83,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             {
                 var sid = session_ids[i];
 
-                showRoutebutton[i] = _log.getXYZ(sid).Any();
+                showRoutebutton[i] = _log.GetPath(sid).Any();
                 showLabChartbutton[i] = File.Exists(@files[i]);
 
                 if (!showRoutebutton[i]) continue;
@@ -106,7 +106,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                         //else
                         timeSec[i][k] = _log.timeDifferenceTimespan(times[0], times[0]); ;
                     }
-                    var xyzTable = _log.getXYZ(sid, k);
+                    var xyzTable = _log.GetPath(sid, k);
                     distances[i][k] = MenuUtils.ComputeParticipantPathDistance(xyzTable);
                 }
 
@@ -140,7 +140,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         public void ShowParticipantDetails(int sid)
         {
             _menuManager.ActiveSessionId = sid;
-            _menuManager.ShowMenu(GameObject.Find("Participant Menu").GetComponent<BaseMenu>());
+            _menuManager.InstantiateAndShowMenu("Participant Menu","Launcher");
         }
 
         /// <summary>
@@ -153,8 +153,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             _menuManager.ActiveSessionId = sid;
             _menuManager.ActiveParticipantId = pid;
-            _menuManager.ActiveListItem = item;
-            _menuManager.ShowMenu(GameObject.Find("Delete Participant Menu").GetComponent<BaseMenu>());
+            _menuManager.InstantiateAndShowMenu("Delete Participant Menu", "Launcher");
         }
     }
 }

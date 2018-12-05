@@ -445,7 +445,7 @@ public class LoggingManager
         return result.ToArray();
     }
 
-    public List<float>[] getXYZ(int sessionId, int sceneNumber)
+    public List<float>[] GetPath(int sessionId, int sceneNumber)
     {
         var xyz = new List<float>[6];
 
@@ -496,7 +496,7 @@ public class LoggingManager
         return xyz;
     }
 
-    public List<float>[] getXYZ(int sessionId)
+    public List<float>[] GetPath(int sessionId)
     {   
         var environments = getListOfEnvironments(sessionId);
         var result = new List<float>[6];
@@ -510,7 +510,7 @@ public class LoggingManager
         var envIdx = 0;
         for (var i = 0; i < environments.Length; i++)
         {
-            var tmp = getXYZ(sessionId, i);
+            var tmp = GetPath(sessionId, i);
             result[0].AddRange(tmp[0]);
             result[1].AddRange(tmp[1]);
             result[2].AddRange(tmp[2]);
@@ -522,7 +522,7 @@ public class LoggingManager
         return result;
     }
 
-    public List<string> getXYZtimestamp(int sessionId, int sceneNumber)
+    public List<string> GetPathAndTime(int sessionId, int sceneNumber)
     {
         var xyzT = new List<string>();
         
@@ -581,7 +581,7 @@ public class LoggingManager
     public string getAbortTime(int sessionId, int sceneId)
     {
 
-        var timestamps = getXYZtimestamp(sessionId, sceneId);
+        var timestamps = GetPathAndTime(sessionId, sceneId);
 
         if (timestamps.Count > 0)
             return timestamps[timestamps.Count - 1];

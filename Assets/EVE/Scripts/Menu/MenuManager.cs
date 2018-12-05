@@ -51,14 +51,7 @@ public class MenuManager : MonoBehaviour {
     /// in a menu.
     /// </summary>
     public string ActiveParticipantId { get; set; }
-
-    /// <summary>
-    /// Representation of a list item that is manipulated.
-    /// </summary>
-    public GameObject ActiveListItem { get; set; }
-
-
-
+    
     public string GetSceneFilePath() {
         if (_sceneFilePath == null)
             _sceneFilePath = Application.dataPath + "/Experiment/Scenes";

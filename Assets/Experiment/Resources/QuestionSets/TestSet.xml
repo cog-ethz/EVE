@@ -2,7 +2,9 @@
 <QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="TestSet">
   <Questions>
     <InfoScreen Name="example_info" NColumns="1" NRows="1">
-      <Text><![CDATA[<size=25>People questionnaire</size>\n\nPerception of people in the neighborhood]]></Text>
+      <Text><![CDATA[<size=25>People questionnaire</size>
+	  
+Perception of people in the neighborhood]]></Text>
     </InfoScreen>
     <TextQuestion Name="exercise" NColumns="1" NRows="1">
       <Text><![CDATA[What type of exercise have you done recently?]]></Text>
