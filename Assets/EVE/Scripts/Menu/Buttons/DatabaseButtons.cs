@@ -19,10 +19,13 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private Button _setupButton;
         private Button _questionButton;
         private Button _resetButton;
+        private MenuManager _menuManager;
 
         // Use this for initialization
         void Start () {
+            
             _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
+            _menuManager = _launchManager.MenuManager;
             _log = _launchManager.LoggingManager;
             _dbSettings = _launchManager.ExperimentSettings.DatabaseSettings;
 
@@ -34,8 +37,10 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _resetButton = content.Find("TableButtons").Find("ResetDatabaseTables").GetComponent<Button>();
             _questionButton = content.Find("SetupQuestionnaires").GetComponent<Button>();
 
-
+            _setupButton.onClick.AddListener(CreateDbSchema);
             _resetButton.onClick.AddListener(ResetDbSchema);
+            _questionButton.onClick.AddListener(LoadQuestionnairesFromXML);
+            content.Find("BackButton").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Main Menu", "Launcher"));
 
             CheckDatabase();
         }
@@ -99,8 +104,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// </summary>
         public void ResetDbSchema()
         {
-            _launchManager.MenuManager.ShowMenu(GameObject.Find("Delete Database Menu").GetComponent<BaseMenu>());
-            CheckDatabase();
+            _launchManager.MenuManager.InstantiateAndShowMenu("Delete Database Menu","Launcher");
         }
 
         /// <summary>

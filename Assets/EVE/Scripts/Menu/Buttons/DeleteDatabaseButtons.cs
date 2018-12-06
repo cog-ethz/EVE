@@ -11,12 +11,18 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private LaunchManager _launchManager;
         private MenuManager _menuManager;
         private LoggingManager _log;
+        private Transform _fields;
 
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
             _log = _launchManager.LoggingManager;
             _menuManager = _launchManager.MenuManager;
+            _fields = transform.Find("Panel").Find("Fields");
+            
+            _fields.Find("YesButton").GetComponent<Button>().onClick.AddListener(ResetDatabase);
+            _fields.Find("NoButton").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Database Configuration Menu", "Launcher"));
+
         }
 
         public void ResetDatabase() {
@@ -24,7 +30,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _log.LogExperiment(_launchManager.ExperimentName);
             _launchManager.SessionId = _log.CurrentSessionID;
             _launchManager.LoadSettingsIntoDB();
-            _launchManager.MenuManager.ShowMenu(GameObject.Find("Database Configuration Menu").GetComponent<BaseMenu>());
+            _launchManager.MenuManager.InstantiateAndShowMenu("Database Configuration Menu","Launcher");
         }
     }
 }
