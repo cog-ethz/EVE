@@ -37,7 +37,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// </summary>
         public void UpdateAvailableScenes()
         {
-            var path = _launchManager.MenuManager.GetSceneFilePath();
+            var path = _launchManager.MenuManager.SceneFilePath;
             var filenames = Directory.GetFiles(path);
             foreach (var filename in filenames)
             {
@@ -84,7 +84,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             //call setscenepath as with the folder textfield
             if (scenePath != null && !scenePath.Equals(""))
             {
-                _menuManager.SetSceneFilePath(scenePath);
+                _menuManager.SceneFilePath = scenePath;
             }
             UpdateAvailableScenes();
             transform.Find("Panel").Find("Folder Selection").Find("PathField").GetComponent<InputField>().text = scenePath;

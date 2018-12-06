@@ -31,7 +31,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             MenuUtils.ClearList(_dynamicField);
 
-            var experimentParameters = _menuManager.GetExperimentParameterList();
+            var experimentParameters = _menuManager.ExperimentParameterList;
 
 
             foreach (var experimentParameter in experimentParameters)

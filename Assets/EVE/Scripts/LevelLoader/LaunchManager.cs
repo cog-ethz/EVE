@@ -279,7 +279,7 @@ public class LaunchManager : MonoBehaviour
 
             var sceneList = ExperimentSettings.SceneSettings.Scenes;
             Console.Write(sceneList.Count);
-            var nParameters = MenuManager.GetExperimentParameterList().Count;
+            var nParameters = MenuManager.ExperimentParameterList.Count;
             if (sceneList.Count <= 0)
             {
                 MenuManager.DisplayErrorMessage("No scenes selected!", "Scene Configuration", "Launcher");
@@ -296,7 +296,7 @@ public class LaunchManager : MonoBehaviour
                     if (SessionParameters.ContainsKey("Labchart File Name"))
                         LoggingManager.SetLabChartFileName(SessionParameters["Labchart File Name"]);
 
-                    if (LoggingManager.getSensors().Contains("HL7Server"))
+                    if (LoggingManager.GetSensors().Contains("HL7Server"))
                         this.gameObject.GetComponent<HL7ServerStarter>().enabled = true;
                     StoreSessionParameters();
                     MenuManager.InstantiateAndShowMenu("Start Menu","Launcher");
@@ -383,7 +383,7 @@ public class LaunchManager : MonoBehaviour
     {
         if (LoggingManager.CurrentSessionID> -1)
         {
-            var sensors = new List<string>(LoggingManager.getSensors());
+            var sensors = LoggingManager.GetSensors();
             if (sensors.Contains("Labchart"))
             {
                 ExperimentSettings.SensorSettings.Labchart = true;
@@ -395,6 +395,15 @@ public class LaunchManager : MonoBehaviour
                 sensors.Remove("HL7Server");
             }
             ExperimentSettings.SensorSettings.Sensors = sensors;
+        }
+    }
+
+    public void SynchroniseExperimentParametersWithDB()
+    {
+        if (LoggingManager.CurrentSessionID > -1)
+        {
+            var experimentParameters = LoggingManager.GetExperimentParameters(ExperimentName);
+            ExperimentSettings.ParameterSettings.Parameters = experimentParameters;
         }
     }
 
@@ -425,4 +434,5 @@ public class LaunchManager : MonoBehaviour
         }
         MenuManager.SetActiveParameters(requiredParams);
     }
+
 }

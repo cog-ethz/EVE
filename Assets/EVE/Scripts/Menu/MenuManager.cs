@@ -31,7 +31,6 @@ public class MenuManager : MonoBehaviour {
     private LaunchManager _launchManager;
     private LoggingManager _log;
     private SceneSettings _sceneSettings;
-    private List<string> _experimentParameters;
     private string _sceneFilePath;
     private GameObject _menuObject;
 
@@ -51,31 +50,33 @@ public class MenuManager : MonoBehaviour {
     /// in a menu.
     /// </summary>
     public string ActiveParticipantId { get; set; }
-    
-    public string GetSceneFilePath() {
-        if (_sceneFilePath == null)
-            _sceneFilePath = Application.dataPath + "/Experiment/Scenes";
-        return _sceneFilePath;
-    }
-    public void SetSceneFilePath(string path)
+
+    public string SceneFilePath
     {
-        _sceneFilePath = path;
+        get
+        {
+            return _sceneFilePath ?? (_sceneFilePath = Application.dataPath + "/Experiment/Scenes");
+        }
+
+        set
+        {
+            _sceneFilePath = value;
+        }
     }
 
     public void SetActiveParameters(List<string> parameters)
     {
-        _experimentParameters = parameters;
+        ExperimentParameterList = parameters;
     }
 
     public void Awake()
     {
         _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        _experimentParameters = new List<string>();
+        ExperimentParameterList = new List<string>();
         _menuState = new Dictionary<string, string>();
     }
 
     public void Start() {        
-        //ShowMenu(CurrentMenu);
         InstantiateAndShowMenu("Main Menu", "Launcher");
         _log = _launchManager.LoggingManager;
         _sceneSettings = _launchManager.ExperimentSettings.SceneSettings;
@@ -87,6 +88,7 @@ public class MenuManager : MonoBehaviour {
         CurrentMenu = menu;
         CurrentMenu.isOpen = true;
     }
+
     /// <summary>
     /// Instantiates a Menu and shows it.
     /// </summary>
@@ -109,51 +111,10 @@ public class MenuManager : MonoBehaviour {
 
     public void CloseCurrentMenu()
     {
-        StartCoroutine(RemoveWithDelay(CurrentMenu.gameObject,1));
+        StartCoroutine(GameObjectUtils.RemoveGameObject(CurrentMenu.gameObject,1));
         CurrentMenu.isOpen = false;
     }
 
-    private IEnumerator RemoveWithDelay(GameObject currentMenu, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        Destroy(currentMenu);
-    }
-
-    public void AddExperimentParameter(string experimentParameter)
-    {
-        if (_experimentParameters.Contains(experimentParameter))
-        {
-            Debug.LogWarning("Parameter exists! " + experimentParameter);
-            return;
-        }
-        _experimentParameters.Add(experimentParameter);
-        AddExperimentParameterToDb(experimentParameter);
-    }
-
-    public void AddExperimentParameter(Text text)
-    {
-        var experimentParameter = text.text;
-        if (_experimentParameters.Contains(experimentParameter))
-        {
-            Debug.LogWarning("Parameter exists! " + experimentParameter);
-            return;
-        }
-        _experimentParameters.Add(experimentParameter);
-        AddExperimentParameterToDb(experimentParameter);
-    }
-    
-    public void AddExperimentParameterToDb(string attributeName)
-    {       
-        _log.CreateExperimentParameter(_launchManager.ExperimentSettings.Name, attributeName);
-    }
-    
-    
-    
-    
-    //no longer used?
-    //public void deleteParentObject(GameObject deleteButton) {
-    //    Destroy(deleteButton.transform.parent.gameObject);
-    //}
 
     public void AddToBackOfSceneList(string sceneName)
     {
@@ -188,14 +149,11 @@ public class MenuManager : MonoBehaviour {
     public void RemoveExperimentParameter(string experimentParameter)
     {
         _log.RemoveExperimentParameter(experimentParameter, _launchManager.ExperimentSettings.Name);
-        _experimentParameters.Remove(experimentParameter);
+        ExperimentParameterList.Remove(experimentParameter);
         _launchManager.SessionParameters.Remove(experimentParameter);
     }
-    
-    public List<string> GetExperimentParameterList()
-    {
-        return _experimentParameters;
-    }
+
+    public List<string> ExperimentParameterList { get; private set; }
 
     /// <summary>
     /// Display an error message in the menu system.
@@ -211,43 +169,5 @@ public class MenuManager : MonoBehaviour {
         errorBaseMenu.SetErrorOriginMenu(originBaseMenu,originContext);
         errorBaseMenu.SetErrorText(errorMessage);
         ShowMenu(errorBaseMenu.gameObject.GetComponent<BaseMenu>());
-    }
-    
-    /// <summary>
-    /// Compares whether two lists contain the same elements ignoring order.
-    /// </summary>
-    /// <remarks>
-    /// http://stackoverflow.com/questions/3669970/compare-two-listt-objects-for-equality-ignoring-order
-    /// </remarks>
-    /// <typeparam name="T">Type in List</typeparam>
-    /// <param name="list1">First List</param>
-    /// <param name="list2">Second List</param>
-    /// <returns>Whether both lists contain the same elements ignoring order</returns>
-    public static bool ScrambledEquals<T>(IEnumerable<T> list1, IEnumerable<T> list2)
-    {
-        var cnt = new Dictionary<T, int>();
-        foreach (T s in list1)
-        {
-            if (cnt.ContainsKey(s))
-            {
-                cnt[s]++;
-            }
-            else
-            {
-                cnt.Add(s, 1);
-            }
-        }
-        foreach (T s in list2)
-        {
-            if (cnt.ContainsKey(s))
-            {
-                cnt[s]--;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return cnt.Values.All(c => c == 0);
     }
 }

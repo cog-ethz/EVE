@@ -765,7 +765,7 @@ public class LoggingManager
         _dbConnector.RemoveDataOrigin(deviceName);
     }
 
-    public List<string> getSensors()
+    public List<string> GetSensors()
     {
         var origins = _dbConnector.GetDataOrigins();
         origins.Remove("Player");

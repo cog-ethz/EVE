@@ -17,8 +17,11 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _menuManager = _launchManager.MenuManager;
 
 
-            _dynamicField = gameObject.transform.Find("Panel").Find("Fields").Find("DynFieldsWithScrollbar").Find("DynFields");
 
+            var fields = transform.Find("Panel").Find("Fields");
+            _dynamicField = fields.Find("DynFieldsWithScrollbar").Find("DynFields");
+            fields.Find("AddButton").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Add Experiment Parameter Menu", "Launcher"));
+            fields.Find("BackButton").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Configuration Menu", "Launcher"));
             DisplayExperimentParameters();
         }
 
@@ -26,7 +29,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             MenuUtils.ClearList(_dynamicField);
 
-            var experimentParameters = _menuManager.GetExperimentParameterList();
+            var experimentParameters = _menuManager.ExperimentParameterList;
 
 
             foreach (var experimentParameter in experimentParameters)

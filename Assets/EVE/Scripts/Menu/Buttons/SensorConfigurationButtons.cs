@@ -50,7 +50,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
             if (_launchManager.SessionId < 0) return;
 
-            var sensors = _log.getSensors();
+            var sensors = _log.GetSensors();
 
             if (sensors.Contains("Labchart"))
             {
