@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
@@ -28,6 +29,13 @@ namespace Assets.EVE.Scripts.Utils
             _commentWriterPath = _path + "AddComments\\DriveChart.exe";
             _experimentName = launchManager.ExperimentSettings.Name;
             _commenters = launchManager.ExperimentSettings.LabchartSettings.Commenters;
+        }
+
+        internal void AddLabchartComments(int sessionId)
+        {
+            var file = _log.GetSessionData(sessionId)[3];
+
+            AddLabchartComments(sessionId, file);
         }
 
         /// <summary>

@@ -25,11 +25,13 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _log = _launchManager.LoggingManager;
             _labchart = _launchManager.gameObject.GetComponent<LabchartUtils>();
 
+            _sessionId = _menuManager.ActiveSessionId;
+
             _fields = transform.Find("Panel").Find("Fields");
 
             _dynamicField = _fields.Find("DynFieldsWithScrollbar").Find("DynFields");
 
-            _fields.Find("Labchart Button").GetComponent<Button>().onClick.AddListener(() => _labchart.AddLabchartComments());
+            _fields.Find("Labchart Button").GetComponent<Button>().onClick.AddListener(() => _labchart.AddLabchartComments(_sessionId));
             _fields.Find("BackButton").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Participants Menu","Launcher"));
             DisplayParticipantDetails();
         }
@@ -41,7 +43,6 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             MenuUtils.ClearList(_dynamicField);
 
-            _sessionId = _menuManager.ActiveSessionId;
 
             var envs = _log.GetListOfEnvironments(_sessionId);
             var timeSec = new TimeSpan[envs.Length];
