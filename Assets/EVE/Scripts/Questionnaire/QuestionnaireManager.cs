@@ -191,7 +191,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
             var name = _currentQuestionSet.Name;
             name = name.Length > 15 ? name.Substring(0, 15) : name;
-            _log.insertLiveMeasurement("QuestionnaireSystem", "Start Set", null, name);
+            _log.InsertLiveMeasurement("QuestionnaireSystem", "Start Set", null, name);
 
             _currentQuestion = 0;
             _totalQuestions = _currentQuestionSet.Questions.Count;
@@ -317,7 +317,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             }
             _currentQuestion = _previousQuestion.Pop();
             var qOld = _currentQuestionSet.Questions[_currentQuestion];
-            _oldAnswers = _log.readAnswer(qOld.Name);
+            _oldAnswers = _log.ReadAnswer(qOld.Name);
             _showedQuestions--;
             _numberOfAnswers = _previousNofAnswers.Pop();
         }
@@ -344,7 +344,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
                 if (_currentQuestion >= _totalQuestions) return;
                 _question = _currentQuestionSet.Questions[_currentQuestion];
-                _oldAnswers = _log.readAnswer(_question.Name);
+                _oldAnswers = _log.ReadAnswer(_question.Name);
                 
                 _previousNofAnswers.Push(_numberOfAnswers);
                 _numberOfAnswers++;

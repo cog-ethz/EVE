@@ -47,7 +47,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         private void CheckDatabase()
         {
-            var currentSessionId = _log.CurrentSessionID;
+            var currentSessionId = _log.CurrentSessionId;
             switch (currentSessionId)
             {
 
@@ -94,7 +94,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             _log.ConnectToServerAndCreateSchema(_dbSettings);
             _log.LogExperiment(_launchManager.ExperimentName);
-            _launchManager.SessionId = _log.CurrentSessionID;
+            _launchManager.SessionId = _log.CurrentSessionId;
             _launchManager.LoadSettingsIntoDB();
             CheckDatabase();
         }
@@ -112,6 +112,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// </summary>
         public void LoadQuestionnairesFromXML()
         {
+            _questionButton.interactable = false;
             var qf = new QuestionnaireFactory(_log, _launchManager.ExperimentSettings);
             qf.ImportAllQuestionnairesFromXml();
             CheckDatabase();

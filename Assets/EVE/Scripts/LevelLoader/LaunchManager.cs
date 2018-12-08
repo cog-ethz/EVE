@@ -96,7 +96,7 @@ public class LaunchManager : MonoBehaviour
         else
         {
             LoadSettingsIntoDB();
-            SessionId = LoggingManager.CurrentSessionID;
+            SessionId = LoggingManager.CurrentSessionId;
         }
 
         
@@ -185,6 +185,7 @@ public class LaunchManager : MonoBehaviour
                 else
                 {
                     MenuManager.InstantiateAndShowMenu("Finish Menu","Launcher");
+                    SessionParameters.Clear();
                 }
             }
         }
@@ -222,8 +223,8 @@ public class LaunchManager : MonoBehaviour
     /// </summary>
     public void SetCompletedAndReset() {
         _currentScene = 0;
-        LoggingManager.updateParameters();
-        SessionId = LoggingManager.CurrentSessionID;
+        LoggingManager.UpdateParameters();
+        SessionId = LoggingManager.CurrentSessionId;
     }
     
     public void LoadCurrentScene()
@@ -235,16 +236,16 @@ public class LaunchManager : MonoBehaviour
         {
             QuestionnaireName = scene.Split('.')[0];
 
-            LoggingManager.CreateUserAnswer(LoggingManager.CurrentSessionID, QuestionnaireName);
-            LoggingManager.setQuestionnaireName(QuestionnaireName);
+            LoggingManager.CreateUserAnswer(LoggingManager.CurrentSessionId, QuestionnaireName);
+            LoggingManager.SetQuestionnaireName(QuestionnaireName);
 
             scene = "Questionnaire";
         }
         switch (scene)
         {
-            case "LabchartStartScene":
-                _configureLabchart = true;
-                MenuManager.ShowMenu(GameObject.Find("Configure Labchart Menu").GetComponent<BaseMenu>());
+			case "LabchartStartScene":
+				_configureLabchart = true;
+				MenuManager.InstantiateAndShowMenu ("Configure Labchart Menu","Launcher");
                 ManualContinueToNextScene();
                 break;
             case "Questionnaire":
@@ -375,13 +376,13 @@ public class LaunchManager : MonoBehaviour
 
     public void SynchroniseSceneListWithDB()
     {
-        if (LoggingManager.CurrentSessionID> -1)
-            ExperimentSettings.SceneSettings.Scenes = new List<string>(LoggingManager.getSceneNamesInOrder(ExperimentSettings.Name));
+        if (LoggingManager.CurrentSessionId> -1)
+            ExperimentSettings.SceneSettings.Scenes = new List<string>(LoggingManager.GetSceneNamesInOrder(ExperimentSettings.Name));
     }
 
     public void SynchroniseSensorListWithDB()
     {
-        if (LoggingManager.CurrentSessionID> -1)
+        if (LoggingManager.CurrentSessionId> -1)
         {
             var sensors = LoggingManager.GetSensors();
             if (sensors.Contains("Labchart"))
@@ -400,7 +401,7 @@ public class LaunchManager : MonoBehaviour
 
     public void SynchroniseExperimentParametersWithDB()
     {
-        if (LoggingManager.CurrentSessionID > -1)
+        if (LoggingManager.CurrentSessionId > -1)
         {
             var experimentParameters = LoggingManager.GetExperimentParameters(ExperimentName);
             ExperimentSettings.ParameterSettings.Parameters = experimentParameters;

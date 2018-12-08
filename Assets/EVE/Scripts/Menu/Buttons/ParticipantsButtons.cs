@@ -67,7 +67,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             MenuUtils.ClearList(_dynFields);
 
             var experimentName = _launchManager.ExperimentName;
-            var s = _log.getAllSessionsData(experimentName);
+            var s = _log.GetAllSessionsData(experimentName);
             session_ids = Array.ConvertAll(s[0], int.Parse);
             participant_ids = s[1];
             files = s[3];
@@ -87,24 +87,24 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 showLabChartbutton[i] = File.Exists(@files[i]);
 
                 if (!showRoutebutton[i]) continue;
-                envs[i] = _log.getListOfEnvironments(sid);
+                envs[i] = _log.GetListOfEnvironments(sid);
                 timeSec[i] = new TimeSpan[envs[i].Length];
                 distances[i] = new float[envs[i].Length];
 
                 for (var k = 0; k < envs[i].Length; k++)
                 {
-                    var times = _log.getSceneTime(k, sid);
+                    var times = _log.GetSceneTime(k, sid);
                     if (times == null) continue;
                     timeSec[i][k] = TimeSpan.FromSeconds(0);
                     if (times[0] != null && times[1] != null)
-                        timeSec[i][k] = _log.timeDifferenceTimespan(times[0], times[1]);
+                        timeSec[i][k] = _log.TimeDifferenceTimespan(times[0], times[1]);
                     else if (times[0].Length > 0)
                     {
                         //string abortTime = _log.getAbortTime(sid, k);
                         //if (abortTime.Length > 0)
                         //    timeSec[i][k] = _log.timeDifferenceTimespan(times[0], abortTime);
                         //else
-                        timeSec[i][k] = _log.timeDifferenceTimespan(times[0], times[0]); ;
+                        timeSec[i][k] = _log.TimeDifferenceTimespan(times[0], times[0]); ;
                     }
                     var xyzTable = _log.GetPath(sid, k);
                     distances[i][k] = MenuUtils.ComputeParticipantPathDistance(xyzTable);

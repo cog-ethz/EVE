@@ -53,8 +53,8 @@ public class ReplayRoute : MonoBehaviour {
         pos_logger.enabled = false;
         xyz = log.GetPath(sessionID, sceneID);
         xyzT = log.GetPathAndTime(sessionID, sceneID);
-        input = log.getAllInput(sessionID, sceneID);
-        sceneTime = log.getSceneTime(sceneID, sessionID);
+        input = log.GetAllInput(sessionID, sceneID);
+        sceneTime = log.GetSceneTime(sceneID, sessionID);
 
         movementControls = player.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         movementControls.enabled = false;
@@ -168,8 +168,8 @@ public class ReplayRoute : MonoBehaviour {
                 // replay position and view
                 if (pos_pointer < xyzT.Count - 2)
                 {
-                    timeSpent = (float)((DateTime.Now.Subtract(playStart)).TotalSeconds) + log.timeDifference(sceneTime[0], xyzT[start_pointer]) / 1000000;
-                    float nextPosTime = log.timeDifference(sceneTime[0], xyzT[pos_pointer + 1]) / 1000000;  // in seconds
+                    timeSpent = (float)((DateTime.Now.Subtract(playStart)).TotalSeconds) + log.TimeDifference(sceneTime[0], xyzT[start_pointer]) / 1000000;
+                    float nextPosTime = log.TimeDifference(sceneTime[0], xyzT[pos_pointer + 1]) / 1000000;  // in seconds
                     float t = timeSpent - nextPosTime;
                     float p = 0;
 
@@ -178,12 +178,12 @@ public class ReplayRoute : MonoBehaviour {
                         currentSliderValue++;
                         pos_pointer++;
                         // pos_pointer was increased by one therefore pos_pointer + 1 is now one step more!
-                        float nextNextPosTime = log.timeDifference(sceneTime[0], xyzT[pos_pointer + 1]) / 1000000;  // in seconds
+                        float nextNextPosTime = log.TimeDifference(sceneTime[0], xyzT[pos_pointer + 1]) / 1000000;  // in seconds
                         p = (float)pos_pointer + (timeSpent - nextPosTime) / (nextNextPosTime - nextPosTime);
                     }
                     else
                     {
-                        float oldPosTime = log.timeDifference(sceneTime[0], xyzT[pos_pointer]) / 1000000;   // in seconds
+                        float oldPosTime = log.TimeDifference(sceneTime[0], xyzT[pos_pointer]) / 1000000;   // in seconds
                         p = pos_pointer + (timeSpent - oldPosTime) / (nextPosTime - oldPosTime);
                     }
                     

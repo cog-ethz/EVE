@@ -54,13 +54,13 @@ public class MapDisplay : MonoBehaviour
         if (rpl.isActivated())
         {
             var parameterValue = 0;
-            int.TryParse(launchManager.LoggingManager.getParameterValue(launchManager.ReplaySessionId,"mapType"), out parameterValue);
+            int.TryParse(launchManager.LoggingManager.GetParameterValue(launchManager.ReplaySessionId,"mapType"), out parameterValue);
             mapType = parameterValue;
         }
         else
         {
             var parameterValue = 0;
-            int.TryParse(launchManager.LoggingManager.getParameterValue("mapType"), out parameterValue);
+            int.TryParse(launchManager.LoggingManager.GetParameterValue("mapType"), out parameterValue);
             mapType = parameterValue;
         }                     
 
@@ -131,7 +131,7 @@ public class MapDisplay : MonoBehaviour
                 {
                     if (showMap)
                     {
-                        if (!rpl.isActivated()) log.insertLiveMeasurement("Map", "Map showed", "sec", DateTime.Now.Subtract(pressed).TotalSeconds.ToString());
+                        if (!rpl.isActivated()) log.InsertLiveMeasurement("Map", "Map showed", "sec", DateTime.Now.Subtract(pressed).TotalSeconds.ToString());
                     }
 
                     showMap = false;

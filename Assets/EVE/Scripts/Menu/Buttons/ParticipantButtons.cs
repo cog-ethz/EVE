@@ -43,7 +43,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
             _sessionId = _menuManager.ActiveSessionId;
 
-            var envs = _log.getListOfEnvironments(_sessionId);
+            var envs = _log.GetListOfEnvironments(_sessionId);
             var timeSec = new TimeSpan[envs.Length];
 
             var sceneDescription = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Lists/SceneEntry");
@@ -58,16 +58,16 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 sceneDescription.transform.Find("SceneInformation").Find("SceneValue")
                         .GetComponent<Text>().text = envs[k];
                 timeSec[k] = TimeSpan.FromSeconds(0);
-                var times = _log.getSceneTime(k, _sessionId);
+                var times = _log.GetSceneTime(k, _sessionId);
                 if (times[0] != null && times[1] != null)
-                    timeSec[k] = _log.timeDifferenceTimespan(times[0], times[1]);
+                    timeSec[k] = _log.TimeDifferenceTimespan(times[0], times[1]);
                 else if (times[0].Length > 0)
                 {
                     //string abortTime = log.getAbortTime(sessionID, k);
                     //if (abortTime.Length > 0)
                     //    timeSec[k] = log.timeDifferenceTimespan(times[0], abortTime);
                     //else
-                    timeSec[k] = _log.timeDifferenceTimespan(times[0], times[0]);
+                    timeSec[k] = _log.TimeDifferenceTimespan(times[0], times[0]);
                 }
 
                 sceneDescription.transform.Find("Statistics").Find("TimeInformation").Find("TimeValue")
@@ -106,7 +106,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             var envNameMatrix = new string[1][];
             envNameMatrix[0] = new string[1];
-            var sceneNames = _log.getListOfEnvironments(sessionId);
+            var sceneNames = _log.GetListOfEnvironments(sessionId);
             envNameMatrix[0][0] = sceneNames[sceneId];
 
             _map = GameObject.Find("EvaluationMap").GetComponent<PopUpEvaluationMap>();

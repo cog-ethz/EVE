@@ -23,6 +23,6 @@ public class RandomCharPlacement : MonoBehaviour
         aCamera.transform.eulerAngles = PlacementPositions[r].eulerAngles;
 
         if (!fpc.GetComponentInChildren<ReplayRoute>().isActivated())
-            launchManager.LoggingManager.insertLiveMeasurement("CharacterPlacement", "arrayIndex", null, r.ToString());
+            launchManager.LoggingManager.InsertLiveMeasurement("CharacterPlacement", "arrayIndex", null, r.ToString());
     }
 }

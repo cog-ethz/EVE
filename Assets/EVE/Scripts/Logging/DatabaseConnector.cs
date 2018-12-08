@@ -511,4 +511,5 @@ public abstract class DatabaseConnector
     public abstract string GetQuestionNameById(int id);
     public abstract string GetJumpCondition(int jumpId);
     public abstract List<string> GetAllQuestionnaireNames();
+    public abstract int GetQuestionSetId(string questionSetName);
 }

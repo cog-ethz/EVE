@@ -18,13 +18,13 @@ public class EventMarker: MonoBehaviour {
         if (other.gameObject.tag == "Player")
             if (_log != null)
                 if(!launchManager.FPC.GetComponentInChildren<ReplayRoute>().isActivated())
-                    _log.insertLiveMeasurement("EventMarker", "EnterTrigger", null, eventName);
+                    _log.InsertLiveMeasurement("EventMarker", "EnterTrigger", null, eventName);
 	}
 
 	void OnTriggerExit(Collider other) {
 		if ( other.gameObject.tag == "Player" )
             if (_log != null)
                 if (!launchManager.FPC.GetComponentInChildren<ReplayRoute>().isActivated())
-                    _log.insertLiveMeasurement("EventMarker", "ExitTrigger", null, eventName);
+                    _log.InsertLiveMeasurement("EventMarker", "ExitTrigger", null, eventName);
 	}
 }

@@ -33,11 +33,11 @@ public class CountdownTimer : MonoBehaviour {
         rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
         if (rpl.isActivated())
         {
-            maxDuration = int.Parse(launchManager.LoggingManager.getParameterValue(launchManager.ReplaySessionId,"maxDuration"));
+            maxDuration = int.Parse(launchManager.LoggingManager.GetParameterValue(launchManager.ReplaySessionId,"maxDuration"));
         }
         else
         {
-            maxDuration = int.Parse(launchManager.LoggingManager.getParameterValue("maxDuration"));
+            maxDuration = int.Parse(launchManager.LoggingManager.GetParameterValue("maxDuration"));
         }
 
         time = this.gameObject.GetComponentsInChildren<Text> ();        

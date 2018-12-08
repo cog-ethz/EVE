@@ -33,7 +33,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         {
             Questions.ForEach(q =>
             {
-                log.InsertQuestionToDB(q.AsDatabaseQuestion(Name));
+                log.InsertQuestionToDb(q.AsDatabaseQuestion(Name));
             });
             Questions.ForEach(q =>
             {

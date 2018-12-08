@@ -102,7 +102,7 @@ public class CheckPointAngle : MonoBehaviour {
                     if (_log != null)
                     {
                         var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
-                        _log.insertMeasurement("JRD", locations, "Degree", (Target.eulerAngles.y).ToString(), timestamp);
+                        _log.InsertMeasurement("JRD", locations, "Degree", (Target.eulerAngles.y).ToString(), timestamp);
                     }             
 
                     Target.eulerAngles.Set(0, 0, 0);

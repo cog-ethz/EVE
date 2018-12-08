@@ -31,7 +31,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         }
 
         public void ConfirmDelete() {
-            _launchManager.LoggingManager.removeSession(_sid);
+            _launchManager.LoggingManager.RemoveSession(_sid);
             _launchManager.MenuManager.InstantiateAndShowMenu("Participants Menu", "Launcher");
         }
     }

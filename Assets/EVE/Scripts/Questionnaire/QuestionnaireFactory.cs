@@ -29,15 +29,21 @@ namespace Assets.EVE.Scripts.Questionnaire
             {
                 foreach (var questionnaireQuestionSet in questionnaire.QuestionSets)
                 {
-                    WriteQuestionSetToDb(questionnaireQuestionSet);
+                    if (_log.GetQuestionSetId(questionnaireQuestionSet) < 0)
+                    {
+                        WriteQuestionSetToDb(questionnaireQuestionSet);
+                    }
                 }
 
-                // Create a questionnaire entry in DB
-                _log.addQuestionnaire(questionnaire.Name);
-                // Then for each question set of the questionnaire add an entry into DB (q_q_sets table)
-                foreach (var questionnaireQuestionSet in questionnaire.QuestionSets)
+                if (!_log.CheckQuestionnaireExists(questionnaire.Name))
                 {
-                    _log.setupQuestionnaire(questionnaire.Name, questionnaireQuestionSet);
+                    // Create a questionnaire entry in DB
+                    _log.AddQuestionnaire(questionnaire.Name);
+                    // Then for each question set of the questionnaire add an entry into DB (q_q_sets table)
+                    foreach (var questionnaireQuestionSet in questionnaire.QuestionSets)
+                    {
+                        _log.SetupQuestionnaire(questionnaire.Name, questionnaireQuestionSet);
+                    }
                 }
             }
         }
