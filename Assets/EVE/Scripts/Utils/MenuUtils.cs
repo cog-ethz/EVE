@@ -65,6 +65,7 @@ namespace Assets.EVE.Scripts.Utils
             var myFont = tex.font;
             var arr = message.ToCharArray();
 
+            myFont.RequestCharactersInTexture(message, tex.fontSize, tex.fontStyle);
             for (var index = 0; index < arr.Length; index++)
             {
                 CharacterInfo characterInfo;

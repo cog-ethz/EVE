@@ -16,11 +16,15 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         [XmlIgnore]
         private string[] _temporaryStringAnswers;
 
-        public TextQuestion() { }
+        public TextQuestion()
+        {
+            _temporaryStringAnswers = new string[NRows];
+        }
 
         public TextQuestion(QuestionData questionData)
         {
             FromDatabaseQuestion(questionData);
+            _temporaryStringAnswers = new string[NRows];
         }
 
         public TextQuestion(string name, string text)
@@ -29,6 +33,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Text = text;
             RowLabels = null;
             NRows =  1;
+            _temporaryStringAnswers = new string[NRows];
         }
 
         public TextQuestion(string name, string text, List<Label> rowLabels)
@@ -37,6 +42,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Text = text;
             RowLabels = rowLabels;
             NRows = RowLabels != null ? RowLabels.Count : 1;
+            _temporaryStringAnswers = new string[NRows];
         }
 
 
