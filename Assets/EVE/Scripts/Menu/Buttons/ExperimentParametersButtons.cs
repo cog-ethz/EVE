@@ -34,7 +34,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
             foreach (var experimentParameter in experimentParameters)
             {
-                var gObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/TextWithoutField");
+                var gObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Lists/ExperimentParameterEntry");
                 MenuUtils.PlaceElement(gObject, _dynamicField);
                 gObject.transform.Find("FieldName").GetComponent<Text>().text = experimentParameter;
                 if (_launchManager.SessionParameters.ContainsKey(experimentParameter))

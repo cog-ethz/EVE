@@ -6,10 +6,8 @@
     <User>energyscape</User>
     <Password>MainExperiment2018</Password>
   </DatabaseSettings>
-  <SensorSettings Labchart="true" H7Server="false">
-    <Sensors>
-      <Sensor>QuestionnaireSystem</Sensor>
-    </Sensors>
+  <SensorSettings Labchart="false" H7Server="false">
+    <Sensors />
   </SensorSettings>
   <ParameterSettings>
     <Parameters />

@@ -86,7 +86,7 @@ namespace Assets.EVE.Scripts.Utils
         /// <returns>Maximal length in pixel</returns>
         public static int GetMaxTextLength(IEnumerable<string> labels, int min = 0)
         {
-            var labelTextTmp = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ToggleTopLabel");
+            var labelTextTmp = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Questionnaire/Rows/Elements/OneLabel");
             var textTmp = labelTextTmp.GetComponent<Text>();
 
             var maxLength = labels.Select(t => MessagePixelLength(t, textTmp)).Concat(new[] { min }).Max();

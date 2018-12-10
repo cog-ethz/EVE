@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.EVE.Scripts.Questionnaire.Questions;
+using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -37,8 +39,16 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         public void SetActiveDisableTextField(int positionOffset, bool enabled)
         {
-            _displayableTextFields.Add(positionOffset, enabled);
-            _currentlyDisplayed.Add(positionOffset,false);
+            if (!_displayableTextFields.ContainsKey(positionOffset))
+            {
+                _displayableTextFields.Add(positionOffset, enabled);
+                _currentlyDisplayed.Add(positionOffset, enabled);
+            }
+            else
+            {
+                _displayableTextFields[positionOffset] = enabled;
+                _currentlyDisplayed[positionOffset] = enabled;
+            }
         }
 
         public void SetAnswerString(int positionOffset, string answer)
@@ -54,8 +64,17 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
             if (!_displayableTextFields.ContainsKey(positionOffset)) return;
             //switch whether the text can be edited based on whether button is selected
-            _currentlyDisplayed[positionOffset] = !_currentlyDisplayed[positionOffset];
-            gameObject.GetComponentsInChildren<InputField>()[positionOffset].interactable = _currentlyDisplayed[positionOffset];
+            if (answer > 0)
+            {
+                _currentlyDisplayed[positionOffset] = true;
+            }
+            else
+            {
+                _currentlyDisplayed[positionOffset] = false;
+            }
+
+            var child = GameObjectUtils.FindGameObjectInChildren(transform,"ResponseRows").GetChild(positionOffset);
+            child.Find("InputField").GetComponent<InputField>().interactable = _currentlyDisplayed[positionOffset];
         }
 
         /// <summary>
