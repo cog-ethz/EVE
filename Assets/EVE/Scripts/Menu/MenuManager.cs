@@ -103,15 +103,15 @@ public class MenuManager : MonoBehaviour {
         CurrentMenu.isOpen = true;
     }
 
-    public void CloseMenu(BaseMenu baseMenu)
+    public void CloseMenu(BaseMenu baseMenu, float removalDelay = 1f)
     {
         CurrentMenu = baseMenu;
-        CloseCurrentMenu();
+        CloseCurrentMenu(removalDelay);
     }
 
-    public void CloseCurrentMenu()
+    public void CloseCurrentMenu(float removalDelay = 1f)
     {
-        StartCoroutine(GameObjectUtils.RemoveGameObject(CurrentMenu.gameObject,1));
+        StartCoroutine(GameObjectUtils.RemoveGameObject(CurrentMenu.gameObject, removalDelay));
         CurrentMenu.isOpen = false;
     }
 
@@ -163,6 +163,8 @@ public class MenuManager : MonoBehaviour {
     /// <param name="originContext">Optional context of active menu</param>
     public void DisplayErrorMessage(string errorMessage, string originBaseMenu, string originContext)
     {
+
+        _log.InsertLiveSystemEvent("ErrorLog", originContext + "/" + originBaseMenu, null, errorMessage);
         var errorMenu = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ErrorMenu");
         MenuUtils.PlaceElement(errorMenu.gameObject, transform);
         var errorBaseMenu = errorMenu.GetComponent<ErrorMenuButtons>();

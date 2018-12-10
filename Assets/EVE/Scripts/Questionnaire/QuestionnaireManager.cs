@@ -21,7 +21,7 @@ namespace Assets.EVE.Scripts.Questionnaire
         private Questionnaire _questionnaire;
         private List<QuestionSet> _questionSets;
         private QuestionSet _currentQuestionSet;
-        private Questions.Question _question;
+        private Question _question;
     
         private int _currentQuestion, 
             _showedQuestions, 
@@ -40,35 +40,35 @@ namespace Assets.EVE.Scripts.Questionnaire
             _dynamicFieldsWithScrollbar,
             _dynamicField;
 
-        private GameObject _oldQuestionPlaceholder,
-            _questionPlaceholder,
-            _canvas;
+        private GameObject _questionPlaceholder;
 
         private List<string> _questionNames;
         private LaunchManager _launchManager;
         private QuestionnaireFactory _qf;
+        private bool _resumeFromError;
 
         // Use this for initialization
         void Start()
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
             _log = _launchManager.LoggingManager;
+            _menuManager = _launchManager.MenuManager;
             _qf = new QuestionnaireFactory(_log,_launchManager.ExperimentSettings);
             
-            this.enabled = false;
+            enabled = false;
         }
 
+        /// <summary>
+        /// Initialises variables for questionnaire.
+        /// </summary>
         public void DisplayQuestionnaire()
         {
-
             var questionnaireName = _launchManager.QuestionnaireName;
+            _log.InsertLiveSystemEvent("QuestionnaireSystem", "Start Questionnaire", null, questionnaireName);
 
             var questionnaires = _qf.ReadQuestionnairesFromDb(new List<string>() { questionnaireName });
             _questionSets = _qf.ReadQuestionSetsFromDb(questionnaires);
             _questionnaire = questionnaires.First();
-
-            _log.InsertLiveSystemEvent("QuestionnaireSystem", "Start QuestionnaireSystem", null, _questionnaire.Name);
-
 
             _previousQuestion = new Stack<int>();
             _previousNofAnswers = new Stack<int>();
@@ -78,16 +78,6 @@ namespace Assets.EVE.Scripts.Questionnaire
 
             _questionSetIndex = 0;
             LoadQuestionSetAt(_questionSetIndex);
-
-
-            _canvas = GameObject.Find("Canvas");
-
-            _canvas.GetComponent<CanvasScaler>().referenceResolution = _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
-            _menuManager = _launchManager.MenuManager;
-            _menuManager.CloseCurrentMenu();
-
-            _oldQuestionPlaceholder = GameObjectUtils.InstatiatePrefab("Prefabs/Questionnaire/QuestionPlaceholder");
-            MenuUtils.PlaceElement(_oldQuestionPlaceholder, _canvas.transform);
         }
 
         void OnGUI()
@@ -106,56 +96,44 @@ namespace Assets.EVE.Scripts.Questionnaire
         // Update is called once per frame
         void Update()
         {
-            if (_currentQuestion >= 0 && _currentQuestion < _totalQuestions && _displayedQuestion != _currentQuestion)
-            {            
-                _displayedQuestion = _currentQuestion;
+            if (_resumeFromError || (_currentQuestion >= 0 && _currentQuestion < _totalQuestions && _displayedQuestion != _currentQuestion))
+            {
+                _resumeFromError = false;
+               _displayedQuestion = _currentQuestion;
                 _question = _currentQuestionSet.Questions[_currentQuestion];
                 while (_question == null && _currentQuestion < _totalQuestions)
                 {
                     _currentQuestion++;
                     _question = _currentQuestionSet.Questions[_currentQuestion];
                 }
-            
-                _menuManager.CloseMenu(_oldQuestionPlaceholder.GetComponent<Menu.BaseMenu>());
-                _questionPlaceholder = GameObjectUtils.InstatiatePrefab("Prefabs/Questionnaire/QuestionPlaceholder");
-                _questionPlaceholder.name = "QuestionPlaceholder";
-                _oldQuestionPlaceholder.name = "Old QuestionPlaceholder";
-                MenuUtils.PlaceElement(_questionPlaceholder, _canvas.transform);
 
-                var questionMenuButtons = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
-                questionMenuButtons.AddBackAndNextButtons(GoBackOneQuestion, GoToNextQuestion);
-                
+                _menuManager.InstantiateAndShowMenu("QuestionPlaceholder", "Questionnaire");
+                _questionPlaceholder = _menuManager.CurrentMenu.gameObject;
+                _questionPlaceholder.name = "QuestionPlaceholder";
                 _questionContent = _questionPlaceholder.transform
                     .Find("Panel")
                     .Find("QuestionContent").transform;
-
                 _dynamicFieldsWithScrollbar = _questionContent
                     .Find("DynFieldsWithScrollbar").transform;
-
                 _dynamicField = _dynamicFieldsWithScrollbar
                     .Find("DynFields").transform;
 
+                var questionMenuButtons = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
+                questionMenuButtons.AddBackAndNextButtons(GoBackOneQuestion, GoToNextQuestion);
+                if (_showedQuestions <= _lastValidQuestion)
+                    questionMenuButtons.DisableBackButton();
+                
                 SetupQuestionDisplay();
                 ClearQuestionContent();
-            
                 _question.Accept(this);
-            
-                _oldAnswers = new Dictionary<int, string>();
                 UpdateQuestionDisplay();
 
-                if (_showedQuestions <= _lastValidQuestion)
-                    _menuManager.CurrentMenu
-                        .GetDynamicFields("BackButton")
-                        .gameObject
-                        .GetComponent<Button>()
-                        .interactable = false;
+                _oldAnswers = new Dictionary<int, string>();
 
-                //StartCoroutine(GameObjectUtils.GameObjectUtils(_oldQuestionPlaceholder,5));
-                Destroy(_oldQuestionPlaceholder);
-				_oldQuestionPlaceholder = _questionPlaceholder;
             }
             else if (_currentQuestion == _totalQuestions)
             {
+                _log.InsertLiveSystemEvent("QuestionnaireSystem", "End Set", null, _questionSets[_questionSetIndex].Name);
                 if (_currentQuestionSet == _questionSets.Last())
                 {
                     if (_once) return;
@@ -175,9 +153,9 @@ namespace Assets.EVE.Scripts.Questionnaire
         /// </summary>
         private void CloseQuestionnaire()
         {
-            _log.InsertLiveSystemEvent("Questionnaire", "Complete Questionnaire", null, _questionnaire.Name);
+            _log.InsertLiveSystemEvent("QuestionnaireSystem", "Complete Questionnaire", null, _questionnaire.Name);
             _launchManager.MenuManager.CloseCurrentMenu();
-            this.enabled = false;
+            enabled = false;
             _launchManager.ManualContinueToNextScene();
         }
 
@@ -191,29 +169,16 @@ namespace Assets.EVE.Scripts.Questionnaire
 
             var name = _currentQuestionSet.Name;
             name = name.Length > 15 ? name.Substring(0, 15) : name;
-            _log.InsertLiveMeasurement("QuestionnaireSystem", "Start Set", null, name);
+            _log.InsertLiveSystemEvent("QuestionnaireSystem", "Start Set", null, name);
 
             _currentQuestion = 0;
             _totalQuestions = _currentQuestionSet.Questions.Count;
             _questionNames = _currentQuestionSet.Questions.Select(question => question.Name).ToList();
         }
         
-        /// <summary>
-        /// Delete all entries in the dynamic field.
-        /// </summary>
-        /// <remarks>
-        /// Note that this complicated procedure is needed as the enumeration of transforms changes while erasing one entry
-        /// </remarks>
-        /// <param name="dynFieldType">Dynamic Field to be cleared</param>
-        private void ClearDynamicFields()
-        {
-            var entriesObjects = (from Transform entry in _dynamicField select entry.gameObject).ToList();
-            foreach (var entryObject in entriesObjects) Destroy(entryObject);
-        }
-
         private void ClearQuestionContent()
         {
-            ClearDynamicFields();
+            MenuUtils.ClearList(_dynamicField);
             var topRowTransform = _questionContent.Find("TopRow(Clone)");
             if (topRowTransform != null)
             {
@@ -250,8 +215,6 @@ namespace Assets.EVE.Scripts.Questionnaire
         /// </summary>
         private void UpdateQuestionDisplay()
         {
-            var menu = _questionPlaceholder.GetComponent<Menu.BaseMenu>();
-            _menuManager.ShowMenu(menu);
             LayoutRebuilder.ForceRebuildLayoutImmediate(_questionContent.GetComponent<RectTransform>());
         }
         
@@ -351,8 +314,15 @@ namespace Assets.EVE.Scripts.Questionnaire
             }
             else
             {
-                //TODO FIX THIS ERROR CALL
-                _menuManager.DisplayErrorMessage("Please answer the question!","QuestionnaireManager","Questionnaire");
+                var tempAnswer = _question.GetAnswer();
+                _oldAnswers =new Dictionary<int, string>();
+                foreach (var keyValuePair in tempAnswer)
+                {
+                    _oldAnswers.Add(keyValuePair.Key,keyValuePair.Value);
+                }
+
+                enabled = false;
+                _menuManager.DisplayErrorMessage("Please answer the question!","Questionnaire","QuestionnaireSystem");
             }
 
         }
@@ -730,6 +700,15 @@ namespace Assets.EVE.Scripts.Questionnaire
             _questionContent.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.MiddleCenter;
 
             rep.InitialiseRepresentation(this);
+        }
+
+        /// <summary>
+        /// Resume questionnaire from error message.
+        /// </summary>
+        public void ContinueFromError()
+        {
+            enabled = true;
+            _resumeFromError = true;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 //inspired by 3DBuzz, https://www.youtube.com/watch?v=QxRAIjXdfFU
@@ -42,30 +43,6 @@ namespace Assets.EVE.Scripts.Menu
                 _canvasGroup.blocksRaycasts = _canvasGroup.interactable = true;
             }
         }
-
-        //a menu can have a panel called DynFields which contains all dynamically created fields
-        //if no Object with the name "DynFields" exists, null is returned
-        public Transform GetDynamicFields(string dynamicFieldName) {
-            Transform dynf = null;
-            List<Transform> listOfChilds = new List<Transform>();
-            listOfChilds.Add(transform);
-            GetAllChildren(transform,listOfChilds);
-            foreach (var child in listOfChilds) {
-                if (child.Find(dynamicFieldName) != null) {
-                    dynf = child.Find(dynamicFieldName);
-                }
-            }
-            return dynf;
-        }
-
-        private void GetAllChildren(Transform transform, List<Transform> listOfChilds)
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                listOfChilds.Add(transform.GetChild(i));
-                GetAllChildren(transform.GetChild(i), listOfChilds);
-            }
-        }
-
+        
     }
 }

@@ -20,8 +20,10 @@ The menu is standardised to make expansion and use more simple
   - The evaluation scene is deleted and contents moved to the launcher
   - The questionnaire scene is deleted and contents are moved to the launcher
 - All menus are instantiated instead of kept in the background
+- The questionnaire manager no longer manages menus but defers everything to the MenuManager.
 - All function used within one menu panel are now on the Menu Game Object
 - The database can be reseted from the menu
+
 
 ### LaunchManager Overhaul
 

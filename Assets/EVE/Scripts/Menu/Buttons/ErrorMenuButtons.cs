@@ -40,7 +40,14 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// Returns to previous menu.
         /// </summary>
         public void ShowOriginMenu() {
-            _launchManager.MenuManager.InstantiateAndShowMenu(_originBaseMenu, _originContext);
+            if (_originBaseMenu == "Questionnaire" && _originContext == "QuestionnaireSystem")
+            {
+                _launchManager.QuestionnaireManager.ContinueFromError();
+            }
+            else
+            {
+                _launchManager.MenuManager.InstantiateAndShowMenu(_originBaseMenu, _originContext);
+            }
         }
     }
 }

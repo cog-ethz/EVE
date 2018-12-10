@@ -55,6 +55,11 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _currentlyDisplayed[positionOffset] = !_currentlyDisplayed[positionOffset];
             gameObject.GetComponentsInChildren<InputField>()[positionOffset].interactable = _currentlyDisplayed[positionOffset];
         }
+
+        public void DisableBackButton()
+        {
+            _backButton.interactable = false;
+        }
     }
 }
 
