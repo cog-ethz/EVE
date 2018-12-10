@@ -123,10 +123,7 @@ namespace Assets.EVE.Scripts.Questionnaire
                 if (_showedQuestions <= _lastValidQuestion)
                     questionMenuButtons.DisableBackButton();
                 
-                SetupQuestionDisplay();
-                ClearQuestionContent();
-                _question.Accept(this);
-                UpdateQuestionDisplay();
+                DisplayQuestion();
 
                 _oldAnswers = new Dictionary<int, string>();
 
@@ -145,6 +142,27 @@ namespace Assets.EVE.Scripts.Questionnaire
                     LoadQuestionSetAt(++_questionSetIndex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Arranges the question into the placeholder.
+        /// </summary>
+        private void DisplayQuestion()
+        {
+            _questionPlaceholder.GetComponent<QuestionMenuButtons>().AssociatedQuestion = _question;
+            _questionPlaceholder
+                .transform.Find("Panel")
+                .Find("questionName")
+                .GetComponent<Text>()
+                .text = "";
+            _questionContent
+                .Find("questionText")
+                .GetComponent<Text>()
+                .text = _question.Text;
+
+            _question.Accept(this);
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_questionContent.GetComponent<RectTransform>());
         }
 
         /// <summary>
@@ -176,99 +194,13 @@ namespace Assets.EVE.Scripts.Questionnaire
             _questionNames = _currentQuestionSet.Questions.Select(question => question.Name).ToList();
         }
         
-        private void ClearQuestionContent()
-        {
-            MenuUtils.ClearList(_dynamicField);
-            var topRowTransform = _questionContent.Find("TopRow(Clone)");
-            if (topRowTransform != null)
-            {
-                Destroy(topRowTransform.gameObject);
-            }
-            if (_customContent != null)
-            {
-                Destroy(_customContent.gameObject);
-            }
-            _dynamicFieldsWithScrollbar.gameObject.SetActive(true);
-        }
-
         /// <summary>
-        /// Sets the title of a question and links the question to the UI.
+        /// Resume questionnaire from error message.
         /// </summary>
-        private void SetupQuestionDisplay()
+        public void ContinueFromError()
         {
-            _questionPlaceholder.GetComponent<QuestionMenuButtons>().AssociatedQuestion = _question;
-            var title = "";//"Question: " + (showedQuestions);
-            _questionPlaceholder
-                .transform.Find("Panel")
-                .Find("questionName")
-                .GetComponent<Text>()
-                .text = title;
-            _questionContent
-                .Find("questionText")
-                .GetComponent<Text>()
-                .text = _question.Text;
-
-        }
-
-        /// <summary>
-        /// Updates the question display to show the new content.
-        /// </summary>
-        private void UpdateQuestionDisplay()
-        {
-            LayoutRebuilder.ForceRebuildLayoutImmediate(_questionContent.GetComponent<RectTransform>());
-        }
-        
-        /// <summary>
-        /// Adds a label element to a question.
-        /// </summary>
-        /// <param name="labelType">Name of Prefab to be instantiated</param>
-        /// <param name="labelText">Text on Label</param>
-        /// <param name="parent">Container where to place label</param>
-        /// <returns>Returns the new label</returns>
-        private GameObject AddLabelText(string labelType, string labelText, Transform parent)
-        {
-            var label = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + labelType);
-            MenuUtils.PlaceElement(label, parent);
-            label.GetComponent<Text>().text = labelText;
-            return label;
-        }
-
-        /// <summary>
-        /// Adds a sub label element to a question.
-        /// </summary>
-        /// <param name="labelType">Name of Prefab to be instantiated</param>
-        /// <param name="labelText">Text on sublabel</param>
-        /// <param name="parent">Container where to place label</param>
-        /// <param name="subLabelType">Container within the Prefab where the sublabel is found</param>
-        /// <param name="subLabelLength">Length of sublabel</param>
-        /// <returns></returns>
-        private GameObject AddLabelText(string labelType, string labelText, Transform parent, string subLabelType, float subLabelLength)
-        {
-            var label = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + labelType);
-            MenuUtils.PlaceElement(label, parent);
-            var sublabel = label.transform.Find(subLabelType);
-
-            sublabel.GetComponent<RectTransform>().sizeDelta = new Vector2(subLabelLength, 50);
-            sublabel.GetComponent<Text>().text = labelText;
-            return label;
-        }
-    
-
-        /// <summary>
-        /// Creates a toggle with a width and height.
-        /// </summary>
-        /// <param name="toggleType">Toggle type to be created.</param>
-        /// <param name="parent">Container where to place toggle</param>
-        /// <param name="width">Width of toggle area</param>
-        /// <param name="height">Height of toggle area</param>
-        /// <returns>Transform of created toggle</returns>
-        private Transform CreateToggleElement(string toggleType, Transform parent, float width, float height)
-        {
-            var toggleObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + toggleType);
-            toggleObject.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
-            MenuUtils.PlaceElement(toggleObject, parent);
-            var button = toggleObject.transform.Find("ToggleButtons");
-            return button;
+            enabled = true;
+            _resumeFromError = true;
         }
 
         public void GoBackOneQuestion()
@@ -320,53 +252,9 @@ namespace Assets.EVE.Scripts.Questionnaire
                 {
                     _oldAnswers.Add(keyValuePair.Key,keyValuePair.Value);
                 }
-
                 enabled = false;
                 _menuManager.DisplayErrorMessage("Please answer the question!","Questionnaire","QuestionnaireSystem");
             }
-
-        }
-
-        private static int GetMaxTextLength(IEnumerable<string> labels)
-        {
-            var labelTextTmp = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ToggleTopLabel");
-            var textTmp = labelTextTmp.GetComponent<Text>();
-
-            var maxLength = labels.Select(t => MenuUtils.MessagePixelLength(t, textTmp)).Concat(new[] {0}).Max();
-
-            Destroy(textTmp);
-            Destroy(labelTextTmp);
-            return maxLength;
-        }
-
-        private static Vector2 ComputeTopLabelSize(int nColumns, IList<string> labels)
-        {
-            // find longest substring to set top label width
-            var labelTextTmp = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ToggleTopLabel");
-            var textTmp = labelTextTmp.GetComponent<Text>(); ;
-
-            float minWidth = 150;
-            float height = 0;
-            for (var i = 0; i < nColumns; i++)
-            {
-                textTmp.text = labels[i];
-                var fullLength = textTmp.preferredWidth;
-                var substrings = labels[i].Split(' ');
-                foreach (var t in substrings)
-                {
-                    textTmp.text = t;
-                    if (textTmp.preferredWidth > minWidth)
-                        minWidth = textTmp.preferredWidth;
-                }
-                var nlines = (int)(Math.Ceiling(fullLength / minWidth));
-                if (nlines * 32 > height)
-                    height = nlines * 32;
-
-            }
-
-            Destroy(textTmp);
-            Destroy(labelTextTmp);
-            return new Vector2(minWidth, height);
         }
 
         public void Visit(Question q)
@@ -404,12 +292,12 @@ namespace Assets.EVE.Scripts.Questionnaire
                 MenuUtils.PlaceElement(topRow, _questionContent);
                 topRow.transform.SetSiblingIndex(1);
 
-                var topLabelSize = ComputeTopLabelSize(nColumns, cLabels);
+                var topLabelSize = MenuUtils.ComputeTopLabelSize(cLabels);
                 
                 for (var i = 0; i < nColumns; i++)
                 {
                     //Set side labels
-                    var filenameObj = AddLabelText("ToggleTopLabel", cLabels[i], topRow.transform);
+                    var filenameObj = MenuUtils.AddLabelText("ToggleTopLabel", cLabels[i], topRow.transform);
                     filenameObj.GetComponent<RectTransform>().sizeDelta = topLabelSize;
                 }
 
@@ -427,7 +315,7 @@ namespace Assets.EVE.Scripts.Questionnaire
                     MenuUtils.PlaceElement(oneRow, newParent);
 
                     var text = q.RowLabels!=null?q.RowLabels[i].Text:"";
-                    var filenameObj = AddLabelText("ToggleSidelabel", text, oneRow.transform);
+                    var filenameObj = MenuUtils.AddLabelText("ToggleSidelabel", text, oneRow.transform);
                     var tex = filenameObj.GetComponent<Text>();
 
                     var count = Regex.Split(tex.text, "\n").Length - 1;
@@ -437,8 +325,8 @@ namespace Assets.EVE.Scripts.Questionnaire
 
                     for (var j = 0; j < nColumns; j++)
                     {
-                        var button = isMultiple ? CreateToggleElement("ToggleLayoutObject", oneRow.transform, topLabelSize.x,
-                            100) : CreateToggleElement("ToggleLayoutObjectMultipleChoice", oneRow.transform,
+                        var button = isMultiple ? MenuUtils.CreateToggleElement("ToggleLayoutObject", oneRow.transform, topLabelSize.x,
+                            100) : MenuUtils.CreateToggleElement("ToggleLayoutObjectMultipleChoice", oneRow.transform,
                             topLabelSize.x,
                             100);
                         var btn = button.GetComponent<ToggleExtended>();
@@ -458,7 +346,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             else
             {
                 var rLabels = q.RowLabels.Select(l => l.Text).ToList();
-                float length = GetMaxTextLength(rLabels);
+                float length = MenuUtils.GetMaxTextLength(rLabels);
                 var newParent = multiColObject.transform.Find("ResponseRows");
                 for (var i = 0; i < nRows; i++)
                 {
@@ -468,13 +356,13 @@ namespace Assets.EVE.Scripts.Questionnaire
                     GameObject oneRow;
                     if (q.RowLabels[i].Image != null)
                     {
-                        oneRow = AddLabelText("ToggleOneRowImage", rLabels[i], newParent, "ToggleSidelabel", length);
+                        oneRow = MenuUtils.AddLabelText("ToggleOneRowImage", rLabels[i], newParent, "ToggleSidelabel", length);
                         oneRow.transform.Find("RawImage").GetComponent<RawImage>().texture = Resources.Load<Sprite>(q.RowLabels[i].Image).texture;
                     }
                     else
                     {
                         var labelType = hasText ? "ToggleOneRowText" : "ToggleOneRowNoText";
-                        oneRow = AddLabelText(labelType, rLabels[i], newParent, "ToggleSidelabel", length);
+                        oneRow = MenuUtils.AddLabelText(labelType, rLabels[i], newParent, "ToggleSidelabel", length);
                     }
                     MenuUtils.PlaceElement(oneRow, newParent);
 
@@ -547,13 +435,12 @@ namespace Assets.EVE.Scripts.Questionnaire
             else
             {
                 var rLabels = q.RowLabels.Select(l => l.Text).ToList();
-                float length = GetMaxTextLength(rLabels);
+                float length = MenuUtils.GetMaxTextLength(rLabels);
                 for (var index = 0; index < q.RowLabels.Count; index++)
                 {
-
                     var iLocal = index;
 
-                    var labelAndField = AddLabelText("QuestionChoiceLabelAndField", q.RowLabels[index].Text, _dynamicField, "Label", length);
+                    var labelAndField = MenuUtils.AddLabelText("QuestionChoiceLabelAndField", q.RowLabels[index].Text, _dynamicField, "Label", length);
 
                     var inpt = labelAndField.transform.Find("InputField").GetComponent<InputField>();
 
@@ -648,35 +535,15 @@ namespace Assets.EVE.Scripts.Questionnaire
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
             _lastValidQuestion = _currentQuestion + 1;
-            _questionPlaceholder.transform
-                    .Find("Panel")
-                    .Find("QuestionControlButtons")
-                    .Find("BackButton")
-                        .gameObject
-                        .SetActive(false);
-            _questionPlaceholder.transform
-                    .Find("Panel")
-                    .Find("QuestionControlButtons")
-                    .Find("NextButton")
-                        .gameObject
-                        .SetActive(false);
-            _questionPlaceholder.transform
-                    .Find("Panel")
-                    .Find("questionName").gameObject
-                    .SetActive(false);
-            var test = _questionContent.GetComponentsInChildren<Transform>();
-            foreach (var t in test)
-            {
-                t.gameObject.SetActive(false);
-            }
-
-            var rep =_questionContent.
-                gameObject.
-                AddComponent<Representations.VisualStimuli>();
+            var qmb = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
+            qmb.DeactivateQuestionControlButtons();
+            qmb.DeactivateQuestionName();
+            MenuUtils.ClearList(_questionContent);
+            
+            var rep =_questionContent.gameObject.AddComponent<Representations.VisualStimuli>();
             rep.Question = q;
 
-            _questionContent.GetComponent<RectTransform>().sizeDelta =
-                _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
+            _questionContent.GetComponent<RectTransform>().sizeDelta = _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
             
             var fixationScreen = GameObjectUtils.InstatiatePrefab("Prefabs/Questionnaire/VisualStimuli/Fixation");
             MenuUtils.PlaceElement(fixationScreen, _questionContent);
@@ -692,8 +559,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             expositionScreen.SetActive(false);
             rep.ExpositionScreen = expositionScreen;
 
-            expositionScreen.GetComponent<RectTransform>().sizeDelta =
-                _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
+            expositionScreen.GetComponent<RectTransform>().sizeDelta = _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
 
             _questionContent.gameObject.SetActive(true);
 
@@ -702,14 +568,5 @@ namespace Assets.EVE.Scripts.Questionnaire
             rep.InitialiseRepresentation(this);
         }
 
-        /// <summary>
-        /// Resume questionnaire from error message.
-        /// </summary>
-        public void ContinueFromError()
-        {
-            enabled = true;
-            _resumeFromError = true;
-        }
     }
 }
-

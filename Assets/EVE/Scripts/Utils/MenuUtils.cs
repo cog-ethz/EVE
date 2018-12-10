@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -76,5 +78,97 @@ namespace Assets.EVE.Scripts.Utils
             return totalLength;
         }
 
+        /// <summary>
+        /// Compares text length of multiple labels and returns maximal length in pixel.
+        /// </summary>
+        /// <param name="labels">Labels to be compared</param>
+        /// <param name="min">Optional: changes the minimal text length returned.</param>
+        /// <returns>Maximal length in pixel</returns>
+        public static int GetMaxTextLength(IEnumerable<string> labels, int min = 0)
+        {
+            var labelTextTmp = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ToggleTopLabel");
+            var textTmp = labelTextTmp.GetComponent<Text>();
+
+            var maxLength = labels.Select(t => MessagePixelLength(t, textTmp)).Concat(new[] { min }).Max();
+
+            Object.Destroy(textTmp);
+            Object.Destroy(labelTextTmp);
+            return maxLength;
+        }
+
+        /// <summary>
+        /// Computes the size of a label that may break into multiple lines
+        /// </summary>
+        /// <param name="labels">Labels to compute size</param>
+        /// <param name="rowHeight">Height of one row in pixels.</param>
+        /// <param name="minLabelWidth">Minimum width of label in pixels</param>
+        /// <returns>Height and width accommodating all labels</returns>
+        public static Vector2 ComputeTopLabelSize(IList<string> labels, int rowHeight = 32, int minLabelWidth = 150)
+        {
+            float minWidth = minLabelWidth;
+            minWidth = labels.Aggregate(minWidth, (current, label) => new[] {GetMaxTextLength(label.Split(' '), minLabelWidth), current}.Max());
+            
+            var fullLength = GetMaxTextLength(labels);
+            var nlines = (int) Math.Ceiling(fullLength / minWidth);
+
+            var height = rowHeight;
+            if (nlines * rowHeight > height)
+                height = nlines * rowHeight;
+
+            return new Vector2(minWidth, height);
+        }
+
+
+        /// <summary>
+        /// Adds a label element to a question.
+        /// </summary>
+        /// <param name="labelType">Name of Prefab to be instantiated</param>
+        /// <param name="labelText">Text on Label</param>
+        /// <param name="parent">Container where to place label</param>
+        /// <returns>Returns the new label</returns>
+        public static GameObject AddLabelText(string labelType, string labelText, Transform parent)
+        {
+            var label = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + labelType);
+            PlaceElement(label, parent);
+            label.GetComponent<Text>().text = labelText;
+            return label;
+        }
+
+        /// <summary>
+        /// Adds a sub label element to a question.
+        /// </summary>
+        /// <param name="labelType">Name of Prefab to be instantiated</param>
+        /// <param name="labelText">Text on sublabel</param>
+        /// <param name="parent">Container where to place label</param>
+        /// <param name="subLabelType">Container within the Prefab where the sublabel is found</param>
+        /// <param name="subLabelLength">Length of sublabel</param>
+        /// <returns></returns>
+        public static GameObject AddLabelText(string labelType, string labelText, Transform parent, string subLabelType, float subLabelLength)
+        {
+            var label = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + labelType);
+            PlaceElement(label, parent);
+            var sublabel = label.transform.Find(subLabelType);
+
+            sublabel.GetComponent<RectTransform>().sizeDelta = new Vector2(subLabelLength, 50);
+            sublabel.GetComponent<Text>().text = labelText;
+            return label;
+        }
+
+        /// <summary>
+        /// Creates a toggle with a width and height.
+        /// </summary>
+        /// <param name="toggleType">Toggle type to be created.</param>
+        /// <param name="parent">Container where to place toggle</param>
+        /// <param name="width">Width of toggle area</param>
+        /// <param name="height">Height of toggle area</param>
+        /// <returns>Transform of created toggle</returns>
+        public static Transform CreateToggleElement(string toggleType, Transform parent, float width, float height)
+        {
+            var toggleObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + toggleType);
+            toggleObject.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+            PlaceElement(toggleObject, parent);
+            var button = toggleObject.transform.Find("ToggleButtons");
+            return button;
+        }
     }
 }

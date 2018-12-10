@@ -17,6 +17,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private Button _nextButton;
         private Dictionary<int, bool> _displayableTextFields;
         private Dictionary<int, bool> _currentlyDisplayed;
+        private Transform _nameHolder;
 
 
         void Awake()
@@ -25,6 +26,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _currentlyDisplayed = new Dictionary<int, bool>();
             _backButton = transform.Find("Panel").Find("QuestionControlButtons").Find("BackButton").GetComponent<Button>();
             _nextButton = transform.Find("Panel").Find("QuestionControlButtons").Find("NextButton").GetComponent<Button>();
+            _nameHolder = transform.Find("Panel").Find("questionName");
         }
         
         public void AddBackAndNextButtons(UnityAction backButtonAction, UnityAction nextButtonAction)
@@ -56,9 +58,29 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             gameObject.GetComponentsInChildren<InputField>()[positionOffset].interactable = _currentlyDisplayed[positionOffset];
         }
 
+        /// <summary>
+        /// Makes the back button non-interactable.
+        /// </summary>
         public void DisableBackButton()
         {
             _backButton.interactable = false;
+        }
+
+        /// <summary>
+        /// Deactivates (removes) the next and back button.
+        /// </summary>
+        /// <remarks>
+        /// If you use this, make sure that your participant has a way to continue.
+        /// </remarks>
+        public void DeactivateQuestionControlButtons()
+        {
+            _backButton.gameObject.SetActive(false);
+            _nextButton.gameObject.SetActive(false);
+        }
+
+        public void DeactivateQuestionName()
+        {
+            _nameHolder.gameObject.SetActive(false);
         }
     }
 }
