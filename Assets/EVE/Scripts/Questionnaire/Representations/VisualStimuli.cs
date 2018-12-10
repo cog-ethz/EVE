@@ -52,11 +52,28 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
 			_osc = _launchManager.gameObject.GetComponent<OSC> ();
 
+            if(ExpositionScreen!=null)
+            {
+                ExpositionScreen.GetComponentInChildren<VideoPlayer>()
+                    .SetTargetAudioSource(0, GameObject
+                        .FindGameObjectWithTag("MainCamera")
+                        .GetComponentInChildren<AudioSource>());
+            }
+            else
+            {
+                StartCoroutine(DelayAudioConnection());
+            }
+        }
+
+        private IEnumerator DelayAudioConnection()
+        {
+            yield return new WaitForSeconds(0.25f);
             ExpositionScreen.GetComponentInChildren<VideoPlayer>()
                 .SetTargetAudioSource(0, GameObject
                     .FindGameObjectWithTag("MainCamera")
                     .GetComponentInChildren<AudioSource>());
         }
+
 
         void Update()
         {
