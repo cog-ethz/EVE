@@ -25,7 +25,6 @@ public class CheckPointAngle : MonoBehaviour {
     private int _counter;
     private string _goalText, _posText, _lookText;
 
-    private ReplayRoute _rpl;
     private JRD_FirstPersonController _fpc;
     private LoggingManager _log;
     private bool _once;
@@ -39,7 +38,6 @@ public class CheckPointAngle : MonoBehaviour {
         {
             var launchManager = lauchManagerObject.GetComponent<LaunchManager>();
             _log = launchManager.LoggingManager;
-            _rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
         }
         else
         {

@@ -174,7 +174,6 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                     var answerableInds = new List<int>();
 
                     var imgCount = q.Vals[3];
-                    var answerableCount = q.Vals[4];
                     _answerStrings = new Dictionary<int, string>();
 
 

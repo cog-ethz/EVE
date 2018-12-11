@@ -6,6 +6,7 @@ using Assets.EVE.Scripts.Menu.Buttons;
 using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using Assets.EVE.Scripts.XML;
+using Assets.EVE.Scripts.XML.XMLHelper;
 using UnityEngine.UI;
 
 /// <summary>
@@ -23,10 +24,7 @@ public class MenuManager : MonoBehaviour {
     /// The name of the participant as provided in the main menu.
     /// </summary>
     public string ParticipantId { get; set; }
-
-    private Dictionary<string,string> _menuState;
-
-
+    
     public BaseMenu CurrentMenu;
     private LaunchManager _launchManager;
     private LoggingManager _log;
@@ -51,6 +49,12 @@ public class MenuManager : MonoBehaviour {
     /// </summary>
     public string ActiveParticipantId { get; set; }
 
+    /// <summary>
+    /// Scene Id that is currently manipulated
+    /// in a menu.
+    /// </summary>
+    public string ActiveSceneId { get; set; }
+
     public string SceneFilePath
     {
         get
@@ -73,7 +77,6 @@ public class MenuManager : MonoBehaviour {
     {
         _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
         ExperimentParameterList = new List<string>();
-        _menuState = new Dictionary<string, string>();
     }
 
     public void Start() {        
@@ -120,8 +123,9 @@ public class MenuManager : MonoBehaviour {
     {
         if (_sceneSettings != null)
         {
-            _sceneSettings.Scenes.Add(sceneName);
-            _log.AddScene(sceneName);
+            var scene = new SceneEntry(sceneName, false);
+            _sceneSettings.Scenes.Add(new SceneEntry(sceneName,false));
+            _log.AddScene(scene);
             _log.RemoveExperimentSceneOrder(_launchManager.ExperimentName);
             _log.SetExperimentSceneOrder(_launchManager.ExperimentName, _sceneSettings.Scenes.ToArray());
         }

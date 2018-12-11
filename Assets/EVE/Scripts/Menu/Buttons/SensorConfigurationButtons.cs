@@ -97,10 +97,10 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 _launchManager.ExperimentSettings.SensorSettings.Labchart = false;
                 _launchManager.SynchroniseSceneListWithDB();
                 _menuManager.DeleteSceneEntry(
-                    _launchManager.ExperimentSettings.SceneSettings.Scenes.FindIndex(a => a == "LabchartStartScene"));
+                    _launchManager.ExperimentSettings.SceneSettings.Scenes.FindIndex(entry => entry.Name == "LabchartStartScene"));
                 _log.RemoveSensor("Labchart");
             }
-            else if (!scenes.Contains("LabchartStartScene"))
+            else if (!scenes.Exists(entry => entry.Name == "LabchartStartScene"))//Contains(()=>"LabchartStartScene"))
             {
                 _launchManager.ExperimentSettings.SensorSettings.Labchart = true;
                 _log.AddSensor("Labchart");

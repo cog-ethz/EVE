@@ -6,6 +6,7 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using Assets.EVE.Scripts.Questionnaire;
 using Assets.EVE.Scripts.Questionnaire.Questions;
+using Assets.EVE.Scripts.XML.XMLHelper;
 
 public class MySqlConnector : DatabaseConnector
 {
@@ -211,13 +212,15 @@ public class MySqlConnector : DatabaseConnector
 
     
 
-    public override void AddScene(string sceneName)
+    public override void AddScene(SceneEntry scene)
     {
-        TryInsert1Value(sceneName, "scene", "scene_name");
+        TryInsert1Value(scene.Name, "scene", "scene_name");
+        //TODO process curtain information
     }
 
-    public override void RemoveScene(string sceneName)
+    public override void RemoveScene(SceneEntry scene)
     {
+        //TODO Process curtain information
         try
         {
             var query = "DELETE FROM scene WHERE scene_name = ?sceneName";
@@ -226,7 +229,7 @@ public class MySqlConnector : DatabaseConnector
             {
                 using (_cmd = new MySqlCommand(query, _con))
                 {
-                    var oParam0 = _cmd.Parameters.Add("?sceneName", MySqlDbType.VarChar); oParam0.Value = sceneName;
+                    var oParam0 = _cmd.Parameters.Add("?sceneName", MySqlDbType.VarChar); oParam0.Value = scene.Name;
                     _cmd.ExecuteNonQuery();
                 }
             }
@@ -238,8 +241,9 @@ public class MySqlConnector : DatabaseConnector
         }
     }
 
-    public override void SetExperimentSceneOrder(string experimentName, string[] scenes)
+    public override void SetExperimentSceneOrder(string experimentName, SceneEntry[] scenes)
     {
+        //TODO Process curtain information
         for (var i = 0; i < scenes.Length; i++)
         {
             try
@@ -252,7 +256,7 @@ public class MySqlConnector : DatabaseConnector
                     using (_cmd = new MySqlCommand(query, _con))
                     {
                         var oParam0 = _cmd.Parameters.Add("?experimentName", MySqlDbType.VarChar); oParam0.Value = experimentName;
-                        var oParam1 = _cmd.Parameters.Add("?sceneName", MySqlDbType.VarChar); oParam1.Value = scenes[i];
+                        var oParam1 = _cmd.Parameters.Add("?sceneName", MySqlDbType.VarChar); oParam1.Value = scenes[i].Name;
                         var oParam2 = _cmd.Parameters.Add("?orderNumber", MySqlDbType.Int32); oParam2.Value = i;
                         _cmd.ExecuteNonQuery();
                     }
@@ -442,10 +446,10 @@ public class MySqlConnector : DatabaseConnector
         }
     }
 
-    public override List<string> GetExperimentScenes(int experimentId)
+    public override List<SceneEntry> GetExperimentScenes(int experimentId)
     {
         var query = string.Empty;
-        var result = new List<string>();
+        var result = new List<SceneEntry>();
         try
         {
             if (!_con.State.Equals(ConnectionState.Open)) _con.Open();
@@ -461,7 +465,8 @@ public class MySqlConnector : DatabaseConnector
                     {
                         while (_rdr.Read())
                         {
-                            result.Add(_rdr["scene_name"].ToString());
+                            //TODO read out curtain information from database as well
+                            result.Add(new SceneEntry(_rdr["scene_name"].ToString(),false));
                         }
                         _rdr.Dispose();
                     }
@@ -474,6 +479,7 @@ public class MySqlConnector : DatabaseConnector
         }
         return result;
     }
+
 
     public override void InsertQuestion(QuestionData question)
     {

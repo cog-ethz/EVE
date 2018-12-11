@@ -6,7 +6,7 @@
     <User>energyscape</User>
     <Password>MainExperiment2018</Password>
   </DatabaseSettings>
-  <SensorSettings Labchart="false" H7Server="false">
+  <SensorSettings Labchart="false" H7Server="false" MiddleVR="false">
     <Sensors />
   </SensorSettings>
   <ParameterSettings>
@@ -19,7 +19,7 @@
   </QuestionnaireSettings>
   <SceneSettings>
     <Scenes>
-      <Scene>ExampleQuestionnaire.xml</Scene>
+      <Scene Curtain="false" Name="ExampleQuestionnaire" />
     </Scenes>
   </SceneSettings>
   <LabchartSettings>

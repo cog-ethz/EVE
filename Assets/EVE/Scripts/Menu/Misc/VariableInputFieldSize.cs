@@ -20,7 +20,6 @@ namespace Assets.EVE.Scripts.Menu
         /// Updates the size of the input field.
         /// </summary>
         public void AdaptInputFieldSize () {
-            var length = MenuUtils.MessagePixelLength(inputField.text, inputField.textComponent);
             var substrings = inputField.text.Split('\n');
             var nWraps = 0;
             for (var i = 0; i< substrings.Length; i++)

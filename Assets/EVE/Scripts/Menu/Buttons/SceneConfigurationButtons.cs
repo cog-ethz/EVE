@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Assets.EVE.Scripts.Utils;
+using Assets.EVE.Scripts.XML.XMLHelper;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 {
     public class SceneConfigurationButtons : MonoBehaviour {
 
-        private List<string> _scenes;
+        private List<SceneEntry> _scenes;
         private LaunchManager _launchManager;
         private Transform _choosenScenesList;
         private Transform _availableScenesList;
@@ -19,7 +20,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
             _menuManager = _launchManager.MenuManager;
-            _scenes = new List<string>();
+            _scenes = new List<SceneEntry>();
 
             _availableScenesList = transform.Find("Panel").Find("SceneSelection").Find("DynFieldsWithScrollbarRight").Find("DynFields");
             _choosenScenesList = transform.Find("Panel").Find("SceneSelection").Find("DynFieldsWithScrollbarLeft").Find("DynFields");
@@ -72,13 +73,14 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _launchManager.SynchroniseSceneListWithDB();
             MenuUtils.ClearList(_choosenScenesList);
             _scenes = _launchManager.ExperimentSettings.SceneSettings.Scenes;
-            foreach (var filename in _scenes)
+            foreach (var scene in _scenes)
             {
+                _menuManager.ActiveSceneId = scene.Name;
                 var filenameObj = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Lists/ChoosenSceneEntry");
                 MenuUtils.PlaceElement(filenameObj, _choosenScenesList);
-                filenameObj.transform.Find("SceneName").GetComponent<Text>().text = GetFileNameOnly(filename);
+                filenameObj.transform.Find("SceneName").GetComponent<Text>().text = GetFileNameOnly(scene.Name);
                 filenameObj.transform.Find("MoveUpButton").GetComponent<Button>().onClick.AddListener(() => { MoveUpChoosenSceneEntry(filenameObj); });
-                filenameObj.transform.Find("EditButton").GetComponent<Button>().onClick.AddListener(() =>  _menuManager.InstantiateAndShowMenu("Edit Scene Settings Menu", "Launcher"));
+                filenameObj.transform.Find("EditButton").GetComponent<Button>().onClick.AddListener(() =>  _menuManager.InstantiateAndShowMenu("Scene Options Menu", "Launcher"));
                 filenameObj.transform.Find("RemoveButton").GetComponent<Button>().onClick.AddListener(() => { RemoveChoosenSceneEntry(filenameObj); });
                 
             }

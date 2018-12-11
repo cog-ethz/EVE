@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.EVE.Scripts.Questionnaire;
 using Assets.EVE.Scripts.Questionnaire.Questions;
+using Assets.EVE.Scripts.XML.XMLHelper;
 
 public abstract class DatabaseConnector
 {
@@ -116,20 +117,20 @@ public abstract class DatabaseConnector
     /// Add scene to database
     /// </summary>
     /// <param name="sceneName"> Name of the scene</param>
-    public abstract void AddScene(string sceneName);
+    public abstract void AddScene(SceneEntry sceneName);
 
     /// <summary>
     /// Remove scene to database
     /// </summary>
     /// <param name="sceneName"> Name of the scene</param>
-    public abstract void RemoveScene(string sceneName);
+    public abstract void RemoveScene(SceneEntry sceneName);
 
     /// <summary>
     /// Set the order of the scenes of the experiment
     /// </summary>
     /// <param name="experimentName"> Name of the experiment</param>
     /// <param name="scenes">The scene names in order (can contain repetitions)</param>
-    public abstract void SetExperimentSceneOrder(string experimentName, string[] scenes);
+    public abstract void SetExperimentSceneOrder(string experimentName, SceneEntry[] scenes);
 
      /// <summary>
     /// Remove the saved scene order of the experiment
@@ -191,7 +192,7 @@ public abstract class DatabaseConnector
     /// Get the scenes of an experiment
     /// </summary>
     /// <param name="experimentId"> Id the of the experiment the scenes belongs to</param>
-    public abstract List<string> GetExperimentScenes(int experimentId);
+    public abstract List<SceneEntry> GetExperimentScenes(int experimentId);
 
     // -----------------------------------------
     //			Log Questions
@@ -512,4 +513,5 @@ public abstract class DatabaseConnector
     public abstract string GetJumpCondition(int jumpId);
     public abstract List<string> GetAllQuestionnaireNames();
     public abstract int GetQuestionSetId(string questionSetName);
+
 }

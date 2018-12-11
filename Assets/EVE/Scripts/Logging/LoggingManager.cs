@@ -6,6 +6,7 @@ using Assets.EVE.Scripts.Questionnaire;
 using Assets.EVE.Scripts.XML;
 using Assets.EVE.Scripts.Questionnaire.XMLHelper;
 using Assets.EVE.Scripts.Questionnaire.Questions;
+using Assets.EVE.Scripts.XML.XMLHelper;
 
 // for lists
 
@@ -18,7 +19,7 @@ public class LoggingManager
 
     private DatabaseConnector _dbConnector;
 
-	public List<string> Scenes = new List<string>();
+	public List<SceneEntry> Scenes = new List<SceneEntry>();
 
     /// <summary>
     /// The logging manager takes care of all communications between the database and the framework.
@@ -147,7 +148,7 @@ public class LoggingManager
     /// Add scene to database
     /// </summary>
     /// <param name="sceneName"> Name of the scene</param>
-    public void AddScene(string sceneName)
+    public void AddScene(SceneEntry sceneName)
     {
         _dbConnector.AddScene(sceneName);
     }
@@ -156,12 +157,12 @@ public class LoggingManager
     /// Remove scene to database
     /// </summary>
     /// <param name="sceneName"> Name of the scene</param>
-    public void RemoveScene(string sceneName)
+    public void RemoveScene(SceneEntry sceneName)
     {
         _dbConnector.RemoveScene(sceneName);
     }
 
-	public List<string> GetExperimentScenes(string experimentName){
+	public List<SceneEntry> GetExperimentScenes(string experimentName){
 		var experimentId = _dbConnector.getExperimentId(experimentName);
 		Scenes = _dbConnector.GetExperimentScenes(experimentId);
 		return Scenes;
@@ -172,9 +173,9 @@ public class LoggingManager
     /// </summary>
     /// <param name="experimentName"> Name of the experiment</param>
     /// <param name="scenes">The scene names in order (can contain repetitions)</param>
-    public void SetExperimentSceneOrder(string experimentName, string[] scenes)
+    public void SetExperimentSceneOrder(string experimentName, SceneEntry[] scenes)
     {
-        _dbConnector.SetExperimentSceneOrder(experimentName,scenes);
+        _dbConnector.SetExperimentSceneOrder(experimentName,scenes.ToArray());
     }
 
      /// <summary>
@@ -418,7 +419,7 @@ public class LoggingManager
         _dbConnector.removeSession(sessionId);
     }
 
-    public string[] GetSceneNamesInOrder(string experimentName)
+    public SceneEntry[] GetSceneNamesInOrder(string experimentName)
     {
         return _dbConnector.GetExperimentScenes(_dbConnector.getExperimentId(experimentName)).ToArray();
     }

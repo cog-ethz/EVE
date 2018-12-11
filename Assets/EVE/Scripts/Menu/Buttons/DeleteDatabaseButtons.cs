@@ -5,9 +5,6 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 {
     public class DeleteDatabaseButtons : MonoBehaviour
     {
-        private int _sid=-1;
-        private string _pid = "";
-        private GameObject _item;
         private LaunchManager _launchManager;
         private MenuManager _menuManager;
         private LoggingManager _log;

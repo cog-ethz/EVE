@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using Assets.EVE.Scripts.Menu;
 using Assets.EVE.Scripts.XML;
@@ -11,6 +12,7 @@ using Assets.EVE.Scripts.Questionnaire;
 using Assets.EVE.Scripts.Questionnaire.Enums;
 using VisualStimuliEnums = Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli;
 using Assets.EVE.Scripts.Questionnaire.XMLHelper;
+using Assets.EVE.Scripts.XML.XMLHelper;
 using JetBrains.Annotations;
 using UnityEngine.UI;
 
@@ -20,8 +22,8 @@ public class LaunchManager : MonoBehaviour
     public GameObject FPC;
     public GameObject MenuCanvas;
     private int _currentScene;
-    private bool _loadScene, _initialized, _configureLabchart, _inQuestionnaire;
-    private string _nextScene, _activeSceneName, _participantId, _filePathParticipants;
+    private bool _initialized, _configureLabchart, _inQuestionnaire;
+    private string _activeSceneName, _participantId, _filePathParticipants;
 
     public Dictionary<string, string> SessionParameters { get; private set; }
 
@@ -161,7 +163,7 @@ public class LaunchManager : MonoBehaviour
         var isReplay = FPC.GetComponentInChildren<ReplayRoute>().isActivated();
         var sceneList = ExperimentSettings.SceneSettings.Scenes;
         _activeSceneName = SceneManager.GetActiveScene().name;
-        var subSceneName = sceneList[_currentScene];
+        var subSceneName = sceneList[_currentScene].Name;
         Debug.Log("Scene " + _currentScene  + ":" + subSceneName + " in " + _activeSceneName);
         LoggingManager.InsertLiveSystemEvent("SceneFlow","switch",null, "Scene " + _currentScene + ":" + subSceneName + " in " + _activeSceneName);
         
@@ -231,7 +233,7 @@ public class LaunchManager : MonoBehaviour
     public void LoadCurrentScene()
     {
         SynchroniseSceneListWithDB();
-        var scene = ExperimentSettings.SceneSettings.Scenes[_currentScene];
+        var scene = ExperimentSettings.SceneSettings.Scenes[_currentScene].Name;
         
         if (scene.Contains(".xml"))
         {
@@ -256,7 +258,7 @@ public class LaunchManager : MonoBehaviour
                 ManualContinueToNextScene();
                 break;
             default:
-                SceneManager.LoadScene(_nextScene);
+                SceneManager.LoadScene(scene);
                 break;
         }
     }
@@ -367,8 +369,11 @@ public class LaunchManager : MonoBehaviour
         {
             LoggingManager.AddScene(scene);
         }
-        LoggingManager.SetExperimentSceneOrder(name, ExperimentSettings.SceneSettings.Scenes.ToArray());
-        UpdateParameters();
+
+        LoggingManager.SetExperimentSceneOrder(name,
+            ExperimentSettings.SceneSettings.Scenes.ToArray());
+
+    UpdateParameters();
         foreach (var sensor in ExperimentSettings.SensorSettings.Sensors)
         {
             LoggingManager.AddSensor(sensor);
@@ -378,7 +383,7 @@ public class LaunchManager : MonoBehaviour
     public void SynchroniseSceneListWithDB()
     {
         if (LoggingManager.CurrentSessionId> -1)
-            ExperimentSettings.SceneSettings.Scenes = new List<string>(LoggingManager.GetSceneNamesInOrder(ExperimentSettings.Name));
+            ExperimentSettings.SceneSettings.Scenes = new List<SceneEntry>(LoggingManager.GetSceneNamesInOrder(ExperimentSettings.Name));
     }
 
     public void SynchroniseSensorListWithDB()

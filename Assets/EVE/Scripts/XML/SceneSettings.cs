@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using Assets.EVE.Scripts.XML.XMLHelper;
 
 namespace Assets.EVE.Scripts.XML
 {
@@ -9,6 +10,6 @@ namespace Assets.EVE.Scripts.XML
     {
         [XmlArray]
         [XmlArrayItem("Scene")]
-        public List<string> Scenes;
+        public List<SceneEntry> Scenes;
     }
 }

@@ -25,6 +25,7 @@ namespace Assets.EVE.Scripts.Utils
         /// <returns></returns>
         public static GameObject InstatiatePrefab(string prefab)
         {
+            Debug.Log("Instantiate " + prefab);
             var newObject = Object.Instantiate(Resources.Load(prefab)) as GameObject;
             if (newObject == null) Debug.LogError("Failed instantiating " + prefab);
             return newObject;
