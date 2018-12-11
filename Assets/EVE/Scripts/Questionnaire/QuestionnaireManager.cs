@@ -295,12 +295,14 @@ namespace Assets.EVE.Scripts.Questionnaire
                 topRow.transform.SetSiblingIndex(1);
 
                 var topLabelSize = MenuUtils.ComputeTopLabelSize(cLabels);
-                
+                var oldDelta = topRow.GetComponent<RectTransform>().sizeDelta;
+                topRow.GetComponent<RectTransform>().sizeDelta = new Vector2(oldDelta.x, topLabelSize.y);
+
+
                 for (var i = 0; i < nColumns; i++)
                 {
                     //Set top labels
                     var filenameObj = MenuUtils.AddLabelText("Questionnaire/Rows/Elements/OneLabel", cLabels[i], topRow.transform);
-                    filenameObj.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
                     filenameObj.GetComponent<RectTransform>().sizeDelta = topLabelSize;
                 }
 

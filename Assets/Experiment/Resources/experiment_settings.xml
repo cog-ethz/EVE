@@ -19,7 +19,7 @@
   </QuestionnaireSettings>
   <SceneSettings>
     <Scenes>
-      <Scene Curtain="false" Name="ExampleQuestionnaire" />
+      <Scene Curtain="false" Name="ExampleQuestionnaire.xml" />
     </Scenes>
   </SceneSettings>
   <LabchartSettings>

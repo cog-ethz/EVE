@@ -2,7 +2,7 @@
 <QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="TestSet">
   <Questions>
     <InfoScreen Name="example_info" NColumns="1" NRows="1">
-      <Text><![CDATA[<size=25>People questionnaire</size>
+      <Text><![CDATA[<size=48>People questionnaire</size>
 	  
 Perception of people in the neighborhood]]></Text>
     </InfoScreen>
@@ -30,6 +30,32 @@ Perception of people in the neighborhood]]></Text>
           <Text><![CDATA[No]]></Text>
         </Label>
       </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="likert_scale" NColumns="7" NRows="1" Choice="Single">
+      <Text><![CDATA[Is this a good question?]]></Text>
+      <ColumnLabels>
+        <Label Output="0">
+          <Text><![CDATA[Not at all]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[This entry has text that is way tooooooooo long]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[It is okay]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Very Good]]></Text>
+        </Label>
+      </ColumnLabels>
     </ChoiceQuestion>
     <ChoiceQuestion Name="multiple_yes_no" NColumns="2" NRows="5" Choice="Single">
       <Text><![CDATA[Answer quickly without thinking:]]></Text>
@@ -97,32 +123,6 @@ Perception of people in the neighborhood]]></Text>
           <Text><![CDATA[Red Hot Chili Peppers]]></Text>
         </Label>
       </RowLabels>
-    </ChoiceQuestion>
-    <ChoiceQuestion Name="likert_scale" NColumns="7" NRows="1" Choice="Single">
-      <Text><![CDATA[Is this a good question?]]></Text>
-      <ColumnLabels>
-        <Label Output="0">
-          <Text><![CDATA[Not at all]]></Text>
-        </Label>
-        <Label Output="1">
-          <Text><![CDATA[]]></Text>
-        </Label>
-        <Label Output="2">
-          <Text><![CDATA[]]></Text>
-        </Label>
-        <Label Output="3">
-          <Text><![CDATA[It is okay]]></Text>
-        </Label>
-        <Label Output="4">
-          <Text><![CDATA[]]></Text>
-        </Label>
-        <Label Output="5">
-          <Text><![CDATA[]]></Text>
-        </Label>
-        <Label Output="6">
-          <Text><![CDATA[Very Good]]></Text>
-        </Label>
-      </ColumnLabels>
     </ChoiceQuestion>
     <ChoiceQuestion Name="multi_c_text" NColumns="1" NRows="8" Choice="Multiple">
       <Text><![CDATA[Which animals do you like:]]></Text>
