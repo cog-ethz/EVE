@@ -163,6 +163,7 @@ public class LaunchManager : MonoBehaviour
         _activeSceneName = SceneManager.GetActiveScene().name;
         var subSceneName = sceneList[_currentScene];
         Debug.Log("Scene " + _currentScene  + ":" + subSceneName + " in " + _activeSceneName);
+        LoggingManager.InsertLiveSystemEvent("SceneFlow","switch",null, "Scene " + _currentScene + ":" + subSceneName + " in " + _activeSceneName);
         
         if (_activeSceneName == "Launcher" && !_inQuestionnaire && !_configureLabchart)
         { //coming back from a scene
