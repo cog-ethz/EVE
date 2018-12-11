@@ -437,4 +437,13 @@ public class LaunchManager : MonoBehaviour
         MenuManager.SetActiveParameters(requiredParams);
     }
 
+    /// <summary>
+    /// Enable or disable the connection to MiddleVR.
+    /// </summary>
+    /// <param name="enable">Whether to use MiddleVR.</param>
+    // ReSharper disable once InconsistentNaming
+    public void SetActiveMiddleVR(bool enable)
+    {
+        throw new NotImplementedException();
+    }
 }

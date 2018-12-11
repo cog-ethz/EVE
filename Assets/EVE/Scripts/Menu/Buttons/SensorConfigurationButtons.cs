@@ -13,8 +13,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private LaunchManager _launchManager;
         private HL7ServerStarter _hl7ServerStarter;
         private LoggingManager _log;
-        public Toggle LabchartButton;
-        public Toggle HL7ServerButton;
+        private Toggle _labchartButton, _hl7ServerButton, _middleVRButton;
         private Transform _dynFields;
 
         // Use this for initialization
@@ -25,15 +24,23 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
             _log = _launchManager.LoggingManager;
             _hl7ServerStarter = _launchManager.gameObject.GetComponent<HL7ServerStarter>();
-            HL7ServerButton.isOn = _launchManager.ExperimentSettings.SensorSettings.H7Server;
-            LabchartButton.isOn = _launchManager.ExperimentSettings.SensorSettings.Labchart;
 
 
             var fields = transform.Find("Panel").Find("Fields");
             fields.Find("AddButton").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Add Sensor Menu", "Launcher"));
             fields.Find("BackButton").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Configuration Menu", "Launcher"));
-            fields.Find("LabchartButton").Find("Button").GetComponent<Toggle>().isOn = _launchManager.ExperimentSettings.SensorSettings.H7Server;
-            fields.Find("HL7Button").Find("Button").GetComponent<Toggle>().isOn = _launchManager.ExperimentSettings.SensorSettings.Labchart;
+
+            _labchartButton = fields.Find("LabchartButton").Find("Button").GetComponent<Toggle>();
+            _labchartButton.isOn = _launchManager.ExperimentSettings.SensorSettings.Labchart;
+            _labchartButton.onValueChanged.AddListener(LabchartToggle);
+
+            _hl7ServerButton = fields.Find("HL7Button").Find("Button").GetComponent<Toggle>();
+            _hl7ServerButton.isOn = _launchManager.ExperimentSettings.SensorSettings.H7Server;
+            _hl7ServerButton.onValueChanged.AddListener(HL7ServerToggle);
+
+            _middleVRButton = fields.Find("MiddleVRButton").Find("Button").GetComponent<Toggle>();
+            _middleVRButton.isOn = _launchManager.ExperimentSettings.SensorSettings.MiddleVR;
+            _middleVRButton.onValueChanged.AddListener((enabled)=>_launchManager.SetActiveMiddleVR(enabled));
 
             _dynFields = fields.Find("DynFieldsWithScrollbar").Find("DynFields");
 
@@ -54,14 +61,20 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
             if (sensors.Contains("Labchart"))
             {
-                LabchartButton.isOn = true;
+                _labchartButton.isOn = true;
                 sensors.Remove("Labchart");
             }
 
             if (sensors.Contains("HL7Server"))
             {
-                HL7ServerButton.isOn = true;
+                _hl7ServerButton.isOn = true;
                 sensors.Remove("HL7Server");
+            }
+
+            if (sensors.Contains("MiddleVR"))
+            {
+                _middleVRButton.isOn = true;
+                sensors.Remove("MiddleVR");
             }
 
             foreach (var sensorName in sensors)
@@ -75,10 +88,10 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _launchManager.SynchroniseSensorListWithDB();
         }
 
-        public void LabchartToggle()
+        public void LabchartToggle(bool enable)
         {
             var scenes = _launchManager.ExperimentSettings.SceneSettings.Scenes;
-            if (!LabchartButton.isOn)
+            if (!enable)
             {
                 _menuManager.RemoveExperimentParameter("Labchart File Name");
                 _launchManager.ExperimentSettings.SensorSettings.Labchart = false;
@@ -98,9 +111,9 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         }
 
 
-        public void HL7ServerToggle()
+        public void HL7ServerToggle(bool enable)
         {
-            if (!HL7ServerButton.isOn)
+            if (!enable)
             {
                 _hl7ServerStarter.enabled = false;
                 _launchManager.ExperimentSettings.SensorSettings.H7Server = false;
