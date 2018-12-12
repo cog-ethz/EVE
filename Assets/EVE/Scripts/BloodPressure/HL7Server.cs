@@ -156,7 +156,7 @@ class HL7Server
 				string unit = obxField.Field(9);
                 Debug.Log(name + " " + value + " " + unit);
 				time = obxField.Field(18);
-                log.insertMeasurement("HL7Server", name,unit,value, time);
+                log.InsertMeasurement("HL7Server", name,unit,value, time);
                 lastMeasurement = DateTime.ParseExact(time, "yyyyMMddHHmmss", new CultureInfo("de-DE"));
             }
             else
@@ -165,7 +165,7 @@ class HL7Server
                 string name = obxField.Field(4);
                 string value = obxField.Field(7);
                 string unit = obxField.Field(9);
-                log.insertMeasurement("HL7Server", name, unit, value, time);
+                log.InsertMeasurement("HL7Server", name, unit, value, time);
             }
             obxField = msg.FindNextSegment("OBX", obxField);
 

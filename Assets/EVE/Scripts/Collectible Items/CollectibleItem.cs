@@ -12,7 +12,7 @@ public class CollectibleItem : MonoBehaviour {
     void Start()
     {
         LaunchManager launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        log = launchManager.GetLoggingManager();
+        log = launchManager.LoggingManager;
         collectedItems = 0;
     }
 
@@ -25,7 +25,7 @@ public class CollectibleItem : MonoBehaviour {
 		{
 			transform.gameObject.GetComponent<Collider>().enabled = false;
 			transform.gameObject.GetComponent<Renderer>().enabled = false;
-            if (log != null) log.insertLiveMeasurement("Collectible","Gem",null,id);
+            if (log != null) log.InsertLiveMeasurement("Collectible","Gem",null,id);
 			Destroy(this.gameObject);
 			collectedItems++;
             

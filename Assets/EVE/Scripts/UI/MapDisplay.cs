@@ -48,19 +48,19 @@ public class MapDisplay : MonoBehaviour
     void Start()
     {
         launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        log = launchManager.GetLoggingManager();
+        log = launchManager.LoggingManager;
 
         rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
         if (rpl.isActivated())
         {
             var parameterValue = 0;
-            int.TryParse(launchManager.GetLoggingManager().getParameterValue(launchManager.getReplaySessionId(),"mapType"), out parameterValue);
+            int.TryParse(launchManager.LoggingManager.GetParameterValue(launchManager.ReplaySessionId,"mapType"), out parameterValue);
             mapType = parameterValue;
         }
         else
         {
             var parameterValue = 0;
-            int.TryParse(launchManager.GetLoggingManager().getParameterValue("mapType"), out parameterValue);
+            int.TryParse(launchManager.LoggingManager.GetParameterValue("mapType"), out parameterValue);
             mapType = parameterValue;
         }                     
 
@@ -131,7 +131,7 @@ public class MapDisplay : MonoBehaviour
                 {
                     if (showMap)
                     {
-                        if (!rpl.isActivated()) log.insertLiveMeasurement("Map", "Map showed", "sec", DateTime.Now.Subtract(pressed).TotalSeconds.ToString());
+                        if (!rpl.isActivated()) log.InsertLiveMeasurement("Map", "Map showed", "sec", DateTime.Now.Subtract(pressed).TotalSeconds.ToString());
                     }
 
                     showMap = false;

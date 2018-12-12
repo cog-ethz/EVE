@@ -25,7 +25,6 @@ public class CheckPointAngle : MonoBehaviour {
     private int _counter;
     private string _goalText, _posText, _lookText;
 
-    private ReplayRoute _rpl;
     private JRD_FirstPersonController _fpc;
     private LoggingManager _log;
     private bool _once;
@@ -38,8 +37,7 @@ public class CheckPointAngle : MonoBehaviour {
         if (lauchManagerObject != null)
         {
             var launchManager = lauchManagerObject.GetComponent<LaunchManager>();
-            _log = launchManager.GetLoggingManager();
-            _rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
+            _log = launchManager.LoggingManager;
         }
         else
         {
@@ -102,7 +100,7 @@ public class CheckPointAngle : MonoBehaviour {
                     if (_log != null)
                     {
                         var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
-                        _log.insertMeasurement("JRD", locations, "Degree", (Target.eulerAngles.y).ToString(), timestamp);
+                        _log.InsertMeasurement("JRD", locations, "Degree", (Target.eulerAngles.y).ToString(), timestamp);
                     }             
 
                     Target.eulerAngles.Set(0, 0, 0);

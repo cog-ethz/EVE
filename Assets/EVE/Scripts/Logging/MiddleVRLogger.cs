@@ -16,7 +16,7 @@ public class MiddleVRLogger : MonoBehaviour {
     {
         player = GameObject.FindGameObjectWithTag("Player");
         LaunchManager launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        log = launchManager.GetLoggingManager();
+        log = launchManager.LoggingManager;
 
         doc = XDocument.Load(GameObject.FindGameObjectWithTag("MiddleVR").GetComponent<VRManagerScript>().ConfigFile); // load MiddleVR config file (XML)
 
@@ -60,9 +60,9 @@ public class MiddleVRLogger : MonoBehaviour {
         while (true)
         {
             string time = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
-            log.insert3DMeasurement(deviceName, "Pos " + description, "Meters", tmp.transform.position.x.ToString(), transform.position.y.ToString(), transform.position.z.ToString(), time);
+            log.Insert3DMeasurement(deviceName, "Pos " + description, "Meters", tmp.transform.position.x.ToString(), transform.position.y.ToString(), transform.position.z.ToString(), time);
             Debug.Log("Inserted MiddleVR Position Data of " + deviceName);
-            log.insert3DMeasurement(deviceName, "Rot " + description, "Degrees", tmp.transform.rotation.eulerAngles.x.ToString(), tmp.transform.rotation.eulerAngles.y.ToString(), tmp.transform.rotation.eulerAngles.z.ToString(), time);
+            log.Insert3DMeasurement(deviceName, "Rot " + description, "Degrees", tmp.transform.rotation.eulerAngles.x.ToString(), tmp.transform.rotation.eulerAngles.y.ToString(), tmp.transform.rotation.eulerAngles.z.ToString(), time);
             Debug.Log("Inserted MiddleVR Rotation Data of " + deviceName);
             yield return new WaitForSeconds(timestep_in_sec);
         }

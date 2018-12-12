@@ -2,7 +2,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using Assets.EVE.Scripts.Questionnaire.Visitor;
+using Assets.EVE.Scripts.Questionnaire.XMLHelper;
 using UnityEngine;
 
 namespace Assets.EVE.Scripts.Questionnaire.Questions
@@ -12,6 +14,8 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
     /// </summary>
     public class InfoScreen : Question
     {
+        [XmlElement] public ConfirmationRequirement ConfirmationRequirement;
+        
         public InfoScreen() { }
 
         public InfoScreen(QuestionData questionData)
@@ -23,15 +27,26 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         {
             Name = name;
             Text = text;
+            ConfirmationRequirement = new ConfirmationRequirement(false, 0);
+        }
+
+        public InfoScreen(string name, string text, ConfirmationRequirement confirmationRequirement)
+        {
+            Name = name;
+            Text = text;
+            ConfirmationRequirement = confirmationRequirement;
         }
 
         internal override QuestionData AsDatabaseQuestion(string questionSet)
         {
+            var vals = ConfirmationRequirement.Required
+                ? new[] {ConfirmationRequirement.Required ? 1 : 0, ConfirmationRequirement.ConfirmationDelay}
+                : null;
             return new QuestionData(Name,
                 Text,
                 questionSet,
                 (int)Enums.Question.Info,
-                null,
+                vals,
                 null,
                 null);
         }
@@ -42,6 +57,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             {
                 Name = q.QuestionName;
                 Text = q.QuestionText;
+                ConfirmationRequirement = new ConfirmationRequirement
+                {
+                    Required = q.Vals != null && q.Vals[0] == 1, 
+                    ConfirmationDelay = q.Vals != null && q.Vals.Length > 1 ? q.Vals[1] : 0
+                };
             }
             else
             {
@@ -75,5 +95,6 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         {
             qv.Visit(this);
         }
+
     }
 }

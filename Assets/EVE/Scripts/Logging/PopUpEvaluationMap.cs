@@ -73,7 +73,7 @@ public class PopUpEvaluationMap : MonoBehaviour
             }
 
             //draw participant path
-            for (int i = 0; i < participantLocationsOnMap.Count; i++)
+            for (var i = 0; i < participantLocationsOnMap.Count; i++)
             {
                 GUI.DrawTexture(new Rect(participantLocationsOnMap[i], size), participantPathTexture);
             }
@@ -89,30 +89,30 @@ public class PopUpEvaluationMap : MonoBehaviour
     /// <summary>
     /// Opens a map displaying a participants route through the scene.
     /// </summary>
-    /// <param name="xyz">Participant's location data</param>
+    /// <param name="xyz">Participant's location data, first array is rows, second is columns</param>
     /// <param name="mapName">Name of the scene</param>
-    public void OpenPopUpMap(float[][] xyz, string mapName)
+    public void OpenPopUpMap(List<float>[] xyz, string mapName)
     {
         currentMapToDisplay = mapName;
         displayMapPopup = true;
-        float top = (Screen.height - mapHeight) / 2;
-        float left = (Screen.width - mapWidth) / 2;
+        var top = (Screen.height - mapHeight) / 2;
+        var left = (Screen.width - mapWidth) / 2;
         participantLocationsOnMap.Clear();
-        List<Vector2> tempParticipantLocationsOnMap = new List<Vector2>();
-        for (int i = 0; i < xyz.Length; i++)
+        var tempParticipantLocationsOnMap = new List<Vector2>();
+        for (var i = 0; i < xyz.Length; i++)
         {
-            Vector3 worldLocation = new Vector3(xyz[i][0], xyz[i][1], xyz[i][2]);
-            Vector3 screenPoint = projectionMatrices[currentMapToDisplay].MultiplyPoint(worldToCameraMatrices[currentMapToDisplay].MultiplyPoint(worldLocation));
-            Vector2 screenPixel = new Vector2(left + (screenPoint[0] + 1.0f) *0.5f* mapWidth, top + (-screenPoint[1] + 1.0f) * 0.5f * mapHeight);
+            var worldLocation = new Vector3(xyz[0][i], xyz[1][i], xyz[2][i]);
+            var screenPoint = projectionMatrices[currentMapToDisplay].MultiplyPoint(worldToCameraMatrices[currentMapToDisplay].MultiplyPoint(worldLocation));
+            var screenPixel = new Vector2(left + (screenPoint[0] + 1.0f) *0.5f* mapWidth, top + (-screenPoint[1] + 1.0f) * 0.5f * mapHeight);
 
             tempParticipantLocationsOnMap.Add(screenPixel);
         }
-        for (int i = 0; i < tempParticipantLocationsOnMap.Count - 1; i++)
+        for (var i = 0; i < tempParticipantLocationsOnMap.Count - 1; i++)
         {
-            Vector2 a = tempParticipantLocationsOnMap[i];
-            Vector2 b = tempParticipantLocationsOnMap[i + 1];
-            int dist = (int)(a - b).magnitude + 1;
-            for (int j = 0; j <= dist; j++)
+            var a = tempParticipantLocationsOnMap[i];
+            var b = tempParticipantLocationsOnMap[i + 1];
+            var dist = (int)(a - b).magnitude + 1;
+            for (var j = 0; j <= dist; j++)
             {
                 participantLocationsOnMap.Add(a + (b - a) * ((float)j / dist));
             }
@@ -129,9 +129,9 @@ public class PopUpEvaluationMap : MonoBehaviour
     internal void SetupMaps(string[][] envNames)
     {
         uniqueNames = new List<string>();
-        for (int i = 0; i < envNames.Length; i++)
+        for (var i = 0; i < envNames.Length; i++)
         {
-            for (int j = 0; j < envNames[i].Length; j++)
+            for (var j = 0; j < envNames[i].Length; j++)
             {
                 if (!uniqueNames.Contains(envNames[i][j]) && !envNames[i][j].Contains(".xml"))
                 {
@@ -143,28 +143,28 @@ public class PopUpEvaluationMap : MonoBehaviour
         projectionMatrices = new Dictionary<string, Matrix4x4>();
         worldToCameraMatrices = new Dictionary<string, Matrix4x4>();
         mapTextures = new Dictionary<string, Texture>();
-        for (int i = 0; i < uniqueNames.Count; i++)
+        foreach (var name in uniqueNames)
         {
             try
             {
-                string path = Application.persistentDataPath + "/maps/" + uniqueNames[i] + "_worldToCameraMatrix.xml";
+                var path = Application.persistentDataPath + "/maps/" + name + "_worldToCameraMatrix.xml";
 
-                XmlSerializer xmls = new XmlSerializer(new Matrix4x4().GetType());
+                var xmls = new XmlSerializer(new Matrix4x4().GetType());
                 using (var stream = File.OpenRead(path))
                 {
-                    worldToCameraMatrices.Add(uniqueNames[i], (Matrix4x4)xmls.Deserialize(stream));
+                    worldToCameraMatrices.Add(name, (Matrix4x4)xmls.Deserialize(stream));
                 }
-                path = Application.persistentDataPath + "/maps/" + uniqueNames[i] + "_projectionMatrix.xml";
+                path = Application.persistentDataPath + "/maps/" + name + "_projectionMatrix.xml";
                 using (var stream = File.OpenRead(path))
                 {
-                    projectionMatrices.Add(uniqueNames[i], (Matrix4x4)xmls.Deserialize(stream));
+                    projectionMatrices.Add(name, (Matrix4x4)xmls.Deserialize(stream));
                 }
+                StartCoroutine(LoadMap(name, ResolutionWidth, ResolutionHeight));
             }
             catch (Exception ex)
             {
-                Debug.LogError("A matrix for " + uniqueNames[i] + " was not found:\n" + ex.StackTrace);
+                Debug.LogWarning("A matrix for " + name + " was not found:\n" + ex.StackTrace);
             }
-            StartCoroutine(LoadMap(uniqueNames[i], ResolutionWidth, ResolutionHeight));
         }
 
     }
@@ -176,11 +176,11 @@ public class PopUpEvaluationMap : MonoBehaviour
     /// <returns></returns>
     private IEnumerator LoadMap(string mapName, int width, int height)
     {
-        string path = "file:///" + Application.persistentDataPath + "/maps/" + mapName + "_" + width + "x" + height + ".png";
+        var path = "file:///" + Application.persistentDataPath + "/maps/" + mapName + "_" + width + "x" + height + ".png";
 
-        WWW www = new WWW(path);
+        var www = new WWW(path);
         yield return www;
-        Texture2D tmpTex = new Texture2D(2, 2);
+        var tmpTex = new Texture2D(2, 2);
         www.LoadImageIntoTexture(tmpTex);
         mapTextures.Add(mapName, tmpTex);
     }

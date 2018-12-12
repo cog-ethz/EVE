@@ -19,7 +19,7 @@ public class LogPosition : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         LaunchManager launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        log = launchManager.GetLoggingManager();
+        log = launchManager.LoggingManager;
     }
 
     void OnGUI()
