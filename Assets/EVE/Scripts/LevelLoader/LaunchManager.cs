@@ -103,7 +103,7 @@ public class LaunchManager : MonoBehaviour
 
 
         //THIS SECTION CAN TEST WRITING QUESTION SETS AND QUESTIONNAIRES
-        var qs = new QuestionSet("TestSet");
+        /*var qs = new QuestionSet("TestSet");
         qs.Questions.Add(new InfoScreen("example_info", "<b><size=48>People questionnaire</size></b>:\n\nPerception of people in the neighborhood"));
         qs.Questions.Add(new InfoScreen("example_confirm", "<b><size=48>Read this</size></b>\n\nWait for 1 seconds before this continues and confirm you really want this to continue", new ConfirmationRequirement{Required = true,ConfirmationDelay = 1}));
         qs.Questions.Add(new TextQuestion("exercise", "What type of exercise have you done recently?"));
@@ -147,7 +147,7 @@ public class LaunchManager : MonoBehaviour
 
         var qf = new QuestionnaireFactory(LoggingManager, ExperimentSettings);
         qf.WriteQuestionSetToXml(qs, "TestSet.xml");
-        qf.WriteQuestionnaireToXml(qn, "ExampleQuestionnaire");
+        qf.WriteQuestionnaireToXml(qn, "ExampleQuestionnaire");*/
     }
 
 
