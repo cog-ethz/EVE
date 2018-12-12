@@ -39,6 +39,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Name = name;
             Text = text;
             LadderText = ladderText;
+            NRows = 10;
         }
 
         internal override QuestionData AsDatabaseQuestion(string questionSet)

@@ -268,6 +268,15 @@ namespace Assets.EVE.Scripts.Questionnaire
 
 			_dynamicFieldsWithScrollbar.gameObject.SetActive (false);
 
+
+            if (q.ConfirmationRequirement.Required)
+            {
+                var qmb = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
+
+                qmb.RequireConfirmationToContinue();
+                qmb.DisableInteractableNextButton();
+                StartCoroutine(qmb.EnableInteractableNextButton(q.ConfirmationRequirement.ConfirmationDelay));
+            }
 		}
 
         public void Visit(ChoiceQuestion q)

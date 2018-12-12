@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.EVE.Scripts.Questionnaire.Questions;
@@ -20,19 +21,37 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private Dictionary<int, bool> _displayableTextFields;
         private Dictionary<int, bool> _currentlyDisplayed;
         private Transform _nameHolder;
+        private Text _instructionMessage;
+        private UnityAction _nextButtonAction;
 
+        private const string ZerothMessage = "Please read this carefully before you continue";
+        private const string FirstMessage = "Press \"next\" when you are ready to continue";
+        private const string SecondMessage = "Press \"next\" again to confirm";
 
         void Awake()
         {
             _displayableTextFields = new Dictionary<int, bool>();
             _currentlyDisplayed = new Dictionary<int, bool>();
-            _backButton = transform.Find("Panel").Find("QuestionControlButtons").Find("BackButton").GetComponent<Button>();
-            _nextButton = transform.Find("Panel").Find("QuestionControlButtons").Find("NextButton").GetComponent<Button>();
+            _backButton = transform.Find("Panel").Find("ControlArea").Find("FlowControlButtons").Find("BackButton").GetComponent<Button>();
+            _nextButton = transform.Find("Panel").Find("ControlArea").Find("FlowControlButtons").Find("NextButton").GetComponent<Button>();
+            _instructionMessage = transform.Find("Panel").Find("ControlArea").Find("Instructions").GetComponent<Text>();
             _nameHolder = transform.Find("Panel").Find("questionName");
+
+
+            SetInstruction("");
         }
         
+        /// <summary>
+        /// Connects the next and back button of an question instance to the questionnaire manager.
+        /// </summary>
+        /// <remarks>
+        /// Stores the next button action in case other actions need to be added to the listener.
+        /// </remarks>
+        /// <param name="backButtonAction"></param>
+        /// <param name="nextButtonAction"></param>
         public void AddBackAndNextButtons(UnityAction backButtonAction, UnityAction nextButtonAction)
         {
+            _nextButtonAction = nextButtonAction;
             _backButton.onClick.AddListener(backButtonAction);
             _nextButton.onClick.AddListener(nextButtonAction);
         }
@@ -100,6 +119,48 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         public void DeactivateQuestionName()
         {
             _nameHolder.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Set whether next can be pressed.
+        ///
+        /// Displays a message that the task needs to be read.
+        /// </summary>
+        public void DisableInteractableNextButton()
+        {
+            _nextButton.interactable = false;
+            SetInstruction(ZerothMessage);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="interactable"></param>
+        /// <param name="delay"></param>
+        /// <returns></returns>
+        public IEnumerator EnableInteractableNextButton(int delay)
+        {
+            yield return new WaitForSeconds(delay);
+            _nextButton.interactable = true;
+            SetInstruction(FirstMessage);
+        }
+
+        /// <summary>
+        /// Requires a confirmation before the next button can be pressed.
+        /// </summary>
+        public void RequireConfirmationToContinue()
+        {
+            _nextButton.onClick.RemoveListener(_nextButtonAction);
+            _nextButton.onClick.AddListener(()=>
+            {
+                SetInstruction(SecondMessage);
+                _nextButton.onClick.AddListener(_nextButtonAction);
+            });
+        }
+
+        public void SetInstruction(string message)
+        {
+            _instructionMessage.text = message;
         }
     }
 }

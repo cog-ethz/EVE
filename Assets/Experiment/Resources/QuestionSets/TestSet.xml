@@ -2,9 +2,16 @@
 <QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="TestSet">
   <Questions>
     <InfoScreen Name="example_info" NColumns="1" NRows="1">
-      <Text><![CDATA[<size=48>People questionnaire</size>
-	  
+      <Text><![CDATA[<b><size=48>People questionnaire</size></b>:
+
 Perception of people in the neighborhood]]></Text>
+      <ConfirmationRequirement Required="false" ConfirmationDelay="0" />
+    </InfoScreen>
+    <InfoScreen Name="example_confirm" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Read this</size></b>
+
+Wait for 1 seconds before this continues and confirm you really want this to continue]]></Text>
+      <ConfirmationRequirement Required="true" ConfirmationDelay="1" />
     </InfoScreen>
     <TextQuestion Name="exercise" NColumns="1" NRows="1">
       <Text><![CDATA[What type of exercise have you done recently?]]></Text>
@@ -197,7 +204,7 @@ Perception of people in the neighborhood]]></Text>
       <Text><![CDATA[Swiss comparison of social status]]></Text>
       <LadderText><![CDATA[At the TOP of the ladder are the people who are the best off. The lower you are, the closer you are to the people at the very bottom. Where would you place yourself on this ladder, compared to all the other people in Switzerland?]]></LadderText>
     </LadderQuestion>
-	<VisualStimuli Name="test_stimuli" NColumns="1" NRows="1">
+    <VisualStimuli Name="test_stimuli" NColumns="1" NRows="1">
       <Text><![CDATA[Which stimulus is more pleasing?
 
 Press "1" for the first or "2" for the second.]]></Text>
