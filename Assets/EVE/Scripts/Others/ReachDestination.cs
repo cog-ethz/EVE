@@ -1,38 +1,58 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
 public class ReachDestination : MonoBehaviour {
 
-	private CrossOfElement destinationList;
+	private CrossOfElement _destinationlist;
+	private int _index;
+    private bool _reached;
+    private string _destinationName;
+    private Text _popUpText;
 
-	private int index;
-	public string destinationName;
+    // Use this for initialization
+    void Start()
+    {
+        _reached = false;
+        _destinationName = this.transform.parent.gameObject.name;
+        _popUpText = GameObject.Find("PopUpText").GetComponent<Text>();
+    }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    // Update is called once per frame
+    void Update()
+    {
+        if (_reached)
+        {
+            _popUpText.text = "You have reached the " + _destinationName;
+            transform.gameObject.SetActive(false);
+        }
+    }
 
-	void OnTriggerEnter(Collider other){
-		if(other.tag == "Player")
+
+    void OnTriggerEnter(Collider other){
+	    _reached = true;
+        if (other.tag == "Player")
 		{
-			//transform.gameObject.GetComponent<Collider>().enabled = false;
-			//transform.gameObject.GetComponent<Renderer>().enabled = false;
-			destinationList.StrikeOff(index);
-			//Destroy(this.gameObject);
+		    _destinationlist.StrikeOff(_index);
 		}
 	}
 
-	public void setIndex(int i){
-		this.index = i;
+	public void SetIndex(int i){
+		this._index = i;
 	}
 
-	public void setDestinationList(CrossOfElement destinationList){
-		this.destinationList = destinationList;
+	public void SetDestinationList(CrossOfElement destinationList){
+		this._destinationlist = destinationList;
 	}
+
+    public bool IsReached()
+    {
+        return _reached;
+    }
+
+    public string getDestinationName()
+    {
+        if (_destinationName == null)
+            _destinationName = this.transform.parent.gameObject.name;
+        return _destinationName;
+    }
 }

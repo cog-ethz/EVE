@@ -5,38 +5,46 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 
 public class CrossOfElement : MonoBehaviour {
-
-    public ReachDestination[] Destinations;
-    public int MaxMin;
+    
+    public GameObject DestinationParent;
+    [Tooltip("Maximum duration of scene in minutes")]
+    public int MaxDuration;
 
     private Image[] _strokes;
-	private Text[] _names;
-	private int[] _nameLengths;
     private int _nReached = 0;
-    private int _maxSecs;
+    private int _maxSecs = 10;
     private FadeOutScene _fader;
     private DateTime _start;
     private GameObject _fpc;
     private bool _once;
+    private ReachDestination[] _destinations;
 
     // Use this for initialization
-	void Start () {
-	    _maxSecs = MaxMin * 60;
+    void Start () {
+	    _maxSecs = MaxDuration * 60;
         _start = DateTime.Now;
-      
-        _strokes = this.gameObject.GetComponentsInChildren<Image>().Where(go => go.gameObject != this.gameObject).ToArray();
-        _names = this.gameObject.GetComponentsInChildren<Text> ();
-		var size = _strokes.Length;
-		_nameLengths = new int[ size];
+
+        int nChildren = DestinationParent.transform.childCount;
+        _destinations = new ReachDestination[nChildren];
+        for (int i = 0; i < nChildren; i++)
+        {
+            ReachDestination destination = DestinationParent.transform.GetChild(i).GetComponentInChildren<ReachDestination>();
+            _destinations[i] = destination;
+        }
+
 		var index = 0;
-		foreach( var destination in Destinations){
-			_names[index].text = destination.destinationName;
-			_nameLengths[index] = destination.destinationName.Length;
-			destination.setIndex(index);
-			destination.setDestinationList(this.gameObject.GetComponent<CrossOfElement>());
+		foreach( var destination in _destinations)
+		{
+		    GameObject uiDestination = Instantiate(Resources.Load("Prefabs/UI_Destination")) as GameObject;
+            uiDestination.transform.SetParent(this.transform);
+		    uiDestination.name = destination.getDestinationName();
+            uiDestination.GetComponentInChildren<Text>().text = destination.getDestinationName();
+			destination.SetIndex(index);
+			destination.SetDestinationList(this.gameObject.GetComponent<CrossOfElement>());
 			index++;
 		}
-		foreach (var stroke in _strokes) {	        
+        _strokes = this.gameObject.GetComponentsInChildren<Image>().Where(go => go.gameObject != this.gameObject).ToArray();
+        foreach (var stroke in _strokes) {	        
 			stroke.enabled = false;
 		}
 
@@ -48,21 +56,21 @@ public class CrossOfElement : MonoBehaviour {
     void OnGUI()
     {
         
-                if (_nReached == _strokes.Length | (DateTime.Now.Subtract(_start).TotalSeconds > _maxSecs))
-                {
-                    _fader.startFadeOut();
-                }
+        if (_nReached == _strokes.Length | (DateTime.Now.Subtract(_start).TotalSeconds > _maxSecs))
+        {
+            _fader.startFadeOut();
+        }
 
-                if (_fader.isFadedOut())
-                {
-                    if (_once) return;
-                    _once = true;
-                    var fpc = _fader.gameObject;
-                    if (fpc.transform.Find("PositionLogger").GetComponent<ReplayRoute>().isActivated())
-                        SceneManager.LoadScene("Evaluation");
-                    else
-                        SceneManager.LoadScene("Loader");
-                }
+        if (_fader.isFadedOut())
+        {
+            if (_once) return;
+            _once = true;
+            var fpc = _fader.gameObject;
+            if (fpc.transform.Find("PositionLogger").GetComponent<ReplayRoute>().isActivated())
+                SceneManager.LoadScene("Evaluation");
+            else
+                SceneManager.LoadScene("Loader");
+        }
       
     }
 
