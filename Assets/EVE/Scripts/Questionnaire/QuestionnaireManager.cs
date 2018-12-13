@@ -344,11 +344,11 @@ namespace Assets.EVE.Scripts.Questionnaire
 
 
                         var iLocal = answernumber;
+                        btn.isOn = _oldAnswers != null && _oldAnswers.ContainsKey(i) && _oldAnswers[i] == j.ToString();
                         btn.onValueChanged.AddListener(isOn =>
                         {
                             qmb.SetAnswerInt(iLocal, isOn ? 1 : 0);
                         });
-                        btn.isOn = _oldAnswers != null && _oldAnswers.ContainsKey(i);
                         answernumber++;
                     }
                 }

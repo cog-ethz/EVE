@@ -278,7 +278,7 @@ public class MapDisplay : MonoBehaviour
         {
             Debug.LogError("A matrix for " + envName + " was not found:\n" + ex.StackTrace);
         }
-        mapTexture = new Texture();
+        mapTexture = new Texture2D(2,2);
 
         StartCoroutine(LoadMap(envName, ResolutionWidth, ResolutionHeight));
     }
