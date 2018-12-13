@@ -21,7 +21,7 @@ public class HL7ServerStarter : MonoBehaviour {
 	public void Update() {
 		if (!started) {
             LaunchManager launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>(); 
-            LoggingManager log = launchManager.GetLoggingManager();
+            LoggingManager log = launchManager.LoggingManager;
 
             if (log != null) {
                 workerObject = new HL7Server(log, LocalIPAddress());

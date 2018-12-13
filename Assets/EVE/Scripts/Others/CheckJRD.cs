@@ -21,7 +21,7 @@ public class CheckJRD : MonoBehaviour {
         if (launchManagerObject != null)
         {
             var launchManager = launchManagerObject.GetComponent<LaunchManager>();
-            _log = launchManager.GetLoggingManager();
+            _log = launchManager.LoggingManager;
         }
         else
         {
@@ -58,7 +58,7 @@ public class CheckJRD : MonoBehaviour {
                 //record to database
                 if (_log != null)
                 {
-                    _log.insertLiveMeasurement("JRD", BuildingsA[_imageCounter].name + "," + BuildingsB[_imageCounter].name, "", (i + 1).ToString());
+                    _log.InsertLiveMeasurement("JRD", BuildingsA[_imageCounter].name + "," + BuildingsB[_imageCounter].name, "", (i + 1).ToString());
                 }               
                 _answered = true;
             }

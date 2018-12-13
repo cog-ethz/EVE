@@ -14,7 +14,7 @@ public class ReplayRoute : MonoBehaviour {
 	private LoggingManager log;
 	private List<float>[] xyz;
 	private List<string> xyzT;
-	private List<string>[] input;
+	private List<string>[] _input;
 	private int input_pointer = 0;
 	private int pos_pointer = 0, start_pointer;
 	private string[] sceneTime;
@@ -48,13 +48,13 @@ public class ReplayRoute : MonoBehaviour {
             evalCamera = GameObject.Find("EvaluationCamera");
         }
 
-        launchManager.setReplaySessionId(sessionID);
-        log = launchManager.GetLoggingManager();
+        launchManager.ReplaySessionId = sessionID;
+        log = launchManager.LoggingManager;
         pos_logger.enabled = false;
-        xyz = log.getXYZ(sessionID, sceneID);
-        xyzT = log.getXYZtimestamp(sessionID, sceneID);
-        input = log.getAllInput(sessionID, sceneID);
-        sceneTime = log.getSceneTime(sceneID, sessionID);
+        xyz = log.GetPath(sessionID, sceneID);
+        xyzT = log.GetPathAndTime(sessionID, sceneID);
+        _input = log.GetAllInput(sessionID, sceneID);
+        sceneTime = log.GetSceneTime(sceneID, sessionID);
 
         movementControls = player.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         movementControls.enabled = false;
@@ -65,7 +65,7 @@ public class ReplayRoute : MonoBehaviour {
     {
         if (activated)
         {
-            Cursor.lockState = UnityEngine.CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             currentSliderValue = GUI.HorizontalSlider(new Rect(130, 20, 300, 30), currentSliderValue, 0, (xyzT.Count - 1));
             GUI.Label(new Rect(440, 15, 100, 30), (int)currentSliderValue + "/" + (xyzT.Count - 1));
@@ -111,15 +111,15 @@ public class ReplayRoute : MonoBehaviour {
                 {
                     playbackLineRenderer = launchManager.FPC.AddComponent(typeof(LineRenderer)) as LineRenderer;
                     playbackLineRenderer.material = new Material(Shader.Find("Particles/Additive"));
-                    float alpha = 1.0f;
-                    Gradient gradient = new Gradient();
+                    var alpha = 1.0f;
+                    var gradient = new Gradient();
                     gradient.SetKeys(
-                        new GradientColorKey[] { new GradientColorKey(Color.red, 0.0f), new GradientColorKey(Color.red, 1.0f) },
-                        new GradientAlphaKey[] { new GradientAlphaKey(alpha, 0.0f), new GradientAlphaKey(alpha, 1.0f) }
+                        new[] { new GradientColorKey(Color.red, 0.0f), new GradientColorKey(Color.red, 1.0f) },
+                        new[] { new GradientAlphaKey(alpha, 0.0f), new GradientAlphaKey(alpha, 1.0f) }
                         );
                     playbackLineRenderer.colorGradient = gradient;
 
-                    AnimationCurve curve = new AnimationCurve();                 
+                    var curve = new AnimationCurve();                 
                     curve.AddKey(0.0f, 1.0f);
                     curve.AddKey(1.0f, 1.0f);
 
@@ -168,9 +168,9 @@ public class ReplayRoute : MonoBehaviour {
                 // replay position and view
                 if (pos_pointer < xyzT.Count - 2)
                 {
-                    timeSpent = (float)((DateTime.Now.Subtract(playStart)).TotalSeconds) + log.timeDifference(sceneTime[0], xyzT[start_pointer]) / 1000000;
-                    float nextPosTime = log.timeDifference(sceneTime[0], xyzT[pos_pointer + 1]) / 1000000;  // in seconds
-                    float t = timeSpent - nextPosTime;
+                    timeSpent = (float)((DateTime.Now.Subtract(playStart)).TotalSeconds) + log.TimeDifference(sceneTime[0], xyzT[start_pointer]) / 1000000;
+                    var nextPosTime = log.TimeDifference(sceneTime[0], xyzT[pos_pointer + 1]) / 1000000;  // in seconds
+                    var t = timeSpent - nextPosTime;
                     float p = 0;
 
                     if (t >= 0)
@@ -178,12 +178,12 @@ public class ReplayRoute : MonoBehaviour {
                         currentSliderValue++;
                         pos_pointer++;
                         // pos_pointer was increased by one therefore pos_pointer + 1 is now one step more!
-                        float nextNextPosTime = log.timeDifference(sceneTime[0], xyzT[pos_pointer + 1]) / 1000000;  // in seconds
+                        var nextNextPosTime = log.TimeDifference(sceneTime[0], xyzT[pos_pointer + 1]) / 1000000;  // in seconds
                         p = (float)pos_pointer + (timeSpent - nextPosTime) / (nextNextPosTime - nextPosTime);
                     }
                     else
                     {
-                        float oldPosTime = log.timeDifference(sceneTime[0], xyzT[pos_pointer]) / 1000000;   // in seconds
+                        var oldPosTime = log.TimeDifference(sceneTime[0], xyzT[pos_pointer]) / 1000000;   // in seconds
                         p = pos_pointer + (timeSpent - oldPosTime) / (nextPosTime - oldPosTime);
                     }
                     
@@ -217,18 +217,19 @@ public class ReplayRoute : MonoBehaviour {
 
                 //replay input
                 // NOTE: This needs to be rewritten, since the takeglobalparameterscript no longer exists
-                /*if (input[0] != null)
-                    if (input_pointer < input[0].Count)
-                    {
-                        float nextInputTime = log.timeDifference(sceneTime[0], input[0][input_pointer]) / 1000000;	// in seconds
+                //TODO Fix input imputation
+                if (_input[input_pointer] != null) input_pointer++;
+                /*if (input_pointer < input[0].Count)
+                {
+                    float nextInputTime = log.timeDifference(sceneTime[0], input[0][input_pointer]) / 1000000;	// in seconds
 
-                        if (Time.timeSinceLevelLoad > nextInputTime)
-                        {
-                            parameters.fake_input = true;
-                            parameters.input = input[1][input_pointer];
-                            input_pointer++;
-                        }
-                    }*/
+                    if (Time.timeSinceLevelLoad > nextInputTime)
+                    {
+                        parameters.fake_input = true;
+                        parameters.input = input[1][input_pointer];
+                        input_pointer++;
+                    }
+                }*/
             }
         }
        

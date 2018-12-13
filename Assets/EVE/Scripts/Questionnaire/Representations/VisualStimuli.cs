@@ -35,7 +35,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         private Sprite[] _imgLocs;
         private RawImage _rawImage;
         private VideoPlayer _videoPlayer;
-        private QuestionnaireSystem _qSystem;
+        private QuestionnaireManager _qSystem;
         private int _currentDecision;
 
         private Coroutine previousCoroutine;
@@ -46,17 +46,34 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             _launchManager = GameObject
                 .FindGameObjectWithTag("LaunchManager")
                 .GetComponent<LaunchManager>();
-            _log = _launchManager.GetLoggingManager();
+            _log = _launchManager.LoggingManager;
             _experimentParameters = _launchManager.SessionParameters;
 
 
 			_osc = _launchManager.gameObject.GetComponent<OSC> ();
 
+            if(ExpositionScreen!=null)
+            {
+                ExpositionScreen.GetComponentInChildren<VideoPlayer>()
+                    .SetTargetAudioSource(0, GameObject
+                        .FindGameObjectWithTag("MainCamera")
+                        .GetComponentInChildren<AudioSource>());
+            }
+            else
+            {
+                StartCoroutine(DelayAudioConnection());
+            }
+        }
+
+        private IEnumerator DelayAudioConnection()
+        {
+            yield return new WaitForSeconds(0.25f);
             ExpositionScreen.GetComponentInChildren<VideoPlayer>()
                 .SetTargetAudioSource(0, GameObject
                     .FindGameObjectWithTag("MainCamera")
                     .GetComponentInChildren<AudioSource>());
         }
+
 
         void Update()
         {
@@ -66,16 +83,16 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
                 {
                     Debug.Log("1 key was pressed.");
                     Question.RetainAnswer(_currentIndex,"1");
-                    _log.insertLiveMeasurement("User_Choice", "User Choice", null, "1");
-                    _log.insertLiveMeasurement("LabChart", "Event", null, "User Choice: 1");
+                    _log.InsertLiveMeasurement("User_Choice", "User Choice", null, "1");
+                    _log.InsertLiveMeasurement("LabChart", "Event", null, "User Choice: 1");
                     _decided = true;
                 }
                 else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.Keypad6))
                 {
                     Debug.Log("2 key was pressed.");
                     Question.RetainAnswer(_currentIndex,"2");
-                    _log.insertLiveMeasurement("User_Choice", "User Choice", null, "2");
-                    _log.insertLiveMeasurement("LabChart", "Event", null, "User Choice: 2");
+                    _log.InsertLiveMeasurement("User_Choice", "User Choice", null, "2");
+                    _log.InsertLiveMeasurement("LabChart", "Event", null, "User Choice: 2");
                     _decided = true;
                 }
 
@@ -108,7 +125,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
         /// Setup up its representation in the questionnaire system.
         /// </summary>
         /// <param name="qSystem"></param>
-        public override void InitialiseRepresentation(QuestionnaireSystem qSystem)
+        public override void InitialiseRepresentation(QuestionnaireManager qSystem)
         {
             _qSystem = qSystem;
             _rawImage = ExpositionScreen.GetComponentInChildren<RawImage>();
@@ -117,7 +134,6 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             _currentIndex = 0;
             _currentDecision = 0;
             _randomisationOrder = Question.RandomisationOrder(_experimentParameters).ToArray();
-
 
             if (Question.Configuration.Type == Type.Image)
             {
@@ -157,7 +173,6 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
         private IEnumerator SwitchToFixation(float time)
         {
-
 			var message = new OscMessage (); //L
 			message.address = Question.Stimuli[_randomisationOrder[_currentIndex]]; //L
 			message.values.Add (0); //L
@@ -189,13 +204,13 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 			}
 
             var index = Question.Configuration.SeparatorFirst ? _currentIndex : _currentDecision;
-            _log.insertLiveMeasurement("Fixation"
+            _log.InsertLiveMeasurement("Fixation"
                 , "Event"
                 , null
                 , "Start " + index);
 
             Debug.Log("Remain in Fixation for " + time + " sec");
-            _log.insertLiveMeasurement("LabChart", "Event", null, "Fixation: " + index);
+            _log.InsertLiveMeasurement("LabChart", "Event", null, "Fixation: " + index);
             yield return new WaitForSeconds(time);
             
             _fixation = false;
@@ -216,8 +231,8 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
 			_osc.Send (message); //L
 
-			_log.insertLiveMeasurement("Video", "Event", null, "Start " + Question.Stimuli[_randomisationOrder[_currentIndex]]);
-			_log.insertLiveMeasurement("LabChart", "Event", null, "Video: " + Question.Stimuli[_randomisationOrder[_currentIndex]]);
+			_log.InsertLiveMeasurement("Video", "Event", null, "Start " + Question.Stimuli[_randomisationOrder[_currentIndex]]);
+			_log.InsertLiveMeasurement("LabChart", "Event", null, "Video: " + Question.Stimuli[_randomisationOrder[_currentIndex]]);
             Debug.Log("Remain in next scene for " + time + " sec");
             yield return new WaitForSeconds(time);
 
@@ -256,8 +271,8 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 			message.values.Add (0); //L
 
             _secondStimulus = false;
-            _log.insertLiveMeasurement("Decision", "Event", null, "Start " + _currentDecision);
-            _log.insertLiveMeasurement("LabChart", "Event", null, "Decision: " + _currentDecision);
+            _log.InsertLiveMeasurement("Decision", "Event", null, "Start " + _currentDecision);
+            _log.InsertLiveMeasurement("LabChart", "Event", null, "Decision: " + _currentDecision);
             _decide = true;
 			UpdateVisibility();
 			_osc.Send (message); //L

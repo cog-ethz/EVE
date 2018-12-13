@@ -165,11 +165,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         /// <summary>
         /// Stores the user Answer
         /// </summary>
-        /// <param name="number"></param>
-        /// <param name="internalAnswer"></param>
-        public override void RetainAnswer(int number, string internalAnswer)
+        /// <param name="positionOffset"></param>
+        /// <param name="answer"></param>
+        public override void RetainAnswer(int positionOffset, string answer)
         {
-            _answers.Add(new KeyValuePair<int, string>(number,internalAnswer));
+            _answers.Add(new KeyValuePair<int, string>(positionOffset,answer));
         }
 
         /// <summary>
@@ -189,8 +189,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         /// <returns>A list describing the order of items.</returns>
         public List<int> RandomisationOrder(Dictionary<string, string> experimentParameters)
         {
-            return experimentParameters[ExternalRandomisation].Split(',').Select(int.Parse).ToList();
+            return Configuration.Randomisation == Randomisation.ExperimentParameter ?
+                experimentParameters[ExternalRandomisation].Split(',').Select(int.Parse).ToList() :
+                Enumerable.Range(0, Stimuli.Count).ToList();
         }
-
     }
 }

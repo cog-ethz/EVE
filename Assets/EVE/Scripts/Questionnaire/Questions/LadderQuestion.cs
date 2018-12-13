@@ -39,6 +39,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Name = name;
             Text = text;
             LadderText = ladderText;
+            NRows = 10;
         }
 
         internal override QuestionData AsDatabaseQuestion(string questionSet)
@@ -75,18 +76,23 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         {
             return _temporaryIntAnswer > -1;
         }
-        public override void RetainAnswer(int internalnumber)
+        public override void RetainAnswer(int answer)
         {
-            _temporaryIntAnswer = internalnumber;
+            _temporaryIntAnswer = answer;
+        }
+
+        public override void RetainAnswer(int positionOffset, int answer)
+        {
+            _temporaryIntAnswer = positionOffset;
         }
 
         public override string GetJumpDestination()
         {
-            var answerB = new StringBuilder(new string('F', NRows * NColumns));
-            answerB[_temporaryIntAnswer] = 'T';
-            var answer = answerB.ToString();
             if (Jumps != null)
             {
+                var answerB = new StringBuilder(new string('F', NRows * NColumns));
+                answerB[_temporaryIntAnswer] = 'T';
+                var answer = answerB.ToString();
                 return
                 (from jump in Jumps
                  where jump.Activator.Equals("*") || jump.Activator.Equals(answer)

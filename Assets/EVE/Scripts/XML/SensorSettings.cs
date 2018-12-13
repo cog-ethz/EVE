@@ -11,7 +11,8 @@ namespace Assets.EVE.Scripts.XML
     public class SensorSettings
     {
         [XmlAttribute]
-        public bool Labchart, H7Server;
+        // ReSharper disable once InconsistentNaming
+        public bool Labchart, H7Server, MiddleVR;
 
         [XmlArray]
         [XmlArrayItem("Sensor")]

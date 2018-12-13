@@ -1,7 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Assets.EVE.Scripts.Menu;
+using Assets.EVE.Scripts.Menu.Buttons;
+using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using Assets.EVE.Scripts.XML;
+using Assets.EVE.Scripts.XML.XMLHelper;
+using UnityEngine.UI;
 
 /// <summary>
 /// this class manages everything related to menus but also keeps state and important information
@@ -14,107 +20,124 @@ using Assets.EVE.Scripts.XML;
 /// </remarks>
 public class MenuManager : MonoBehaviour {
 
-    public int detailsInt =0;
-    public int numberOfAddedSensors=0;
-    public string fieldTitle = null;
-    public string subjectId = null;
-    private List<string> _activeSensors = new List<string>();
-    private List<string> _activeParameters;
-    private string SceneFilePath;
+    /// <summary>
+    /// The name of the participant as provided in the main menu.
+    /// </summary>
+    public string ParticipantId { get; set; }
     
-    public Menu CurrentMenu;
-    private bool loadEvalScene;
-    private bool loadLoaderScene;
+    public BaseMenu CurrentMenu;
     private LaunchManager _launchManager;
     private LoggingManager _log;
     private SceneSettings _sceneSettings;
-    private ErrorMenu _errorMenu;
+    private string _sceneFilePath;
+    private GameObject _menuObject;
 
-    public string GetSceneFilePath() {
-        if (SceneFilePath == null)
-            SceneFilePath = Application.dataPath + "/Experiment/Scenes";
-        return SceneFilePath;
-    }
-    public void SetSceneFilePath(string path)
+    /// <summary>
+    /// Session id used to interact with the database.
+    ///
+    /// For example, in menus and replay.
+    /// </summary>
+    /// <remarks>
+    /// Note that this ID is most likely different than the
+    /// current session id!
+    /// </remarks>
+    public int ActiveSessionId { get; set; }
+
+    /// <summary>
+    /// Participant Id that is currently manipulated
+    /// in a menu.
+    /// </summary>
+    public string ActiveParticipantId { get; set; }
+
+    /// <summary>
+    /// Scene Id that is currently manipulated
+    /// in a menu.
+    /// </summary>
+    public string ActiveSceneId { get; set; }
+
+    public string SceneFilePath
     {
-        SceneFilePath = path;
+        get
+        {
+            return _sceneFilePath ?? (_sceneFilePath = Application.dataPath + "/Experiment/Scenes");
+        }
+
+        set
+        {
+            _sceneFilePath = value;
+        }
     }
 
     public void SetActiveParameters(List<string> parameters)
     {
-        _activeParameters = parameters;
+        ExperimentParameterList = parameters;
     }
 
     public void Awake()
     {
         _launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        _launchManager.SetMenuManager(this);
-        _errorMenu = GameObject.Find("ErrorMenu").GetComponent<ErrorMenu>();
-        _activeParameters = new List<string>();
+        ExperimentParameterList = new List<string>();
     }
 
     public void Start() {        
-        ShowMenu(CurrentMenu);
-        _log = _launchManager.GetLoggingManager();
+        InstantiateAndShowMenu("Main Menu", "Launcher");
+        _log = _launchManager.LoggingManager;
         _sceneSettings = _launchManager.ExperimentSettings.SceneSettings;
     }
 
-    public void ShowMenu(Menu menu)
+    public void ShowMenu(BaseMenu menu)
     {        
-        if (CurrentMenu != null) CurrentMenu.isOpen = false;
+        if (CurrentMenu != null) CloseCurrentMenu();
         CurrentMenu = menu;
         CurrentMenu.isOpen = true;
-
     }
 
-    public void CloseMenu(Menu menu)
+    /// <summary>
+    /// Instantiates a Menu and shows it.
+    /// </summary>
+    /// <param name="menu">Name of the menu to be instantiated</param>
+    /// <param name="menuContext">Context in which the menu is instantiated</param>
+    public void InstantiateAndShowMenu(string menu, string menuContext)
     {
-        CurrentMenu = menu;
+        if (CurrentMenu != null) CloseCurrentMenu();
+        _menuObject = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/" + menuContext + "/" + menu);
+        MenuUtils.PlaceElement(_menuObject.gameObject,transform);
+        CurrentMenu = _menuObject.GetComponent<BaseMenu>();
+        CurrentMenu.isOpen = true;
+    }
+
+    public void CloseMenu(BaseMenu baseMenu, float removalDelay = 1f)
+    {
+        CurrentMenu = baseMenu;
+        CloseCurrentMenu(removalDelay);
+    }
+
+    public void CloseCurrentMenu(float removalDelay = 1f)
+    {
+        StartCoroutine(GameObjectUtils.RemoveGameObject(CurrentMenu.gameObject, removalDelay));
         CurrentMenu.isOpen = false;
+    }
 
-    }
-   
-    public void AddExperimentParameter(string attributeName)
-    {
-        if (_activeParameters.Contains(attributeName)) return;
-        _activeParameters.Add(attributeName);
-        AddExperimentParameterToDb(attributeName);
-    }
-    
-    public void AddExperimentParameterToDb(string attributeName)
-    {       
-        _log.CreateExperimentParameter(_launchManager.ExperimentSettings.Name, attributeName);
-    }
-    
-
-    public void SetSubjectId(string subjectId)
-    {
-        this.subjectId = string.IsNullOrEmpty(subjectId) ? "" : subjectId;
-    }
-    
-    //no longer used?
-    //public void deleteParentObject(GameObject deleteButton) {
-    //    Destroy(deleteButton.transform.parent.gameObject);
-    //}
 
     public void AddToBackOfSceneList(string sceneName)
     {
         if (_sceneSettings != null)
         {
-            _sceneSettings.Scenes.Add(sceneName);
-            _log.AddScene(sceneName);
-            _log.RemoveExperimentSceneOrder(_launchManager.GetExperimentName());
-            _log.SetExperimentSceneOrder(_launchManager.GetExperimentName(), _sceneSettings.Scenes.ToArray());
+            var scene = new SceneEntry(sceneName, false);
+            _sceneSettings.Scenes.Add(new SceneEntry(sceneName,false));
+            _log.AddScene(scene);
+            _log.RemoveExperimentSceneOrder(_launchManager.ExperimentName);
+            _log.SetExperimentSceneOrder(_launchManager.ExperimentName, _sceneSettings.Scenes.ToArray());
         }
     }
     
     public void DeleteSceneEntry(int i) {
         var removedScene = _sceneSettings.Scenes[i];
         _sceneSettings.Scenes.RemoveAt(i);
-        _log.RemoveExperimentSceneOrder(_launchManager.GetExperimentName());
+        _log.RemoveExperimentSceneOrder(_launchManager.ExperimentName);
         if (!_sceneSettings.Scenes.Contains(removedScene))
             _log.RemoveScene(removedScene);
-        _log.SetExperimentSceneOrder(_launchManager.GetExperimentName(), _sceneSettings.Scenes.ToArray());
+        _log.SetExperimentSceneOrder(_launchManager.ExperimentName, _sceneSettings.Scenes.ToArray());
     }
 
     public void PromoteSceneEntry(int i) {
@@ -123,108 +146,34 @@ public class MenuManager : MonoBehaviour {
             _sceneSettings.Scenes.RemoveAt(i);
             _sceneSettings.Scenes.Insert(i - 1, scene);
         }
-        _log.RemoveExperimentSceneOrder(_launchManager.GetExperimentName());
-        _log.SetExperimentSceneOrder(_launchManager.GetExperimentName(), _sceneSettings.Scenes.ToArray());
+        _log.RemoveExperimentSceneOrder(_launchManager.ExperimentName);
+        _log.SetExperimentSceneOrder(_launchManager.ExperimentName, _sceneSettings.Scenes.ToArray());
     }
-
-    public void RemoveSensor(string entryName)
-    {
-        _activeSensors.Remove(entryName);
-    }
-
+    
     public void RemoveExperimentParameter(string experimentParameter)
     {
         _log.RemoveExperimentParameter(experimentParameter, _launchManager.ExperimentSettings.Name);
-        _activeParameters.Remove(experimentParameter);
-    }
-    
-    public List<string> GetAttributesList()
-    {
-        return _activeParameters;
+        ExperimentParameterList.Remove(experimentParameter);
+        _launchManager.SessionParameters.Remove(experimentParameter);
     }
 
-    public void setDetailsInt(int i) {
-        detailsInt = i;
-    }
-
-    public int getDetailsInt()
-    {
-        return detailsInt;
-    }
-
-	//necessary to check if the eval scene was loaded
-    public bool CheckBackEvalScene()
-    {
-        if (!loadEvalScene) return false;
-        loadEvalScene = false;
-        return true;
-    }
-
-	//necessary to check if the loader scene was loaded
-    public bool CheckBackLoaderScene()
-    {
-        if (!loadLoaderScene) return false;
-        loadLoaderScene = false;
-        return true;
-    }
-
-    public void activateLoadEvalScene() {
-        loadEvalScene = true;
-    }
-
-    public void activateLoadLoaderScene() {
-        loadLoaderScene = true;
-    }
-
-    public void DisplayErrorMessage(string errorMessage)
-    {
-        _errorMenu.setErrorOriginMenu(CurrentMenu);
-        _errorMenu.setErrorText(errorMessage);
-        ShowMenu(_errorMenu);
-    }
-
-    public void DisplayErrorMessage(string errorMessage, Menu originMenu)
-    {
-        _errorMenu.setErrorOriginMenu(originMenu);
-        _errorMenu.setErrorText(errorMessage);
-        ShowMenu(_errorMenu);
-    }
+    public List<string> ExperimentParameterList { get; private set; }
 
     /// <summary>
-    /// Compares whether two lists contain the same elements ignoring order.
+    /// Display an error message in the menu system.
     /// </summary>
-    /// <remarks>
-    /// http://stackoverflow.com/questions/3669970/compare-two-listt-objects-for-equality-ignoring-order
-    /// </remarks>
-    /// <typeparam name="T">Type in List</typeparam>
-    /// <param name="list1">First List</param>
-    /// <param name="list2">Second List</param>
-    /// <returns>Whether both lists contain the same elements ignoring order</returns>
-    public static bool ScrambledEquals<T>(IEnumerable<T> list1, IEnumerable<T> list2)
+    /// <param name="errorMessage">The text to be displayed</param>
+    /// <param name="originBaseMenu">Optional: set a return point other then the currently active menu.</param>
+    /// <param name="originContext">Optional context of active menu</param>
+    public void DisplayErrorMessage(string errorMessage, string originBaseMenu, string originContext)
     {
-        var cnt = new Dictionary<T, int>();
-        foreach (T s in list1)
-        {
-            if (cnt.ContainsKey(s))
-            {
-                cnt[s]++;
-            }
-            else
-            {
-                cnt.Add(s, 1);
-            }
-        }
-        foreach (T s in list2)
-        {
-            if (cnt.ContainsKey(s))
-            {
-                cnt[s]--;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return cnt.Values.All(c => c == 0);
+
+        _log.InsertLiveSystemEvent("ErrorLog", originContext + "/" + originBaseMenu, null, errorMessage);
+        var errorMenu = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ErrorMenu");
+        MenuUtils.PlaceElement(errorMenu.gameObject, transform);
+        var errorBaseMenu = errorMenu.GetComponent<ErrorMenuButtons>();
+        errorBaseMenu.SetErrorOriginMenu(originBaseMenu,originContext);
+        errorBaseMenu.SetErrorText(errorMessage);
+        ShowMenu(errorBaseMenu.gameObject.GetComponent<BaseMenu>());
     }
 }

@@ -19,6 +19,6 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
 
         }
 
-        public abstract void InitialiseRepresentation(QuestionnaireSystem qSystem);
+        public abstract void InitialiseRepresentation(QuestionnaireManager qSystem);
     }
 }

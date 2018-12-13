@@ -36,7 +36,7 @@ public class ShowSkinConductance : MonoBehaviour {
 		string path = "";
         
         LaunchManager launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        LoggingManager log = launchManager.GetLoggingManager();
+        LoggingManager log = launchManager.LoggingManager;
         if (log == null) 	path = @"D:/CityExperiment/LabChartFiles/002.adicht";
 		else 				path = @log.GetLabChartFileName (); 
 

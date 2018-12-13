@@ -2,7 +2,16 @@
 <QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="TestSet">
   <Questions>
     <InfoScreen Name="example_info" NColumns="1" NRows="1">
-      <Text><![CDATA[People questionnaire:Perception of people in the neighborhood]]></Text>
+      <Text><![CDATA[<b><size=48>People questionnaire</size></b>:
+
+Perception of people in the neighborhood]]></Text>
+      <ConfirmationRequirement Required="false" ConfirmationDelay="0" />
+    </InfoScreen>
+    <InfoScreen Name="example_confirm" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Read this</size></b>
+
+Wait for 1 seconds before this continues and confirm you really want this to continue]]></Text>
+      <ConfirmationRequirement Required="true" ConfirmationDelay="1" />
     </InfoScreen>
     <TextQuestion Name="exercise" NColumns="1" NRows="1">
       <Text><![CDATA[What type of exercise have you done recently?]]></Text>
@@ -28,6 +37,32 @@
           <Text><![CDATA[No]]></Text>
         </Label>
       </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="likert_scale" NColumns="7" NRows="1" Choice="Single">
+      <Text><![CDATA[Is this a good question?]]></Text>
+      <ColumnLabels>
+        <Label Output="0">
+          <Text><![CDATA[Not at all]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[This entry has text that is way tooooooooo long]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[It is okay]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Very Good]]></Text>
+        </Label>
+      </ColumnLabels>
     </ChoiceQuestion>
     <ChoiceQuestion Name="multiple_yes_no" NColumns="2" NRows="5" Choice="Single">
       <Text><![CDATA[Answer quickly without thinking:]]></Text>
@@ -95,32 +130,6 @@
           <Text><![CDATA[Red Hot Chili Peppers]]></Text>
         </Label>
       </RowLabels>
-    </ChoiceQuestion>
-    <ChoiceQuestion Name="likert_scale" NColumns="7" NRows="1" Choice="Single">
-      <Text><![CDATA[Is this a good question?]]></Text>
-      <ColumnLabels>
-        <Label Output="0">
-          <Text><![CDATA[Not at all]]></Text>
-        </Label>
-        <Label Output="1">
-          <Text><![CDATA[]]></Text>
-        </Label>
-        <Label Output="2">
-          <Text><![CDATA[]]></Text>
-        </Label>
-        <Label Output="3">
-          <Text><![CDATA[It is okay]]></Text>
-        </Label>
-        <Label Output="4">
-          <Text><![CDATA[]]></Text>
-        </Label>
-        <Label Output="5">
-          <Text><![CDATA[]]></Text>
-        </Label>
-        <Label Output="6">
-          <Text><![CDATA[Very Good]]></Text>
-        </Label>
-      </ColumnLabels>
     </ChoiceQuestion>
     <ChoiceQuestion Name="multi_c_text" NColumns="1" NRows="8" Choice="Multiple">
       <Text><![CDATA[Which animals do you like:]]></Text>
@@ -191,10 +200,22 @@
       <RightLabel>Strongest experience ever felt</RightLabel>
       <Image>Textures/questionline</Image>
     </ScaleQuestion>
-    <LadderQuestion Name="swiss_status" NColumns="1" NRows="1">
+    <LadderQuestion Name="swiss_status" NColumns="1" NRows="10">
       <Text><![CDATA[Swiss comparison of social status]]></Text>
       <LadderText><![CDATA[At the TOP of the ladder are the people who are the best off. The lower you are, the closer you are to the people at the very bottom. Where would you place yourself on this ladder, compared to all the other people in Switzerland?]]></LadderText>
     </LadderQuestion>
+    <VisualStimuli Name="test_stimuli" NColumns="1" NRows="1">
+      <Text><![CDATA[Which stimulus is more pleasing?
+
+Press "1" for the first or "2" for the second.]]></Text>
+      <Stimuli>
+        <Stimulus>Images/test_image</Stimulus>
+        <Stimulus>Images/test_image</Stimulus>
+      </Stimuli>
+      <Configuration Separator="FixationCross" Choice="ArrowKeys" Randomisation="None" Type="Image" SeparatorFirst="false" />
+      <ExternalRandomisation>none</ExternalRandomisation>
+      <Times Fixation="3" Exposition="5" Decision="5" />
+    </VisualStimuli>
     <ChoiceQuestion Name="flu_med" NColumns="1" NRows="2" Choice="Single">
       <Jumps>
         <Jump Destination="inflam_med" Activator="FT" />
@@ -229,17 +250,5 @@
     <TextQuestion Name="inflam_med_name" NColumns="1" NRows="1">
       <Text><![CDATA[Which medication(s)?]]></Text>
     </TextQuestion>
-    <VisualStimuli Name="test_stimuli" NColumns="1" NRows="1">
-      <Text><![CDATA[Which stimulus is more pleasing?
-
-Press "1" for the first or "2" for the second.]]></Text>
-      <Stimuli>
-        <Stimulus>Images/test_image</Stimulus>
-        <Stimulus>Images/test_image</Stimulus>
-      </Stimuli>
-      <Configuration Separator="FixationCross" Choice="ArrowKeys" Randomisation="ExperimentParameter" Type="Image" SeparatorFirst="false" />
-      <ExternalRandomisation>test_stimuli_order</ExternalRandomisation>
-      <Times Fixation="20" Exposition="30" Decision="10" />
-    </VisualStimuli>
   </Questions>
 </QuestionSet>

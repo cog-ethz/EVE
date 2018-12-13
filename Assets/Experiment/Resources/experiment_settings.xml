@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="Windows-1252"?>
-<ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Example">
+<ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Energyscape">
   <DatabaseSettings>
     <Server>localhost</Server>
     <Schema>eve</Schema>
-    <User>user_replace_me</User>
-    <Password>user_password_replace_me</Password>
+    <User>energyscape</User>
+    <Password>MainExperiment2018</Password>
   </DatabaseSettings>
-  <SensorSettings Labchart="false" H7Server="false">
+  <SensorSettings Labchart="false" H7Server="false" MiddleVR="false">
     <Sensors />
   </SensorSettings>
   <ParameterSettings>
     <Parameters />
   </ParameterSettings>
   <QuestionnaireSettings>
-    <Questionnaires />
+    <Questionnaires>
+      <Questionnaire>ExampleQuestionnaire</Questionnaire>
+    </Questionnaires>
   </QuestionnaireSettings>
   <SceneSettings>
-    <Scenes />
+    <Scenes>
+      <Scene Curtain="false" Name="ExampleQuestionnaire.xml" />
+    </Scenes>
   </SceneSettings>
   <LabchartSettings>
-    <Path>PathToLabchartFiles\\</Path>
     <Commenters>
       <Sensor>QuestionnaireSystem</Sensor>
       <Sensor>LabChart</Sensor>
     </Commenters>
+    <Path>PathToLabchartFiles\\</Path>
   </LabchartSettings>
-  <UISettings>  
+  <UISettings>
     <Resolution X="1920" Y="1080" />
   </UISettings>
 </ExperimentSettings>

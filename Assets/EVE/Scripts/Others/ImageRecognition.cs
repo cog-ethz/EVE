@@ -25,10 +25,10 @@ public class ImageRecognition : MonoBehaviour {
     void Start () {
         Cursor.visible = false;
         LaunchManager launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
-        log = launchManager.GetLoggingManager();
+        log = launchManager.LoggingManager;
         // Get condition and order
-        condition = log.getParameterValue("Condition");
-        string order = log.getParameterValue("Order");
+        condition = log.GetParameterValue("Condition");
+        string order = log.GetParameterValue("Order");
 
         string filename = "R"+ order[blockNumber - 1] + condition + "_recall";
         string[] imageNames = getImageNamesFromFile(filename);
@@ -62,7 +62,7 @@ public class ImageRecognition : MonoBehaviour {
                 String[] names = { images[imageCounter].name, images[imageCounter].name };
                 String[] units = { "Answer", "miliseconds" };
                 String[] values = { "2", time.ToString() };
-                log.insertLiveMeasurement("Recall", names, units, values);
+                log.InsertLiveMeasurement("Recall", names, units, values);
                 imageCounter++;
                 start = DateTime.Now;
                 display.sprite = images[imageCounter];               
@@ -73,7 +73,7 @@ public class ImageRecognition : MonoBehaviour {
                 String[] names = { images[imageCounter].name, images[imageCounter].name };
                 String[] units = { "Filename", "miliseconds" };
                 String[] values = { "0", time.ToString() };
-                log.insertLiveMeasurement("Recall", names, units, values);
+                log.InsertLiveMeasurement("Recall", names, units, values);
                 imageCounter++;
                 if (imageCounter < images.Length)
                     display.sprite = images[imageCounter];
@@ -85,7 +85,7 @@ public class ImageRecognition : MonoBehaviour {
                 String[] names = { images[imageCounter].name, images[imageCounter].name };
                 String[] units = { "Filename", "miliseconds" };
                 String[] values = { "1", time.ToString() };
-                log.insertLiveMeasurement("Recall", names, units, values);
+                log.InsertLiveMeasurement("Recall", names, units, values);
                 imageCounter++;
                 if (imageCounter < images.Length)
                     display.sprite = images[imageCounter];

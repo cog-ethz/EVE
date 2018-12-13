@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.EVE.Scripts.Utils;
 
 public class RamdomGem : MonoBehaviour {
 
@@ -23,19 +24,16 @@ public class RamdomGem : MonoBehaviour {
 	void Start () {
 		fileNames = new ArrayList ();
 		PossibleSelections ();
-		int index = Random.Range (0, fileNames.Count-1);
+		var index = Random.Range (0, fileNames.Count-1);
 
-		GameObject go = Instantiate(Resources.Load((string)fileNames[index]),this.gameObject.transform.position, Random.rotation) as GameObject;
-		go.transform.localScale += go.transform.localScale;
+		var go = GameObjectUtils.InstatiatePrefab((string)fileNames[index]);
+	    go.transform.position = transform.position;
+	    go.transform.rotation = Random.rotation;
+        go.transform.localScale += go.transform.localScale;
         go.gameObject.GetComponent<CollectibleItem>().id = this.gameObject.name;
 		Destroy (this.gameObject);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	private void PossibleSelections(){
 		if (blue) {
 			if (oldSingle) {
