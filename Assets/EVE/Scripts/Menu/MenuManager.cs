@@ -79,8 +79,7 @@ public class MenuManager : MonoBehaviour {
         ExperimentParameterList = new List<string>();
     }
 
-    public void Start() {        
-        InstantiateAndShowMenu("Main Menu", "Launcher");
+    public void Start() {
         _log = _launchManager.LoggingManager;
         _sceneSettings = _launchManager.ExperimentSettings.SceneSettings;
     }
@@ -167,8 +166,8 @@ public class MenuManager : MonoBehaviour {
     /// <param name="originContext">Optional context of active menu</param>
     public void DisplayErrorMessage(string errorMessage, string originBaseMenu, string originContext)
     {
-
-        _log.InsertLiveSystemEvent("ErrorLog", originContext + "/" + originBaseMenu, null, errorMessage);
+        if (_log != null)
+            _log.InsertLiveSystemEvent("ErrorLog", originContext + "/" + originBaseMenu, null, errorMessage);
         var errorMenu = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/ErrorMenu");
         MenuUtils.PlaceElement(errorMenu.gameObject, transform);
         var errorBaseMenu = errorMenu.GetComponent<ErrorMenuButtons>();

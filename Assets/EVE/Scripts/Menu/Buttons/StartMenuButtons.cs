@@ -12,7 +12,11 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
             
             var fields = transform.Find("Panel").Find("Fields");
-            fields.Find("StartButton").GetComponent<Button>().onClick.AddListener(() => _launchManager.LoadCurrentScene());
+            fields.Find("StartButton").GetComponent<Button>().onClick.AddListener(() =>
+            {
+                _launchManager.MenuManager.CloseCurrentMenu(0);
+                _launchManager.LoadCurrentScene();                
+            });            
         }
     }
 }

@@ -93,7 +93,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         {
             var scenePath = "";
 #if UNITY_EDITOR
-            scenePath = UnityEditor.EditorUtility.OpenFilePanel("", "D:/git/EVE/Assets/Experiment/Scenes", "unity,xml");
+            scenePath = UnityEditor.EditorUtility.OpenFilePanel("", Application.dataPath + "/Experiment/Scenes", "unity,xml");
 #endif
             //call setscenepath as with the folder textfield
             if (scenePath != null && !scenePath.Equals(""))
@@ -101,7 +101,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 _menuManager.SceneFilePath = scenePath;
             }
             UpdateAvailableScenes();
-            transform.Find("Panel").Find("Folder Selection").Find("PathField").GetComponent<InputField>().text = scenePath;
+            transform.Find("Panel").Find("Folder Selection").Find("FolderAndField").Find("PathField").GetComponent<InputField>().text = scenePath;
         }
 
         public void AddToChoosenScenes(string fileName)

@@ -31,8 +31,8 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         public void SaveSettings()
         {
             var path = Application.persistentDataPath;
-#if UNITY_EDITOR
-            path = UnityEditor.EditorUtility.SaveFilePanel("Save Experiment Settings", "", "experiment_settings", "xml");
+#if UNITY_EDITOR        
+            path = UnityEditor.EditorUtility.SaveFilePanel("Save Experiment Settings", Application.dataPath, "experiment_settings", "xml");
 #endif
             _launchManager.WriteExperimentSettings(path);
         }

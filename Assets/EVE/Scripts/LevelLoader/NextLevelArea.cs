@@ -48,7 +48,7 @@ public class NextLevelArea : MonoBehaviour {
             fadingOut = false;
             if (_once) return;
             _once = true;
-            SceneManager.LoadScene("Loader");
+            SceneManager.LoadScene("Launcher");
 		}
 	}
 

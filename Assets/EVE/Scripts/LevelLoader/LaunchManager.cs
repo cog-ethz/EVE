@@ -97,6 +97,7 @@ public class LaunchManager : MonoBehaviour
         }
         else
         {
+            MenuManager.InstantiateAndShowMenu("Main Menu", "Launcher");
             LoadSettingsIntoDB();
             SessionId = LoggingManager.CurrentSessionId;
         }
