@@ -37,8 +37,8 @@ public abstract class DatabaseConnector
     /// <param name="questionSetName"> Name of the question set the question belongs to</param>
     /// <param name="questionnaireName"> Name of the questionnaire the question belongs to</param>
     /// <param name="sessionId"> Id of the sessions the answer belongs to</param>
-    /// <param name="selectedIndeces"> Contains the the selected indeces (keys) and (if applicable) the values at the selecte indeces</param>
-    public abstract void InsertAnswer(string questionName, string questionSetName, string questionnaireName, int sessionId, KeyValuePair<int, string>[] selectedIndeces);
+    /// <param name="selectedIndices"> Contains the the selected indeces (keys) and (if applicable) the values at the selecte indeces</param>
+    public abstract void InsertAnswer(string questionName, string questionSetName, string questionnaireName, int sessionId, Dictionary<int, string> selectedIndices);
 
     /// <summary>
     /// Get the selection index of the last given answer of a question

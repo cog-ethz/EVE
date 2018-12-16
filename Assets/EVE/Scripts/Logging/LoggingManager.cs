@@ -105,10 +105,10 @@ public class LoggingManager
     /// </summary>
     /// <param name="questionName"> Name of the question the answer belongs to (name used in xml files</param>
     /// <param name="questionSetName"> Name of the question set the question belongs to</param>
-    /// <param name="selectedIndeces"> Which answers where selected, and the values of them</param>
-    public void InsertAnswer(string questionName, string questionSetName, KeyValuePair<int, string>[] selectedIndeces)
+    /// <param name="selectedIndices"> Which answers where selected, and the values of them</param>
+    public void InsertAnswer(string questionName, string questionSetName, Dictionary<int, string> selectedIndices)
     {
-        _dbConnector.InsertAnswer(questionName, questionSetName, _currentQuestionnaireName, CurrentSessionId, selectedIndeces);
+        _dbConnector.InsertAnswer(questionName, questionSetName, _currentQuestionnaireName, CurrentSessionId, selectedIndices);
     }
     
     public int[] ReadAnswerIndex(int questionId)

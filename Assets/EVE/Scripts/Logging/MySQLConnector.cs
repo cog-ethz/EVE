@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Data;
+using System.Linq;
 using MySql.Data.MySqlClient;
 using Assets.EVE.Scripts.Questionnaire;
 using Assets.EVE.Scripts.Questionnaire.Questions;
@@ -33,8 +34,10 @@ public class MySqlConnector : DatabaseConnector
         Debug.Log("Connection State: " + _con.State);
     }
 
-    public override void InsertAnswer(string questionName, string questionSetName, string questionnaireName, int sessionId, KeyValuePair<int,string>[] selectedIndeces)
+    public override void InsertAnswer(string questionName, string questionSetName, string questionnaireName, int sessionId, Dictionary<int,string> selectedIndices)
     {
+        if (selectedIndices == null) return;
+        
         var query = string.Empty;
         var answerId = -1;
 
@@ -64,39 +67,39 @@ public class MySqlConnector : DatabaseConnector
             answerId = (int)_cmd.LastInsertedId;
 
             // ============ string values ==============
-            if (selectedIndeces != null)
+            
+            var keys = selectedIndices.Keys.ToArray();
+            for (var i = 0; i < selectedIndices.Keys.Count; i++)
             {
-                for (var i = 0; i < selectedIndeces.Length; i++)
+                var insertId = -1;
+                query = "INSERT INTO store_strings (pos, val) VALUES (?pos, ?val)";
+                if (!_con.State.Equals(ConnectionState.Open)) _con.Open();
+                using (_con)
                 {
-                    var insertId = -1;
-                    query = "INSERT INTO store_strings (pos, val) VALUES (?pos, ?val)";
-                    if (!_con.State.Equals(ConnectionState.Open)) _con.Open();
-                    using (_con)
+                    using (_cmd = new MySqlCommand(query, _con))
                     {
-                        using (_cmd = new MySqlCommand(query, _con))
-                        {
-                            var oParam0 = _cmd.Parameters.Add("?pos", MySqlDbType.Int32); oParam0.Value = selectedIndeces[i].Key;
-                            var oParam1 = _cmd.Parameters.Add("?val", MySqlDbType.VarChar); oParam1.Value = selectedIndeces[i].Value;
-                            _cmd.ExecuteNonQuery();
-                        }
+                        var oParam0 = _cmd.Parameters.Add("?pos", MySqlDbType.Int32); oParam0.Value = keys[i];
+                        var oParam1 = _cmd.Parameters.Add("?val", MySqlDbType.VarChar); oParam1.Value = selectedIndices[keys[i]];
+                        _cmd.ExecuteNonQuery();
                     }
-
-                    insertId = (int)_cmd.LastInsertedId;
-
-                    query = "INSERT INTO answers_stored_strings (answer_id, string_id, type) VALUES (?answer_id, ?insert_id,  \"string\")";
-                    if (!_con.State.Equals(ConnectionState.Open)) _con.Open();
-                    using (_con)
-                    {
-                        using (_cmd = new MySqlCommand(query, _con))
-                        {
-                            var oParam0 = _cmd.Parameters.Add("?answer_id", MySqlDbType.Int32); oParam0.Value = answerId;
-                            var oParam1 = _cmd.Parameters.Add("?insert_id", MySqlDbType.Int32); oParam1.Value = insertId;
-                            _cmd.ExecuteNonQuery();
-                        }
-                    }
-                    Debug.Log("Inserted strings!");
                 }
+
+                insertId = (int)_cmd.LastInsertedId;
+
+                query = "INSERT INTO answers_stored_strings (answer_id, string_id, type) VALUES (?answer_id, ?insert_id,  \"string\")";
+                if (!_con.State.Equals(ConnectionState.Open)) _con.Open();
+                using (_con)
+                {
+                    using (_cmd = new MySqlCommand(query, _con))
+                    {
+                        var oParam0 = _cmd.Parameters.Add("?answer_id", MySqlDbType.Int32); oParam0.Value = answerId;
+                        var oParam1 = _cmd.Parameters.Add("?insert_id", MySqlDbType.Int32); oParam1.Value = insertId;
+                        _cmd.ExecuteNonQuery();
+                    }
+                }
+                Debug.Log("Inserted strings!");
             }
+            
         }
         catch (Exception ex)
         {

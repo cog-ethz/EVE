@@ -69,10 +69,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             }
         }
 
-        public override KeyValuePair<int, string>[] GetAnswer()
-        {
-            return null;
-        }
+        public override Dictionary<int, string> GetAnswer() => null;
 
         public override bool IsAnswered()
         {

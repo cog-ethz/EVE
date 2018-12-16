@@ -344,7 +344,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
 
                         var iLocal = answernumber;
-                        btn.isOn = _oldAnswers != null && _oldAnswers.ContainsKey(i) && _oldAnswers[i] == j.ToString();
+                        btn.isOn = _oldAnswers != null && _oldAnswers.ContainsKey(iLocal) ;
                         btn.onValueChanged.AddListener(isOn =>
                         {
                             qmb.SetAnswerInt(iLocal, isOn ? 1 : 0);
@@ -558,7 +558,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             expositionScreen.SetActive(false);
             rep.ExpositionScreen = expositionScreen;
 
-            expositionScreen.GetComponent<RectTransform>().sizeDelta = _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
+            expositionScreen.transform.Find("Screen").GetComponent<RectTransform>().sizeDelta = _launchManager.ExperimentSettings.UISettings.ReferenceResolution;
 
             _questionContent.gameObject.SetActive(true);
 

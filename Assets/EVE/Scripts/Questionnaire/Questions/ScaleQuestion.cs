@@ -93,20 +93,13 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             }
         }
 
-        public override KeyValuePair<int, string>[] GetAnswer()
-        {
-            return new [] { new KeyValuePair<int, string>(_temporaryIntAnswer, "")} ;
-        }
+        public override Dictionary<int, string> GetAnswer() => new Dictionary<int, string> {{_temporaryIntAnswer, "1"}};
 
         public override bool IsAnswered()
         {
             return _temporaryIntAnswer > -1;
         }
-
-        public override void RetainAnswer(int internalnumber)
-        {
-            _temporaryIntAnswer = internalnumber;
-        }
+        
 
         public override void RetainAnswer(int positionOffset, int answer)
         {

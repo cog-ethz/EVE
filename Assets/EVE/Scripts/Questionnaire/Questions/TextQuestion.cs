@@ -14,17 +14,17 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         public List<Label> RowLabels;
 
         [XmlIgnore]
-        private string[] _temporaryStringAnswers;
+        private Dictionary<int,string> _temporaryStringAnswers;
 
         public TextQuestion()
         {
-            _temporaryStringAnswers = new string[NRows];
+            _temporaryStringAnswers = new Dictionary<int, string>();
         }
 
         public TextQuestion(QuestionData questionData)
         {
             FromDatabaseQuestion(questionData);
-            _temporaryStringAnswers = new string[NRows];
+            _temporaryStringAnswers = new Dictionary<int, string>();
         }
 
         public TextQuestion(string name, string text)
@@ -33,7 +33,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Text = text;
             RowLabels = null;
             NRows =  1;
-            _temporaryStringAnswers = new string[NRows];
+            _temporaryStringAnswers = new Dictionary<int, string>();
         }
 
         public TextQuestion(string name, string text, List<Label> rowLabels)
@@ -41,8 +41,8 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Name = name;
             Text = text;
             RowLabels = rowLabels;
-            NRows = RowLabels != null ? RowLabels.Count : 1;
-            _temporaryStringAnswers = new string[NRows];
+            NRows = RowLabels?.Count ?? 1;
+            _temporaryStringAnswers = new Dictionary<int, string>();
         }
 
 
@@ -85,38 +85,30 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             {
                 Debug.LogError("The question type is wrong: " + q.QuestionType);
             }
-            NRows = RowLabels != null ? RowLabels.Count : 1;
+            NRows = RowLabels?.Count ?? 1;
         }
 
-        public override KeyValuePair<int, string>[] GetAnswer()
+        public override Dictionary<int, string> GetAnswer()
         {
-            if (_temporaryStringAnswers == null) return null;
-            var entryArray = new KeyValuePair<int, string>[_temporaryStringAnswers.Length];
-            var i = 0;
-            foreach (var answer in _temporaryStringAnswers)
-            {
-                entryArray[i] = new KeyValuePair<int, string>(i, answer);
-                i++;
-            }
-            return entryArray;
+            return _temporaryStringAnswers;
         }
 
         public override bool IsAnswered()
         {
-            return _temporaryStringAnswers.All(answer => !string.IsNullOrEmpty(answer));
+            return _temporaryStringAnswers.All(answer => !string.IsNullOrEmpty(answer.Value));
         }
 
         public override void RetainAnswer(string internalAnswer)
         {
             if (_temporaryStringAnswers==null)
-                _temporaryStringAnswers = new string[NRows];
+                _temporaryStringAnswers = new Dictionary<int, string>();
             _temporaryStringAnswers[0] = internalAnswer;
         }
 
         public override void RetainAnswer(int number, string internalAnswer)
         {
             if (_temporaryStringAnswers == null)
-                _temporaryStringAnswers = new string[NRows];
+                _temporaryStringAnswers = new Dictionary<int, string>();
             _temporaryStringAnswers[number] = internalAnswer;
         }
 

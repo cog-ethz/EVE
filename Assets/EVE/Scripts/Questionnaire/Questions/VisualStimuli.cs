@@ -30,7 +30,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         [XmlElement]
         public Times Times;
 
-        [XmlIgnore] private readonly List<KeyValuePair<int, string>> _answers;
+        [XmlIgnore] private readonly Dictionary<int, string> _answers;
 
         [XmlIgnore] private bool answersCompleted;
 
@@ -39,12 +39,12 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         /// </summary>
         public VisualStimuli()
         {
-            _answers = new List<KeyValuePair<int, string>>();
+            _answers = new Dictionary<int, string>();
         }
 
         public VisualStimuli(QuestionData questionData)
         {
-            _answers = new List<KeyValuePair<int, string>>();
+            _answers = new Dictionary<int, string>();
             FromDatabaseQuestion(questionData);
         }
 
@@ -80,7 +80,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             };
             Stimuli = stimuli;
 
-            _answers = new List<KeyValuePair<int, string>>();
+            _answers = new Dictionary<int, string>();
         }
 
         public override void Accept(IQuestionVisitor qv)
@@ -143,9 +143,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 output.ToArray());
         }
 
-        public override KeyValuePair<int, string>[] GetAnswer()
+        public override Dictionary<int, string> GetAnswer()
         {
-            return _answers.ToArray();
+            return _answers;
         }
 
         public override bool IsAnswered()
@@ -162,20 +162,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             answersCompleted = state;
         }
         
-        /// <summary>
-        /// Stores the user Answer
-        /// </summary>
-        /// <param name="positionOffset"></param>
-        /// <param name="answer"></param>
         public override void RetainAnswer(int positionOffset, string answer)
         {
-            _answers.Add(new KeyValuePair<int, string>(positionOffset,answer));
+            _answers.Add(positionOffset,answer);
         }
-
-        /// <summary>
-        /// Jumps are not available in Visual Stimuli
-        /// </summary>
-        /// <returns>returns null</returns>
+        
         public override string GetJumpDestination()
         {
             return null;

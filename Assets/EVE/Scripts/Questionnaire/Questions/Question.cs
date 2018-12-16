@@ -85,9 +85,12 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
 
         /// <summary>
         /// Returns all answers to a question in a readable format for the database.
+        ///
+        /// The keys are the index to a reference element in the question, the value
+        /// is the information to be stored.
         /// </summary>
         /// <returns>An array of key value pairs to be inserted into the database</returns>
-        public virtual KeyValuePair<int, string>[] GetAnswer()
+        public virtual Dictionary<int, string> GetAnswer()
         {
             throw new NotImplementedException();
         }
@@ -100,16 +103,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         {
             throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// Store a single integer in the answer.
-        /// </summary>
-        /// <param name="answer">The integer to be stored</param>
-        public virtual void RetainAnswer(int answer)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Store an integer at a specific location.
         /// </summary>

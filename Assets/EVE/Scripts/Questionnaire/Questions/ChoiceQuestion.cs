@@ -23,8 +23,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         [XmlArrayItem("Label")]
         public List<Label> RowLabels;
 
-        [XmlIgnore]
-        public List<int> _answers;
+        [XmlIgnore] private Dictionary<int, string> _answers;
 
         [XmlIgnore]
         public Dictionary<int, string> _answerStrings;
@@ -43,10 +42,10 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Text = text;
             Choice = choice;
             RowLabels = rowLabels;
-            NRows = RowLabels!=null?RowLabels.Count:1;
+            NRows = RowLabels?.Count ?? 1;
             ColumnLabels = columnLabels;
-            NColumns = ColumnLabels != null ? ColumnLabels.Count:1;
-            _answers = new List<int>();
+            NColumns = ColumnLabels?.Count ?? 1;
+            _answers = new Dictionary<int, string>();
             _answerStrings = new Dictionary<int, string>();
         }
 
@@ -57,11 +56,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Text = text;
             Choice = choice;
             RowLabels = rowLabels;
-            NRows = RowLabels != null ? RowLabels.Count : 1;
+            NRows = RowLabels?.Count ?? 1;
             ColumnLabels = columnLabels;
-            NColumns = ColumnLabels != null ? ColumnLabels.Count : 1;
+            NColumns = ColumnLabels?.Count ?? 1;
             Jumps = jumps;
-            _answers = new List<int>();
+            _answers = new Dictionary<int, string>();
             _answerStrings = new Dictionary<int, string>();
         }
 
@@ -155,7 +154,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                     }
                 }
 
-                var output = q.Output!=null?q.Output.ToList():null;
+                var output = q.Output?.ToList();
                 if (output == null)
                 {
                     output = new List<int>();
@@ -238,7 +237,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 }
                 RowLabels = RowLabels.Count > 0 ? RowLabels : null;
                 ColumnLabels = ColumnLabels.Count > 0 ? ColumnLabels : null;
-                _answers = new List<int>();
+                _answers = new Dictionary<int, string>();
             }
             else
             {
@@ -251,25 +250,28 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             qv.Visit(this);
         }
 
-        public override KeyValuePair<int, string>[] GetAnswer()
+        public override Dictionary<int, string> GetAnswer()
         {
             if (_answerStrings == null)
             {
                 _answerStrings = new Dictionary<int, string>();
             }
-            var kvpList = _answerStrings.Where(keyValuePair => keyValuePair.Value.Length > 0).ToList();
-            kvpList.AddRange(_answers
-                .Select(answer => NColumns > 0
-                ? new KeyValuePair<int, string>(answer/NColumns, (answer%NColumns).ToString()) 
-                : new KeyValuePair<int, string>(answer, "0")));
-            return kvpList.ToArray();
+            var dict = new Dictionary<int, string>(_answers);
+            foreach (var answerStringsKey in _answerStrings.Keys)
+            {
+                if (_answers.ContainsKey(answerStringsKey))
+                {
+                    dict[answerStringsKey] = _answerStrings[answerStringsKey];
+                }
+            }
+            return dict;
         }
 
         public override bool IsAnswered()
         {
             if (_answerStrings != null)
             {
-                if (_answerStrings.Where(keyValuePair => _answers.Contains(keyValuePair.Key)).Any(keyValuePair => keyValuePair.Value.Length == 0))
+                if (_answerStrings.Where(keyValuePair => _answers.Contains(new KeyValuePair<int, string>(keyValuePair.Key,"1"))).Any(keyValuePair => keyValuePair.Value.Length == 0))
                 {
                     return false;
                 }
@@ -283,50 +285,23 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 var allRows = true;
                 for (var i = 0; i < NRows && allRows; i++)
                 {
-                    allRows = allRows && _answers.Any(val => val >= i*NColumns && val < (i + 1)*NColumns);
+                    allRows = allRows && _answers.Any(val => val.Key >= i*NColumns && val.Key < (i + 1)*NColumns);
                 }
                 return allRows;
             }
         }
-
-        public override void RetainAnswer(int answer)
-        {
-            if (Choice == Choice.Single )
-            {
-                if (NColumns == 1)
-                {
-                    _answers = new List<int>();
-                }
-                else
-                {
-                    var lowerBound = answer - answer%NColumns;
-                    var upperBound = lowerBound + NColumns;
-                    for (var i = lowerBound; i < upperBound; i++)
-                    {
-                        if (_answers.Contains(i))
-                        {
-                            _answers.Remove(i);
-                        }
-                    }
-                }
-            }
-            if (_answers.Contains(answer))
-            {
-                _answers.Remove(answer);
-            }
-            else
-            {
-                _answers.Add(answer);
-            }
-        }
-
+        
         public override void RetainAnswer(int positionOffset, int answer)
         {
+            if (_answers.ContainsKey(positionOffset))
+            {
+                _answers.Remove(positionOffset);
+            }
             if (Choice == Choice.Single)
             {
                 if (NColumns == 1)
                 {
-                    _answers = new List<int>();
+                    _answers = new Dictionary<int, string>();
                 }
                 else
                 {
@@ -334,20 +309,17 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                     var upperBound = lowerBound + NColumns;
                     for (var i = lowerBound; i < upperBound; i++)
                     {
-                        if (_answers.Contains(i))
+                        if (_answers.ContainsKey(i))
                         {
                             _answers.Remove(i);
                         }
                     }
                 }
             }
-            if (_answers.Contains(positionOffset))
+
+            if (answer ==1)
             {
-                _answers.Remove(positionOffset);
-            }
-            else
-            {
-                _answers.Add(positionOffset);
+                _answers.Add(positionOffset,answer.ToString());
             }
         }
 
@@ -358,20 +330,18 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
 
         public override string GetJumpDestination()
         {
+            if (Jumps == null) return null;
+
             var answerB = new StringBuilder(new string('F', NRows * NColumns));
-            _answers.ForEach(i => answerB[i] = 'T');
-            var answer = answerB.ToString();
-            if (Jumps != null)
+            foreach (var answersKey in _answers.Keys)
             {
-                return
+                answerB[answersKey] = 'T';
+            }
+            var answer = answerB.ToString();
+            return
                 (from jump in Jumps
                     where jump.Activator.Equals("*") || jump.Activator.Equals(answer)
                     select jump.Destination).FirstOrDefault();
-            }
-            else
-            {
-                return null;
-            }
         }
     }
 }
