@@ -27,7 +27,7 @@ public class GoToDestinations : MonoBehaviour
         currentDestination = destinations[destIndex].transform;
         gameObject.GetComponent<Text>().text = "Find the " + currentDestination.name;
         currentDestination.transform.Find("Cylinder").gameObject.SetActive(true);
-        fader =launchManager.FPC.GetComponent<FadeOutScene>();
+        fader =launchManager.FirstPersonController.GetComponent<FadeOutScene>();
         start = DateTime.Now;
         currentDestination = destinations[destIndex].transform;
         popUpText.text = "Find the " + currentDestination.name;
@@ -65,7 +65,7 @@ public class GoToDestinations : MonoBehaviour
         {
             if (fader.isFadedOut())
             {               
-                rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
+                rpl = launchManager.FirstPersonController.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
                 if (rpl.isActivated())
                     SceneManager.LoadScene("Evaluation");
                 else

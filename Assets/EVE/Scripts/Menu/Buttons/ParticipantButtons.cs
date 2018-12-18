@@ -98,7 +98,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         
         public void Replay(int sessionId, int sceneId, string sceneName)
         {
-            var replay = _launchManager.FPC.GetComponentInChildren<ReplayRoute>();
+            var replay = _launchManager.FirstPersonController.GetComponentInChildren<ReplayRoute>();
             replay.activateReplay(sessionId, sceneName, sceneId);
             SceneManager.LoadScene(sceneName);
         }

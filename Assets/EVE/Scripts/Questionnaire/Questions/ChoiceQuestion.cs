@@ -291,11 +291,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             }
         }
         
-        public override void RetainAnswer(int positionOffset, int answer)
+        public override void RetainAnswer(int offsetPosition, int answer)
         {
-            if (_answers.ContainsKey(positionOffset))
+            if (_answers.ContainsKey(offsetPosition))
             {
-                _answers.Remove(positionOffset);
+                _answers.Remove(offsetPosition);
             }
             if (Choice == Choice.Single)
             {
@@ -305,7 +305,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 }
                 else
                 {
-                    var lowerBound = positionOffset - positionOffset % NColumns;
+                    var lowerBound = offsetPosition - offsetPosition % NColumns;
                     var upperBound = lowerBound + NColumns;
                     for (var i = lowerBound; i < upperBound; i++)
                     {
@@ -319,13 +319,13 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
 
             if (answer ==1)
             {
-                _answers.Add(positionOffset,answer.ToString());
+                _answers.Add(offsetPosition,answer.ToString());
             }
         }
 
-        public override void RetainAnswer(int positionOffset, string answer)
+        public override void RetainAnswer(int offsetPosition, string answer)
         {
-            _answerStrings[positionOffset] = answer;
+            _answerStrings[offsetPosition] = answer;
         }
 
         public override string GetJumpDestination()

@@ -26,7 +26,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _log.ConnectToServerAndResetSchema(_launchManager.ExperimentSettings.DatabaseSettings);
             _log.LogExperiment(_launchManager.ExperimentName);
             _launchManager.SessionId = _log.CurrentSessionId;
-            _launchManager.LoadSettingsIntoDB();
+            _launchManager.LoadSettingsIntoDatabase();
             _launchManager.MenuManager.InstantiateAndShowMenu("Database Configuration Menu","Launcher");
         }
     }

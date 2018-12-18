@@ -19,7 +19,7 @@ public class BPDelayCurtain : MonoBehaviour
     {
         launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
         srv = launchManager.gameObject.GetComponent<HL7ServerStarter>();
-        if (srv.isActiveAndEnabled && !launchManager.FPC.GetComponentInChildren<ReplayRoute>().isActivated())
+        if (srv.isActiveAndEnabled && !launchManager.FirstPersonController.GetComponentInChildren<ReplayRoute>().isActivated())
         {
             timeNow = DateTime.Now;
             intervall = srv.getIntervall();
@@ -27,7 +27,7 @@ public class BPDelayCurtain : MonoBehaviour
             diff = intervall - new TimeSpan(0, (int)mod, timeNow.Second);
             if (diff.TotalSeconds < 30)
                 diff = diff.Add(intervall);
-            fpcCamera = launchManager.FPC.GetComponentInChildren<Camera>();
+            fpcCamera = launchManager.FirstPersonController.GetComponentInChildren<Camera>();
             delayCamera = GetComponent<Camera>();
             foreach (var obj in overlayObjects)
             {
@@ -55,7 +55,7 @@ public class BPDelayCurtain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!launchManager.FPC.GetComponentInChildren<ReplayRoute>().isActivated())
+        if (!launchManager.FirstPersonController.GetComponentInChildren<ReplayRoute>().isActivated())
         {
             // Wait for the next blood pressure measurement to start together with the level
             if (diff.TotalSeconds > 1)

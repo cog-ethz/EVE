@@ -236,7 +236,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Representations
             Debug.Log("Remain in next scene for " + time + " sec");
             yield return new WaitForSeconds(time);
 
-            if (Question.Configuration.Choice == Choice.None
+            if (Question.Configuration.AnswerMode == AnswerMode.None
                 && Question.Configuration.Separator == Separator.None
                 && Question.Configuration.Randomisation == Randomisation.None)
             {

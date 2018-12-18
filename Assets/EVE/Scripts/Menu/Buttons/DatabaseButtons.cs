@@ -95,7 +95,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _log.ConnectToServerAndCreateSchema(_dbSettings);
             _log.LogExperiment(_launchManager.ExperimentName);
             _launchManager.SessionId = _log.CurrentSessionId;
-            _launchManager.LoadSettingsIntoDB();
+            _launchManager.LoadSettingsIntoDatabase();
             CheckDatabase();
         }
 

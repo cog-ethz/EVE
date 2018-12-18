@@ -11,21 +11,30 @@ namespace Assets.EVE.Scripts.Questionnaire.XMLHelper
         [XmlElement("Text")]
         public System.Xml.XmlCDataSection TextToXml
         {
-            get
-            {
-                return new System.Xml.XmlDocument().CreateCDataSection(Text);
-            }
-            set
-            {
-                Text = value.Value;
-            }
+            get => new System.Xml.XmlDocument().CreateCDataSection(Text);
+            set => Text = value.Value;
         }
 
-        [XmlAttribute]
-        public int? Output;
+        [XmlIgnore]
+        public int? Output { get; set; }
 
-        [XmlAttribute]
-        public bool? Answerable;
+        [XmlAttribute("Output")]
+        public string OutputToXml
+        {
+            get => (Output.HasValue) ? Output.ToString() : null;
+            set => Output = !string.IsNullOrEmpty(value) ? int.Parse(value) : (int?) null;
+        }
+
+        [XmlIgnore]
+        public bool? Answerable { get; set; }
+
+        
+        [XmlAttribute("Answerable")]
+        public string AnswerableToXml
+        {
+            get => (Answerable.HasValue) ? Answerable.ToString() : null;
+            set => Answerable = !string.IsNullOrEmpty(value) && bool.Parse(value);
+        }
 
         [XmlAttribute]
         public string Image;

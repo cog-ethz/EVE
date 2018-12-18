@@ -2,50 +2,100 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml.Serialization;
-using Assets.EVE.Scripts.Menu;
 using Assets.EVE.Scripts.XML;
 using UnityEngine.SceneManagement;
-using Assets.EVE.Scripts.Questionnaire.Questions;
 using Assets.EVE.Scripts.Questionnaire;
-using Assets.EVE.Scripts.Questionnaire.Enums;
-using VisualStimuliEnums = Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli;
-using Assets.EVE.Scripts.Questionnaire.XMLHelper;
+using Assets.EVE.Scripts.Utils;
 using Assets.EVE.Scripts.XML.XMLHelper;
-using JetBrains.Annotations;
 using UnityEngine.UI;
 
+/// <summary>
+/// This class controls the overall flow of EVE.
+///
+/// Whenever an EVE action is completed the LaunchManager
+/// returns into control and updates the overall state.
+/// </summary>
+/// <remarks>
+/// Using EVE components without a launch manager active
+/// may result in non-working behaviours.
+/// </remarks>
 public class LaunchManager : MonoBehaviour
 {
-    public ExperimentSettings ExperimentSettings;
-    public GameObject FPC;
-    public GameObject MenuCanvas;
-    private int _currentScene;
-    private bool _initialized, _configureLabchart, _inQuestionnaire;
-    private string _activeSceneName, _participantId, _filePathParticipants;
+    /// <summary>
+    /// Experiment settings loaded from the Experiment/Resources folder.
+    /// </summary>
+    public ExperimentSettings ExperimentSettings { get; set; }
 
+    /// <summary>
+    /// First person controller that is moved through all scenes of an experiment.
+    /// </summary>
+    public GameObject FirstPersonController { get; private set; }
+
+    /// <summary>
+    /// Canvas for menus to be displayed in.
+    /// </summary>
+    public GameObject MenuCanvas { get; private set; }
+
+    /// <summary>
+    /// Helper variable to execute the writing of example questionnaires.
+    /// </summary>
+    public bool ShouldCreateExampleQuestionnaire;
+
+    /// <summary>
+    /// Session parameters for the currently active session id.
+    /// </summary>
+    /// <remarks>
+    /// This is reset when an experiment is completed.
+    /// </remarks>
     public Dictionary<string, string> SessionParameters { get; private set; }
+    
+    /// <summary>
+    /// The session Id used for the current experiment.
+    /// </summary>
+    public int SessionId { get; set; }
+
+    /// <summary>
+    /// The name of the currently active questionnaire.
+    /// </summary>
+    public string QuestionnaireName { get; private set; }
+
+    /// <summary>
+    /// The name of the currently active experiment.
+    /// </summary>
+    public string ExperimentName { get => ExperimentSettings.Name; set => ExperimentSettings.Name = value; }
+
+    /// <summary>
+    /// Access to the LoggingManager.
+    /// </summary>
+    public LoggingManager LoggingManager { get; private set; }
+
+    /// <summary>
+    /// Access to the MenuManager.
+    /// </summary>
+    public MenuManager MenuManager { get; private set; }
+
+    /// <summary>
+    /// Access to the QuestionnaireManager.
+    /// </summary>
+    /// <remarks>
+    /// Note that the QuestionnaireManager is disabled if no questionnaire is active.
+    /// </remarks>
+    public QuestionnaireManager QuestionnaireManager { get; private set; }
+
+    /// <summary>
+    /// Session Id which to use to start a replay.
+    /// </summary>
+    public int ReplaySessionId { get; set; }
 
     /// <summary>
     /// Make the LaunchManager a singleton.
     /// </summary>
-    /// 
     private static LaunchManager _instance;
-    
-    public int SessionId { get; set; }
-    
-    public string QuestionnaireName { get; private set; }
-    
-    public string ExperimentName {get {return ExperimentSettings.Name;} set { ExperimentSettings.Name = value; }}
 
-    public LoggingManager LoggingManager { get; private set; }
-
-    public MenuManager MenuManager { get; private set; }
-
-    public QuestionnaireManager QuestionnaireManager { get; private set; }
-
-    public int ReplaySessionId { get; set; }
+    private int _currentScene;
+    private bool _initialized, _configureLabchart, _inQuestionnaire;
+    private string _activeSceneName, _participantId, _filePathParticipants;
 
     void Awake()
     {
@@ -58,7 +108,10 @@ public class LaunchManager : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(this);
-            DontDestroyOnLoad(FPC);
+            FirstPersonController = GameObject.FindGameObjectWithTag("Player");
+            FirstPersonController.SetActive(false);
+            DontDestroyOnLoad(FirstPersonController);
+            MenuCanvas = GameObject.FindGameObjectWithTag("MenuCanvas");
             DontDestroyOnLoad(MenuCanvas); 
 
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -66,13 +119,7 @@ public class LaunchManager : MonoBehaviour
 
 
         ReadExperimentSettings();
-
-        //THIS SECTION CAN TEST WRITING EXPERIMENT SETTINGS
-        //ExperimentSettings.UISettings.ReferenceResolution = new Vector2(1920,1080);
-        //var path = UnityEditor.EditorUtility.SaveFilePanel("Save Experiment Settings", "", "experiment_settings", "xml");
-        //WriteExperimentSettings(path);
-
-
+        
         _filePathParticipants = Application.persistentDataPath + "/participant_files/"; ;
         var dirInf = new DirectoryInfo(_filePathParticipants);
         if (!dirInf.Exists)
@@ -98,63 +145,26 @@ public class LaunchManager : MonoBehaviour
         else
         {
             MenuManager.InstantiateAndShowMenu("Main Menu", "Launcher");
-            LoadSettingsIntoDB();
+            LoadSettingsIntoDatabase();
             SessionId = LoggingManager.CurrentSessionId;
         }
 
-
-        //THIS SECTION CAN TEST WRITING QUESTION SETS AND QUESTIONNAIRES
-        /*var qs = new QuestionSet("TestSet");
-        qs.Questions.Add(new InfoScreen("example_info", "<b><size=48>People questionnaire</size></b>:\n\nPerception of people in the neighborhood"));
-        qs.Questions.Add(new InfoScreen("example_confirm", "<b><size=48>Read this</size></b>\n\nWait for 1 seconds before this continues and confirm you really want this to continue", new ConfirmationRequirement{Required = true,ConfirmationDelay = 1}));
-        qs.Questions.Add(new TextQuestion("exercise", "What type of exercise have you done recently?"));
-        qs.Questions.Add(new TextQuestion("born_in", "Where were you born?", new List<Label> { new Label("Country:"), new Label("City:") }));
-        qs.Questions.Add(new ChoiceQuestion("yes_no", "Is this a Yes/No Question?", Choice.Single, new List<Label> { new Label("Yes", 1), new Label("No", 0) }, null));
-        qs.Questions.Add(new ChoiceQuestion("likert_scale", "Is this a good question?", Choice.Single, null, new List<Label> { new Label("Not at all", 0), new Label("This entry has text that is way tooooooooo long", 1), new Label("", 2), new Label("It is okay", 3), new Label("", 4), new Label("", 5), new Label("Very Good", 6) }));
-        qs.Questions.Add(new ChoiceQuestion("multiple_yes_no", "Answer quickly without thinking:", Choice.Single, new List<Label> { new Label("Do you like questionnaires?"), new Label("Have you ever been to New York?"), new Label("Coffee with Milk?"), new Label("Coffee with Sugar?"), new Label("Black Coffee?") }, new List<Label>() { new Label("Yes", 1), new Label("No", 0) }));
-        qs.Questions.Add(new ChoiceQuestion("coffe_consumption", "Did you have coffee, espresso, or another beverage containing caffeine in the past 24 hours?", Choice.Single, new List<Label>() { new Label("If yes, how many hours ago", 1,true), new Label("No, I did not have any caffeine", 0) },null));
-        qs.Questions.Add(new ChoiceQuestion("band_judgement", "Please check with which assessment you agree most about the bands:", Choice.Multiple, new List<Label> { new Label("Coldplay"), new Label("Maroon5"), new Label("Nsync"), new Label("Red Hot Chili Peppers")}, new List<Label>() { new Label("Mainstream", 0), new Label("Best of their Genre", 1), new Label("Original",2)}));
-        qs.Questions.Add(new ChoiceQuestion("multi_c_text", "Which animals do you like:", Choice.Multiple, new List<Label> { new Label("Bears", 0), new Label("Lions", 1), new Label("Frogs", 2), new Label("Axolotls", 3), new Label("Humans", 4), new Label("Bats", 5), new Label("None", 6), new Label("Other:", 7,true) }, null));
-        qs.Questions.Add(new ChoiceQuestion("image_example", "Which image looks the best?", Choice.Single, new List<Label> { new Label("This", 0, "Images/test_image"), new Label("This", 1, "Images/test_image"), new Label("This", 2, "Images/test_image") }, null));
-        qs.Questions.Add(new ScaleQuestion("amuesment_scale", "How much did you feel AMUSEMENT?",null, Scale.Line, "Did not experience at all", "Strongest experience ever felt"));
-        qs.Questions.Add(new ScaleQuestion("SAM_pleasure", "Please rate how happy-unhappy you actually felt", null, Scale.Pleasure, "SAD", "CHEERFUL"));
-        qs.Questions.Add(new ScaleQuestion("SAM_arousal", "Please rate how excited - calm you actually felt", null, Scale.Arousal, "QUIET", "ACTIVE"));
-        qs.Questions.Add(new ScaleQuestion("SAM_dominance", "Please rate how controlled vs. in-control you actually felt", null, Scale.Dominance, "DEPENDENT", "INDEPENDENT"));
-        qs.Questions.Add(new ScaleQuestion("custom_amuesment_scale", "How much did you feel AMUSEMENT?", "Textures/questionline", Scale.Custom, "Did not experience at all", "Strongest experience ever felt"));
-        qs.Questions.Add(new LadderQuestion("swiss_status", "Swiss comparison of social status", "At the TOP of the ladder are the people who are the best off. The lower you are, the closer you are to the people at the very bottom. Where would you place yourself on this ladder, compared to all the other people in Switzerland?"));
-        qs.Questions.Add(new VisualStimuli("test_stimuli",
-            "Which stimulus is more pleasing?\n\nPress \"1\" for the first or \"2\" for the second.",
-            VisualStimuliEnums.Separator.FixationCross,
-            VisualStimuliEnums.Choice.ArrowKeys,
-            VisualStimuliEnums.Randomisation.None,
-            VisualStimuliEnums.Type.Image, "none", false, 3, 5, 5,
-            new List<string>
-            {
-                "Images/test_image", "Images/test_image"
-            }));
-        qs.Questions.Add(new ChoiceQuestion("flu_med", "Have you taken any medication for cold or flu symptoms today?", Choice.Single, new List<Label> { new Label("Yes", 1), new Label("No", 0) }, null, new List<Jump>() { new Jump("inflam_med", "FT") }));
-        qs.Questions.Add(new TextQuestion("flu_med_name", "Which medication(s)?"));
-        qs.Questions.Add(new ChoiceQuestion("inflam_med", "Have you taken any anti-inflammatory medication today?", Choice.Single, new List<Label> { new Label("Yes", 1), new Label("No", 0) }, null, new List<Jump>() { new Jump("*", "FT") }));
-        qs.Questions.Add(new TextQuestion("inflam_med_name", "Which medication(s)?"));
-        
-
-        
-
-        
-        var qn = new Questionnaire("ExampleQuestionnaire");
-
-
-        qn.QuestionSets.Add(qs.Name);
-
-        var qf = new QuestionnaireFactory(LoggingManager, ExperimentSettings);
-        qf.WriteQuestionSetToXml(qs, "TestSet.xml");
-        qf.WriteQuestionnaireToXml(qn, "ExampleQuestionnaire");*/
+        if(ShouldCreateExampleQuestionnaire)
+        {
+            QuestionnaireUtils.CreateExampleQuestionnaire(LoggingManager, ExperimentSettings);
+        }
     }
 
 
     // -----------------------------------------
     //			 During one Playthrough
     //------------------------------------------
+    /// <summary>
+    /// This method is called whenever unity finished loading a scene or we manually move onto a new
+    /// scene to update the state of the experiment.
+    /// </summary>
+    /// <param name="scene">Upcoming scene</param>
+    /// <param name="mode">Unity parameter needed to mach listener.</param>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (!_initialized)
@@ -163,7 +173,7 @@ public class LaunchManager : MonoBehaviour
             return;
         }
 
-        var isReplay = FPC.GetComponentInChildren<ReplayRoute>().isActivated();
+        var isReplay = FirstPersonController.GetComponentInChildren<ReplayRoute>().isActivated();
         var sceneList = ExperimentSettings.SceneSettings.Scenes;
         _activeSceneName = SceneManager.GetActiveScene().name;
         var subSceneName = sceneList[_currentScene].Name;
@@ -174,7 +184,7 @@ public class LaunchManager : MonoBehaviour
         { //coming back from a scene
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            FPC.SetActive(false);
+            FirstPersonController.SetActive(false);
             LoggingManager.LogSceneEnd(subSceneName);
 
             if (isReplay)
@@ -210,18 +220,11 @@ public class LaunchManager : MonoBehaviour
     /// account for scenes that have no 3D scenes.
     /// </summary>
     /// <remarks>
-    /// Do not call this method unless you know what you are doing.</remarks>
+    /// Do not call this method unless you know what you are doing.
+    /// </remarks>
     public void ManualContinueToNextScene()
     {
         OnSceneLoaded(new Scene(), LoadSceneMode.Additive);
-    }
-
-    // -----------------------------------------
-    //			 Initialization
-    //------------------------------------------	
-    void Start()
-    {         
-        
     }
 
     /// <summary>
@@ -233,9 +236,16 @@ public class LaunchManager : MonoBehaviour
         SessionId = LoggingManager.CurrentSessionId;
     }
     
+    /// <summary>
+    /// Loads the scene to be loaded next.
+    /// </summary>
+    /// <remarks>
+    /// The function call hides the fact that some scenes are within the
+    /// main scene.
+    /// </remarks>
     public void LoadCurrentScene()
     {
-        SynchroniseSceneListWithDB();
+        SynchroniseScenesWithDatabase();
         var scene = ExperimentSettings.SceneSettings.Scenes[_currentScene].Name;
         
         if (scene.Contains(".xml"))
@@ -282,7 +292,7 @@ public class LaunchManager : MonoBehaviour
         }
         else
         {
-            SynchroniseSceneListWithDB();
+            SynchroniseScenesWithDatabase();
 
             var sceneList = ExperimentSettings.SceneSettings.Scenes;
             Console.Write(sceneList.Count);
@@ -315,6 +325,9 @@ public class LaunchManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Transfers the session parameters to the database.
+    /// </summary>
     private void StoreSessionParameters()
     {
         foreach (var entry in SessionParameters)
@@ -323,11 +336,16 @@ public class LaunchManager : MonoBehaviour
         }
     }
 
-    public void ChangeSessionsParameter(string name, string value)
+    /// <summary>
+    /// Update currently used session parameters.
+    /// </summary>
+    /// <param name="sessionParameter">Name of parameter.</param>
+    /// <param name="value">Value to be assumed.</param>
+    public void ChangeSessionsParameter(string sessionParameter, string value)
     {
-        if (SessionParameters.ContainsKey(name))
-            SessionParameters.Remove(name);
-        SessionParameters.Add(name, value);
+        if (SessionParameters.ContainsKey(sessionParameter))
+            SessionParameters.Remove(sessionParameter);
+        SessionParameters.Add(sessionParameter, value);
     }
 
     /// <summary>
@@ -337,7 +355,7 @@ public class LaunchManager : MonoBehaviour
     /// <remarks>
     /// This will overwrite previous settings.
     /// </remarks>
-    /// <param name="folderPath"></param>
+    /// <param name="folderPath">location where file is stored.</param>
     public void WriteExperimentSettings(string folderPath)
     {
         if (!folderPath.EndsWith(".xml"))
@@ -363,7 +381,10 @@ public class LaunchManager : MonoBehaviour
         }
     }
 
-    public void LoadSettingsIntoDB()
+    /// <summary>
+    /// Transfers settings into database.
+    /// </summary>
+    public void LoadSettingsIntoDatabase()
     {
         var name = ExperimentSettings.Name;
         LoggingManager.LogExperiment(name);
@@ -383,13 +404,25 @@ public class LaunchManager : MonoBehaviour
         }
     }
 
-    public void SynchroniseSceneListWithDB()
+    /// <summary>
+    /// Ensure that scenes in the database and EVE are in the same state.
+    /// </summary>
+    public void SynchroniseScenesWithDatabase()
     {
-        if (LoggingManager.CurrentSessionId> -1)
+        if (LoggingManager.CurrentSessionId > -1)
+        {
             ExperimentSettings.SceneSettings.Scenes = new List<SceneEntry>(LoggingManager.GetSceneNamesInOrder(ExperimentSettings.Name));
+        }
+        else
+        {
+            Debug.LogError("Scenes cannot be synchonized because the database is not setup correctly.");
+        }
     }
-
-    public void SynchroniseSensorListWithDB()
+    
+    /// <summary>
+    /// Ensure that sensors in the database and EVE are in the same state.
+    /// </summary>
+    public void SynchroniseSensorsWithDatabase()
     {
         if (LoggingManager.CurrentSessionId> -1)
         {
@@ -406,14 +439,22 @@ public class LaunchManager : MonoBehaviour
             }
             ExperimentSettings.SensorSettings.Sensors = sensors;
         }
+        else
+        {
+            Debug.LogError("Sensors cannot be synchonized because the database is not setup correctly.");
+        }
     }
 
-    public void SynchroniseExperimentParametersWithDB()
+    public void SynchroniseExperimentParametersWithDatabase()
     {
         if (LoggingManager.CurrentSessionId > -1)
         {
             var experimentParameters = LoggingManager.GetExperimentParameters(ExperimentName);
             ExperimentSettings.ParameterSettings.Parameters = experimentParameters;
+        }
+        else
+        {
+            Debug.LogError("Experiment parameters cannot be synchonized because the database is not setup correctly.");
         }
     }
 

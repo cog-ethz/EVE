@@ -23,7 +23,7 @@ public class MoneyCounter : MonoBehaviour {
     // Use this for initialization
     void Start () {
         launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
+        rpl = launchManager.FirstPersonController.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
         if (rpl.isActivated())
         {
             rateOfDecay = int.Parse(launchManager.LoggingManager.GetParameterValue(launchManager.ReplaySessionId,"rateOfDecay"));
@@ -56,7 +56,7 @@ public class MoneyCounter : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (decays) {
-            ReplayRoute rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
+            ReplayRoute rpl = launchManager.FirstPersonController.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
             if (rpl.isActivated())
             {                
                 deltaMoney = startMoney - (rpl.getTimeSpent() * rateOfDecay);

@@ -51,7 +51,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         public VisualStimuli(string name, 
             string text, 
             Separator separator, 
-            Choice choice, 
+            AnswerMode answerMode, 
             Randomisation randomisation, 
             Type type, 
             string externalRandomisation, 
@@ -66,7 +66,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Configuration = new Configuration
             {
                 Separator = separator,
-                Choice = choice,
+                AnswerMode = answerMode,
                 Randomisation = randomisation,
                 Type = type,
                 SeparatorFirst = separatorFirst
@@ -97,7 +97,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Configuration = new Configuration
             {
                 Separator = (Separator) q.Vals[2],
-                Choice = (Choice) q.Vals[3],
+                AnswerMode = (AnswerMode) q.Vals[3],
                 Randomisation = (Randomisation) q.Vals[4],
                 Type = (Type) q.Vals[5],
                 SeparatorFirst = q.Vals[6] > 0
@@ -119,7 +119,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 NRows,
                 NColumns,
                 (int) Configuration.Separator,
-                (int) Configuration.Choice,
+                (int) Configuration.AnswerMode,
                 (int) Configuration.Randomisation,
                 (int) Configuration.Type,
                 Configuration.SeparatorFirst?1:0,
@@ -143,15 +143,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 output.ToArray());
         }
 
-        public override Dictionary<int, string> GetAnswer()
-        {
-            return _answers;
-        }
+        public override Dictionary<int, string> GetAnswer() => _answers;
 
-        public override bool IsAnswered()
-        {
-            return answersCompleted;
-        }
+        public override bool IsAnswered() => answersCompleted;
 
         /// <summary>
         /// Visual Stimuli Representation sets externally, whether the question has been answered.
@@ -162,9 +156,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             answersCompleted = state;
         }
         
-        public override void RetainAnswer(int positionOffset, string answer)
+        public override void RetainAnswer(int offsetPosition, string answer)
         {
-            _answers.Add(positionOffset,answer);
+            _answers.Add(offsetPosition,answer);
         }
         
         public override string GetJumpDestination()

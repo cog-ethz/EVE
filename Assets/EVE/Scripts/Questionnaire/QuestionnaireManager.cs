@@ -485,9 +485,9 @@ namespace Assets.EVE.Scripts.Questionnaire
         {
             _dynamicFieldsWithScrollbar.gameObject.SetActive(false);
 
-            var manikin = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Questionnaire/Content/ScaleContent");
-            _customContent = manikin.transform;
-            MenuUtils.PlaceElement(manikin, _questionContent);
+            var scaleContent = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Questionnaire/Content/ScaleContent");
+            _customContent = scaleContent.transform;
+            MenuUtils.PlaceElement(scaleContent, _questionContent);
 
             //Load image
             var image = _customContent.Find("Image");
@@ -508,6 +508,15 @@ namespace Assets.EVE.Scripts.Questionnaire
                     break;
             }
             image.GetComponent<Image>().overrideSprite = Resources.Load<Sprite>(imageSource);
+
+            if (!q.LabelledToggles)
+            {
+                var labels = scaleContent.transform.Find("Buttons").gameObject.GetComponentsInChildren<Text>();
+                foreach (var label in labels)
+                {
+                    label.gameObject.SetActive(false);
+                }
+            }
 
             var qmb = _questionPlaceholder.GetComponent<QuestionMenuButtons>();
 

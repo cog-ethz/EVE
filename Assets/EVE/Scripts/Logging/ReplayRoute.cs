@@ -98,10 +98,10 @@ public class ReplayRoute : MonoBehaviour {
                 else if (GUI.Button(new Rect(5, 95, 120, 30), "Exit"))
                 {
                     // remove LineRenderer
-                    Destroy(launchManager.FPC.GetComponent<LineRenderer>());
+                    Destroy(launchManager.FirstPersonController.GetComponent<LineRenderer>());
                     playbackCamera = "FirstPersonCharacter";
                     evalCamera.GetComponent<Camera>().enabled = false;
-                    launchManager.FPC.GetComponentInChildren<Camera>().enabled = true;
+                    launchManager.FirstPersonController.GetComponentInChildren<Camera>().enabled = true;
                     SceneManager.LoadScene("Evaluation");
                 }
             }
@@ -109,7 +109,7 @@ public class ReplayRoute : MonoBehaviour {
             {
                 if (GUI.Button(new Rect(5, 50, 120, 30), "Bird's Eye"))
                 {
-                    playbackLineRenderer = launchManager.FPC.AddComponent(typeof(LineRenderer)) as LineRenderer;
+                    playbackLineRenderer = launchManager.FirstPersonController.AddComponent(typeof(LineRenderer)) as LineRenderer;
                     playbackLineRenderer.material = new Material(Shader.Find("Particles/Additive"));
                     var alpha = 1.0f;
                     var gradient = new Gradient();
@@ -130,7 +130,7 @@ public class ReplayRoute : MonoBehaviour {
                     //playbackLineRenderer.SetWidth(0.2f, 0.2f);
 
                     playbackCamera = "EvaluationCamera";                    
-                    launchManager.FPC.GetComponentInChildren<Camera>().enabled = false;
+                    launchManager.FirstPersonController.GetComponentInChildren<Camera>().enabled = false;
                     evalCamera.GetComponent<Camera>().enabled = true;
                 }
             }
@@ -139,11 +139,11 @@ public class ReplayRoute : MonoBehaviour {
                 if (GUI.Button(new Rect(5, 50, 120, 30), "First Person"))
                 {
                     // remove LineRenderer
-                    Destroy(launchManager.FPC.GetComponent<LineRenderer>());
+                    Destroy(launchManager.FirstPersonController.GetComponent<LineRenderer>());
 
                     playbackCamera = "FirstPersonCharacter";
                     evalCamera.GetComponent<Camera>().enabled = false;
-                    launchManager.FPC.GetComponentInChildren<Camera>().enabled = true;
+                    launchManager.FirstPersonController.GetComponentInChildren<Camera>().enabled = true;
                 }
             }
         }

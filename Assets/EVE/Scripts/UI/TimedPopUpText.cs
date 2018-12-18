@@ -8,7 +8,7 @@ public class TimedPopUpText : MonoBehaviour {
     private DateTime start;
     private bool started;
 
-    [Header("User Settings")]
+    [Header("User ExperimentSettings")]
     [Tooltip("Time in seconds until the displayed text is removed.")]
     public double displayReset = 1.0;
 

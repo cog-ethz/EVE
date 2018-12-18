@@ -70,7 +70,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// </summary>
         public void UpdateChosenScenes()
         {
-            _launchManager.SynchroniseSceneListWithDB();
+            _launchManager.SynchroniseScenesWithDatabase();
             MenuUtils.ClearList(_choosenScenesList);
             _scenes = _launchManager.ExperimentSettings.SceneSettings.Scenes;
             foreach (var scene in _scenes)

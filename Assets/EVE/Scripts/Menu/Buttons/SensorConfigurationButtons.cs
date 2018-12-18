@@ -85,7 +85,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 MenuUtils.PlaceElement(sensorDisplay, _dynFields);
                 sensorDisplay.transform.Find("SensorName").GetComponent<Text>().text = sensorName;
             }
-            _launchManager.SynchroniseSensorListWithDB();
+            _launchManager.SynchroniseSensorsWithDatabase();
         }
 
         public void LabchartToggle(bool enable)
@@ -95,7 +95,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             {
                 _menuManager.RemoveExperimentParameter("Labchart File Name");
                 _launchManager.ExperimentSettings.SensorSettings.Labchart = false;
-                _launchManager.SynchroniseSceneListWithDB();
+                _launchManager.SynchroniseScenesWithDatabase();
                 _menuManager.DeleteSceneEntry(
                     _launchManager.ExperimentSettings.SceneSettings.Scenes.FindIndex(entry => entry.Name == "LabchartStartScene"));
                 _log.RemoveSensor("Labchart");
@@ -135,7 +135,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         public void RemoveSensor(GameObject item)
         {
             _log.RemoveSensor(item.transform.Find("SensorName").GetComponent<Text>().text);
-            _launchManager.SynchroniseSensorListWithDB();
+            _launchManager.SynchroniseSensorsWithDatabase();
             Destroy(item);
         }
     }

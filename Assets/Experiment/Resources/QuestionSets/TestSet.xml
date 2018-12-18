@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="TestSet">
+<QuestionSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="TestSet">
   <Questions>
     <InfoScreen Name="example_info" NColumns="1" NRows="1">
       <Text><![CDATA[<b><size=48>People questionnaire</size></b>:
@@ -95,7 +95,7 @@ Wait for 1 seconds before this continues and confirm you really want this to con
     <ChoiceQuestion Name="coffe_consumption" NColumns="1" NRows="2" Choice="Single">
       <Text><![CDATA[Did you have coffee, espresso, or another beverage containing caffeine in the past 24 hours?]]></Text>
       <RowLabels>
-        <Label Output="1" Answerable="true">
+        <Label Output="1" Answerable="True">
           <Text><![CDATA[If yes, how many hours ago]]></Text>
         </Label>
         <Label Output="0">
@@ -155,7 +155,7 @@ Wait for 1 seconds before this continues and confirm you really want this to con
         <Label Output="6">
           <Text><![CDATA[None]]></Text>
         </Label>
-        <Label Output="7" Answerable="true">
+        <Label Output="7" Answerable="True">
           <Text><![CDATA[Other:]]></Text>
         </Label>
       </RowLabels>
@@ -163,38 +163,38 @@ Wait for 1 seconds before this continues and confirm you really want this to con
     <ChoiceQuestion Name="image_example" NColumns="1" NRows="3" Choice="Single">
       <Text><![CDATA[Which image looks the best?]]></Text>
       <RowLabels>
-        <Label Output="0" Image="Images/test_image">
+        <Label Image="Images/test_image" Output="0">
           <Text><![CDATA[This]]></Text>
         </Label>
-        <Label Output="1" Image="Images/test_image">
+        <Label Image="Images/test_image" Output="1">
           <Text><![CDATA[This]]></Text>
         </Label>
-        <Label Output="2" Image="Images/test_image">
+        <Label Image="Images/test_image" Output="2">
           <Text><![CDATA[This]]></Text>
         </Label>
       </RowLabels>
     </ChoiceQuestion>
-    <ScaleQuestion Name="amuesment_scale" NColumns="9" NRows="1" Scale="Line">
+    <ScaleQuestion Name="amuesment_scale" NColumns="9" NRows="1" Scale="Line" LabelledToggles="true">
       <Text><![CDATA[How much did you feel AMUSEMENT?]]></Text>
       <LeftLabel>Did not experience at all</LeftLabel>
       <RightLabel>Strongest experience ever felt</RightLabel>
     </ScaleQuestion>
-    <ScaleQuestion Name="SAM_pleasure" NColumns="9" NRows="1" Scale="Pleasure">
+    <ScaleQuestion Name="SAM_pleasure" NColumns="9" NRows="1" Scale="Pleasure" LabelledToggles="false">
       <Text><![CDATA[Please rate how happy-unhappy you actually felt]]></Text>
       <LeftLabel>SAD</LeftLabel>
       <RightLabel>CHEERFUL</RightLabel>
     </ScaleQuestion>
-    <ScaleQuestion Name="SAM_arousal" NColumns="9" NRows="1" Scale="Arousal">
+    <ScaleQuestion Name="SAM_arousal" NColumns="9" NRows="1" Scale="Arousal" LabelledToggles="false">
       <Text><![CDATA[Please rate how excited - calm you actually felt]]></Text>
       <LeftLabel>QUIET</LeftLabel>
       <RightLabel>ACTIVE</RightLabel>
     </ScaleQuestion>
-    <ScaleQuestion Name="SAM_dominance" NColumns="9" NRows="1" Scale="Dominance">
+    <ScaleQuestion Name="SAM_dominance" NColumns="9" NRows="1" Scale="Dominance" LabelledToggles="true">
       <Text><![CDATA[Please rate how controlled vs. in-control you actually felt]]></Text>
       <LeftLabel>DEPENDENT</LeftLabel>
       <RightLabel>INDEPENDENT</RightLabel>
     </ScaleQuestion>
-    <ScaleQuestion Name="custom_amuesment_scale" NColumns="9" NRows="1" Scale="Custom">
+    <ScaleQuestion Name="custom_amuesment_scale" NColumns="9" NRows="1" Scale="Custom" LabelledToggles="false">
       <Text><![CDATA[How much did you feel AMUSEMENT?]]></Text>
       <LeftLabel>Did not experience at all</LeftLabel>
       <RightLabel>Strongest experience ever felt</RightLabel>
@@ -212,7 +212,7 @@ Press "1" for the first or "2" for the second.]]></Text>
         <Stimulus>Images/test_image</Stimulus>
         <Stimulus>Images/test_image</Stimulus>
       </Stimuli>
-      <Configuration Separator="FixationCross" Choice="ArrowKeys" Randomisation="None" Type="Image" SeparatorFirst="false" />
+      <Configuration Separator="FixationCross" AnswerMode="ArrowKeys" Randomisation="None" Type="Image" SeparatorFirst="false" />
       <ExternalRandomisation>none</ExternalRandomisation>
       <Times Fixation="3" Exposition="5" Decision="5" />
     </VisualStimuli>

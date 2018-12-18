@@ -8,7 +8,7 @@ public class RandomCharPlacement : MonoBehaviour
     void Start()
     {
         var launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        var fpc = launchManager.FPC;
+        var fpc = launchManager.FirstPersonController;
         fpc.SetActive(true);
         Cursor.lockState = UnityEngine.CursorLockMode.Locked;
         Cursor.visible = false;

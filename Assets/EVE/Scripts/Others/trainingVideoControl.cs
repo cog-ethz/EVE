@@ -38,7 +38,7 @@ public class trainingVideoControl : MonoBehaviour {
         currentSetting = FORWARD;
         instructions.text = "Move forward";
 	    launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        oldTransformAngleY = launchManager.FPC.transform.localEulerAngles.y;
+        oldTransformAngleY = launchManager.FirstPersonController.transform.localEulerAngles.y;
         //movDisplay.showVideo();
         changing = false;
 
@@ -65,7 +65,7 @@ public class trainingVideoControl : MonoBehaviour {
                 }
                     
             }
-            oldTransformAngleY = launchManager.FPC.transform.localEulerAngles.y;
+            oldTransformAngleY = launchManager.FirstPersonController.transform.localEulerAngles.y;
             
         }
         else
@@ -153,7 +153,7 @@ public class trainingVideoControl : MonoBehaviour {
                     }
                     break;
             }
-            oldTransformAngleY = launchManager.FPC.transform.localEulerAngles.y;
+            oldTransformAngleY = launchManager.FirstPersonController.transform.localEulerAngles.y;
         }
 
       
@@ -163,9 +163,9 @@ public class trainingVideoControl : MonoBehaviour {
     {
         if (direction == "left")
         {
-            if (launchManager.FPC.transform.localEulerAngles.y - oldTransformAngleY < -0.5f)
+            if (launchManager.FirstPersonController.transform.localEulerAngles.y - oldTransformAngleY < -0.5f)
             {
-                oldTransformAngleY = launchManager.FPC.transform.localEulerAngles.y;
+                oldTransformAngleY = launchManager.FirstPersonController.transform.localEulerAngles.y;
                 return true;
             }
             else
@@ -174,9 +174,9 @@ public class trainingVideoControl : MonoBehaviour {
 
         else if (direction == "right")
         {
-            if (launchManager.FPC.transform.localEulerAngles.y - oldTransformAngleY > 0.5f)
+            if (launchManager.FirstPersonController.transform.localEulerAngles.y - oldTransformAngleY > 0.5f)
             {
-                oldTransformAngleY = launchManager.FPC.transform.localEulerAngles.y;
+                oldTransformAngleY = launchManager.FirstPersonController.transform.localEulerAngles.y;
                 return true;
             }
             else

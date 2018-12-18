@@ -71,10 +71,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
 
         public override Dictionary<int, string> GetAnswer() => null;
 
-        public override bool IsAnswered()
-        {
-            return true;
-        }
+        public override bool IsAnswered() => true;
 
         public override string GetJumpDestination()
         {

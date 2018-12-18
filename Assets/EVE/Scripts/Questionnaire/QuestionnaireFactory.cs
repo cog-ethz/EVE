@@ -100,7 +100,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         private void WriteQuestionSetToDb(string questionSet)
         {
-            bool qsCreated = _log.CreateQuestionSet(questionSet);
+            var qsCreated = _log.CreateQuestionSet(questionSet);
             if (qsCreated)
             {
                 var qs = ReadQuestionSetFromXml(questionSet);
@@ -110,7 +110,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         public QuestionSet ReadQuestionSetFromXml(string name)
         {
-            TextAsset ta = Resources.Load<TextAsset>("QuestionSets/" + name);
+            var ta = Resources.Load<TextAsset>("QuestionSets/" + name);
             var xmlSerializer = new XmlSerializer(typeof(QuestionSet));
             QuestionSet questionSet;
             using (var stream = new StringReader(ta.text))
@@ -122,7 +122,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         public void WriteQuestionSetToXml(QuestionSet questionSet, string fileName)
         {
-            string folderPath = Application.dataPath + "/Experiment/Resources/QuestionSets/" + fileName;
+            var folderPath = Application.dataPath + "/Experiment/Resources/QuestionSets/" + fileName;
             var xmlSerializer = new XmlSerializer(typeof(QuestionSet));
             using (var stream = new FileStream(folderPath, FileMode.Create))
             {
@@ -138,7 +138,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         public void WriteQuestionnaireToXml(Questionnaire questionSet, string fileName)
         {
-            string folderPath = Application.dataPath + "/Experiment/Resources/Questionnaires/" + fileName + ".xml";
+            var folderPath = Application.dataPath + "/Experiment/Resources/Questionnaires/" + fileName + ".xml";
             var xmlSerializer = new XmlSerializer(typeof(Questionnaire));
             using (var stream = new FileStream(folderPath, FileMode.Create))
             {
@@ -152,7 +152,7 @@ namespace Assets.EVE.Scripts.Questionnaire
 
         public Questionnaire ReadQuestionnaireToXml(string fileName)
         {
-            TextAsset ta = Resources.Load<TextAsset>("Questionnaires/" + fileName);
+            var ta = Resources.Load<TextAsset>("Questionnaires/" + fileName);
             var xmlSerializer = new XmlSerializer(typeof(Questionnaire));
             Questionnaire questionSet;
             using (var stream = new StringReader(ta.text))

@@ -15,19 +15,20 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         [XmlAttribute]
         public int NColumns, NRows;
 
+        /// <summary>
+        /// The text as used in unity.
+        /// </summary>
         [XmlIgnore]
         public string Text { get; set; }
+
+        /// <summary>
+        /// Helper to store the text in a CDATA section in the XML.
+        /// </summary>
         [XmlElement("Text")]
         public System.Xml.XmlCDataSection TextToXml
         {
-            get
-            {
-                return new System.Xml.XmlDocument().CreateCDataSection(Text);
-            }
-            set
-            {
-                Text = value.Value;
-            }
+            get => new System.Xml.XmlDocument().CreateCDataSection(Text);
+            set => Text = value.Value;
         }
 
         [XmlArray]
@@ -37,7 +38,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         /// <summary>
         /// Empty constructor for the XML generation process.
         /// </summary>
-        public Question()
+        protected Question()
         {
             NColumns = 1;
             NRows = 1;
@@ -48,7 +49,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         /// </summary>
         /// <param name="name">Name of the question.</param>
         /// <param name="text">Text to be displayed to users.</param>
-        public Question(string name, string text)
+        protected Question(string name, string text)
         {
             Name = name;
             NColumns = 1;
@@ -107,28 +108,19 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         /// <summary>
         /// Store an integer at a specific location.
         /// </summary>
-        /// <param name="positionOffset">Location of the integer</param>
+        /// <param name="offsetPosition">Location of the integer</param>
         /// <param name="answer">The integer to be stored</param>
-        public virtual void RetainAnswer(int positionOffset, int answer)
+        public virtual void RetainAnswer(int offsetPosition, int answer)
         {
             throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// Store a single string in the answer.
-        /// </summary>
-        /// <param name="answer">The string to be stored</param>
-        public virtual void RetainAnswer(string answer)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Store a string at a specific location
         /// </summary>
-        /// <param name="positionOffset">Location of the string</param>
+        /// <param name="offsetPosition">Location of the string</param>
         /// <param name="answer">The string to be stored</param>
-        public virtual void RetainAnswer(int positionOffset, string answer)
+        public virtual void RetainAnswer(int offsetPosition, string answer)
         {
             throw new NotImplementedException();
         }

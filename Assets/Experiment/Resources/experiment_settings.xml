@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
-<ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="YourProjectName">
+<ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Test">
   <DatabaseSettings>
     <Server>localhost</Server>
     <Schema>eve</Schema>
-    <User>YourUsername</User>
-    <Password>YourPassword</Password>
+    <User>energyscape</User>
+    <Password>MainExperiment2018</Password>
   </DatabaseSettings>
   <SensorSettings Labchart="false" H7Server="false" MiddleVR="false">
     <Sensors />

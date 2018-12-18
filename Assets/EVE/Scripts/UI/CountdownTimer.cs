@@ -30,7 +30,7 @@ public class CountdownTimer : MonoBehaviour {
         lerpTime = 0;
 
         launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
+        rpl = launchManager.FirstPersonController.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
         if (rpl.isActivated())
         {
             maxDuration = int.Parse(launchManager.LoggingManager.GetParameterValue(launchManager.ReplaySessionId,"maxDuration"));
@@ -46,7 +46,7 @@ public class CountdownTimer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
+        rpl = launchManager.FirstPersonController.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
         if (rpl.isActivated()) { 
             deltaTime = maxDuration - rpl.getTimeSpent();
         }

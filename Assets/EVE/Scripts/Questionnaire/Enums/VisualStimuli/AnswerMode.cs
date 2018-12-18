@@ -1,6 +1,6 @@
 ﻿namespace Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli
 {
-    public enum Choice
+    public enum AnswerMode
     {
         ArrowKeys,
         None

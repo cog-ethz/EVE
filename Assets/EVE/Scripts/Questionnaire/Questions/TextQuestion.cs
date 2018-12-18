@@ -64,7 +64,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
 
         internal sealed override void FromDatabaseQuestion(QuestionData q)
         {
-
+            _temporaryStringAnswers = new Dictionary<int, string>();
             if (q.QuestionType == (int)Enums.Question.Text)
             {
                 Name = q.QuestionName;
@@ -88,28 +88,16 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             NRows = RowLabels?.Count ?? 1;
         }
 
-        public override Dictionary<int, string> GetAnswer()
-        {
-            return _temporaryStringAnswers;
-        }
+        public override Dictionary<int, string> GetAnswer() => _temporaryStringAnswers;
 
         public override bool IsAnswered()
         {
-            return _temporaryStringAnswers.All(answer => !string.IsNullOrEmpty(answer.Value));
+            return _temporaryStringAnswers.Count == NRows && _temporaryStringAnswers.All(answer => !string.IsNullOrEmpty(answer.Value));
         }
-
-        public override void RetainAnswer(string internalAnswer)
+        
+        public override void RetainAnswer(int offsetPosition, string answer)
         {
-            if (_temporaryStringAnswers==null)
-                _temporaryStringAnswers = new Dictionary<int, string>();
-            _temporaryStringAnswers[0] = internalAnswer;
-        }
-
-        public override void RetainAnswer(int number, string internalAnswer)
-        {
-            if (_temporaryStringAnswers == null)
-                _temporaryStringAnswers = new Dictionary<int, string>();
-            _temporaryStringAnswers[number] = internalAnswer;
+            _temporaryStringAnswers[offsetPosition] = answer;
         }
 
         public override string GetJumpDestination()

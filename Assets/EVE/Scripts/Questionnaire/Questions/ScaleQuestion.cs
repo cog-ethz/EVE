@@ -9,13 +9,15 @@ using UnityEngine;
 
 namespace Assets.EVE.Scripts.Questionnaire.Questions
 {
-    public class ScaleQuestion : Questions.Question {
+    public class ScaleQuestion : Question {
 
         [XmlAttribute]
         public Scale Scale;
 
-        public string LeftLabel, RightLabel, Image;
+        [XmlAttribute] public bool LabelledToggles;
 
+        public string LeftLabel, RightLabel, Image;
+        
         [XmlIgnore]
         private int _temporaryIntAnswer = -1;
 
@@ -25,8 +27,8 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         {
             FromDatabaseQuestion(questionData);
         }
-
-        public ScaleQuestion(string name, string text, string image, Scale scale, string leftLabel, string rightLabel)
+        
+        public ScaleQuestion(string name, string text, string image, Scale scale, string leftLabel, string rightLabel, bool labelledToggles = false, int nColumns = 9, List<Jump> jumps = null)
         {
             Name = name;
             Text = text;
@@ -34,33 +36,9 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
             Scale = scale;
             LeftLabel = leftLabel;
             RightLabel = rightLabel;
-            NRows = 1;
-            NColumns = 9;
-        }
-
-        public ScaleQuestion(string name, string text, string image, Scale scale, string leftLabel, string rightLabel,int nColumns)
-        {
-            Name = name;
-            Text = text;
-            Image = image;
-            Scale = scale;
-            LeftLabel = leftLabel;
-            RightLabel = rightLabel;
+            LabelledToggles = labelledToggles;
             NRows = 1;
             NColumns = nColumns;
-        }
-
-        public ScaleQuestion(string name, string text, string image, Scale scale, string leftLabel, string rightLabel, List<Jump> jumps )
-        {
-            Name = name;
-            Text = text;
-            Image = image;
-            Scale = scale;
-            LeftLabel = leftLabel;
-            RightLabel = rightLabel;
-            Jumps = jumps;
-            NRows = 1;
-            NColumns = 9;
         }
 
         internal override QuestionData AsDatabaseQuestion(string questionSet)
@@ -69,7 +47,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 Text,
                 questionSet,
                 (int)Enums.Question.Scale,
-                new int[3] { NRows, NColumns, (int)Scale },
+                new int[4] { NRows, NColumns, (int)Scale , LabelledToggles?1:0},
                 string.IsNullOrEmpty(Image) ? new string[2] { LeftLabel, RightLabel } : new string[3] { LeftLabel, RightLabel, Image },
                 null);
         }
@@ -83,6 +61,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 NRows = q.Vals[0];
                 NColumns = q.Vals[1];
                 Scale = (Scale)q.Vals[2];
+                LabelledToggles = q.Vals[3] == 1;
                 LeftLabel = q.Labels[0];
                 RightLabel = q.Labels[1];
                 Image = q.Labels.Length<=2?null:q.Labels[2];
@@ -95,22 +74,16 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
 
         public override Dictionary<int, string> GetAnswer() => new Dictionary<int, string> {{_temporaryIntAnswer, "1"}};
 
-        public override bool IsAnswered()
-        {
-            return _temporaryIntAnswer > -1;
-        }
+        public override bool IsAnswered() => _temporaryIntAnswer > -1;
         
-
-        public override void RetainAnswer(int positionOffset, int answer)
+        public override void RetainAnswer(int offsetPosition, int answer)
         {
-            _temporaryIntAnswer = answer == 1 ? positionOffset : -1;
+            _temporaryIntAnswer = answer == 1 ? offsetPosition : -1;
         }
 
         public override string GetJumpDestination()
         {
-            var answerB = new StringBuilder(new string('F', NRows * NColumns));
-            answerB[_temporaryIntAnswer] = 'T';
-            var answer = answerB.ToString();
+            var answer = new StringBuilder(new string('F', NRows * NColumns)) { [_temporaryIntAnswer] = 'T' }.ToString();
             if (Jumps != null)
             {
                 return
@@ -118,10 +91,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                  where jump.Activator.Equals("*") || jump.Activator.Equals(answer)
                  select jump.Destination).FirstOrDefault();
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public override void Accept(IQuestionVisitor qv)

@@ -11,7 +11,7 @@ namespace Assets.EVE.Scripts.Questionnaire.XMLHelper.VisualStimuli
         public Separator Separator;
 
         [XmlAttribute]
-        public Choice Choice;
+        public AnswerMode AnswerMode;
 
         [XmlAttribute]
         public Randomisation Randomisation;

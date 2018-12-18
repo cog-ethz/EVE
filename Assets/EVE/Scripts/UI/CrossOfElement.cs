@@ -49,7 +49,7 @@ public class CrossOfElement : MonoBehaviour {
 		}
 
 	    var launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        _fpc = launchManager.FPC;
+        _fpc = launchManager.FirstPersonController;
         _fader = _fpc.GetComponent<FadeOutScene>();
     }
 

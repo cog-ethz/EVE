@@ -50,7 +50,7 @@ public class MapDisplay : MonoBehaviour
         launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
         log = launchManager.LoggingManager;
 
-        rpl = launchManager.FPC.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
+        rpl = launchManager.FirstPersonController.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
         if (rpl.isActivated())
         {
             var parameterValue = 0;
@@ -73,8 +73,8 @@ public class MapDisplay : MonoBehaviour
         posX = Screen.width - mapWidth;
         posY = 0;//Screen.width - mapWidth;
 
-        mainCam = launchManager.FPC.GetComponentInChildren<Camera>();
-        arrow = launchManager.FPC.transform.Find("GuidanceArrow").transform;
+        mainCam = launchManager.FirstPersonController.GetComponentInChildren<Camera>();
+        arrow = launchManager.FirstPersonController.transform.Find("GuidanceArrow").transform;
     }
 
     // Update is called once per frame
@@ -91,7 +91,7 @@ public class MapDisplay : MonoBehaviour
             float top = ((float)Screen.height - mapHeight) / 2f;
             float left = ((float)Screen.width - mapWidth) / 2f;
 
-            Vector3 worldLocation = new Vector3(launchManager.FPC.transform.position.x, launchManager.FPC.transform.position.y, launchManager.FPC.transform.position.z);
+            Vector3 worldLocation = new Vector3(launchManager.FirstPersonController.transform.position.x, launchManager.FirstPersonController.transform.position.y, launchManager.FirstPersonController.transform.position.z);
 
            // Camera c = GameObject.Find("EvaluationCamera").GetComponent<Camera>();
           
@@ -289,10 +289,10 @@ public class MapDisplay : MonoBehaviour
     public void StopAllMotion()
     {
         //disable movement
-        if (!launchManager.FPC.GetComponentInChildren<ReplayRoute>().isActivated())
+        if (!launchManager.FirstPersonController.GetComponentInChildren<ReplayRoute>().isActivated())
         {
-            launchManager.FPC.GetComponent<CharacterController>().enabled = false;
-            launchManager.FPC.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = false;
+            launchManager.FirstPersonController.GetComponent<CharacterController>().enabled = false;
+            launchManager.FirstPersonController.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = false;
         }
         
     }
@@ -300,10 +300,10 @@ public class MapDisplay : MonoBehaviour
     public void ContinueMotion()
     {
         //enable movement
-        if (!launchManager.FPC.GetComponentInChildren<ReplayRoute>().isActivated())
+        if (!launchManager.FirstPersonController.GetComponentInChildren<ReplayRoute>().isActivated())
         {
-            launchManager.FPC.GetComponent<CharacterController>().enabled = true;
-            launchManager.FPC.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = true;
+            launchManager.FirstPersonController.GetComponent<CharacterController>().enabled = true;
+            launchManager.FirstPersonController.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = true;
         }
             
     }

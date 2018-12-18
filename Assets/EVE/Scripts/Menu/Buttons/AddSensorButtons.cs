@@ -34,7 +34,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             else
             {
                 _log.AddSensor(_sensorName);
-                _launchManager.SynchroniseSensorListWithDB();
+                _launchManager.SynchroniseSensorsWithDatabase();
                 _menuManager.InstantiateAndShowMenu("Sensor Configuration Menu", "Launcher");
             }
         }

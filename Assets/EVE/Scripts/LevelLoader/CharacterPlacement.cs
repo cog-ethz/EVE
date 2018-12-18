@@ -6,7 +6,7 @@ public class CharacterPlacement : MonoBehaviour {
 
     void Start()
     {
-        var fpc = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>().FPC;        
+        var fpc = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>().FirstPersonController;        
         Cursor.lockState = UnityEngine.CursorLockMode.Locked;
         Cursor.visible = false;
         _controller = fpc.transform;

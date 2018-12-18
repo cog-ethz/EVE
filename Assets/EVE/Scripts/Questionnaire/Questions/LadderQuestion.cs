@@ -69,14 +69,11 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
 
         public override Dictionary<int, string> GetAnswer() => new Dictionary<int, string> {{_temporaryIntAnswer, ""}};
 
-        public override bool IsAnswered()
+        public override bool IsAnswered() => _temporaryIntAnswer > -1;
+
+        public override void RetainAnswer(int offsetPosition, int answer)
         {
-            return _temporaryIntAnswer > -1;
-        }
-        
-        public override void RetainAnswer(int positionOffset, int answer)
-        {
-            _temporaryIntAnswer = positionOffset;
+            _temporaryIntAnswer = offsetPosition;
         }
 
         public override string GetJumpDestination()
