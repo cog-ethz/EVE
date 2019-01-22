@@ -3,8 +3,8 @@
   <DatabaseSettings>
     <Server>localhost</Server>
     <Schema>eve</Schema>
-    <User>energyscape</User>
-    <Password>MainExperiment2018</Password>
+    <User>yourDBuser</User>
+    <Password>yourDBpassword</Password>
   </DatabaseSettings>
   <SensorSettings Labchart="false" H7Server="false" MiddleVR="false">
     <Sensors />
