@@ -55,23 +55,16 @@ public class CrossOfElement : MonoBehaviour {
 
     void OnGUI()
     {
-        
         if (_nReached == _strokes.Length | (DateTime.Now.Subtract(_start).TotalSeconds > _maxSecs))
         {
             _fader.startFadeOut();
         }
 
-        if (_fader.isFadedOut())
-        {
-            if (_once) return;
-            _once = true;
-            var fpc = _fader.gameObject;
-            if (fpc.transform.Find("PositionLogger").GetComponent<ReplayRoute>().isActivated())
-                SceneManager.LoadScene("Evaluation");
-            else
-                SceneManager.LoadScene("Loader");
-        }
-      
+        if (!_fader.isFadedOut()) return;
+        if (_once) return;
+        _once = true;
+        SceneManager.LoadScene("Launcher");
+
     }
 
 

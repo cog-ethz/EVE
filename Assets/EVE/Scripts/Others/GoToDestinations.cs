@@ -5,7 +5,7 @@ using System;
 
 public class GoToDestinations : MonoBehaviour
 {
-
+    public GameObject DestinationParent;
     public Transform[] destinations;
     public Text popUpText;
     public double infoDelay = 1.0;
@@ -24,12 +24,12 @@ public class GoToDestinations : MonoBehaviour
     void Start()
     {
         launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        currentDestination = destinations[destIndex].transform;
+        currentDestination = DestinationParent.transform.GetChild(destIndex);//destinations[destIndex].transform;
         gameObject.GetComponent<Text>().text = "Find the " + currentDestination.name;
         currentDestination.transform.Find("Cylinder").gameObject.SetActive(true);
         fader =launchManager.FirstPersonController.GetComponent<FadeOutScene>();
         start = DateTime.Now;
-        currentDestination = destinations[destIndex].transform;
+        currentDestination = DestinationParent.transform.GetChild(destIndex);//destinations[destIndex].transform;
         popUpText.text = "Find the " + currentDestination.name;
         background = popUpText.transform.parent.GetChild(0).gameObject;
     }
@@ -50,39 +50,33 @@ public class GoToDestinations : MonoBehaviour
             background = popUpText.transform.parent.GetChild(0).gameObject;
         if (changing)
         {
-            if (DateTime.Now.Subtract(start).TotalSeconds > infoDelay)
-            {
-                currentDestination = destinations[destIndex].transform;
-                popUpText.text = "Find the " + currentDestination.name;
-                gameObject.GetComponent<Text>().text = "Find the " + currentDestination.name;
-                //currentDestination.gameObject.SetActive(true);
-                currentDestination.transform.Find("Cylinder").gameObject.SetActive(true);
-                changing = false;
-                background.SetActive(true);
-            }
+            if (!(DateTime.Now.Subtract(start).TotalSeconds > infoDelay)) return;
+            currentDestination = DestinationParent.transform.GetChild(destIndex);//destinations[destIndex].transform;
+            popUpText.text = "Find the " + currentDestination.name;
+            gameObject.GetComponent<Text>().text = "Find the " + currentDestination.name;
+            //currentDestination.gameObject.SetActive(true);
+            currentDestination.transform.Find("Cylinder").gameObject.SetActive(true);
+            changing = false;
+            background.SetActive(true);
         }
         else
         {
             if (fader.isFadedOut())
             {               
-                rpl = launchManager.FirstPersonController.transform.Find("PositionLogger").GetComponent<ReplayRoute>();
-                if (rpl.isActivated())
-                    SceneManager.LoadScene("Evaluation");
-                else
-                    SceneManager.LoadScene("Loader");
+                SceneManager.LoadScene("Launcher");
             }
-            if (!currentDestination.transform.Find("Cylinder").gameObject.activeSelf)
+
+            if (currentDestination.transform.Find("Cylinder").gameObject.activeSelf) return;
+            
+            destIndex++;
+            if (destIndex < DestinationParent.transform.childCount)//destinations.Length)
             {
-                destIndex++;
-                if (destIndex < destinations.Length)
-                {
-                    changing = true;
-                    start = DateTime.Now;
-                }
-                else
-                {
-                    fadingOut = true;                  
-                }
+                changing = true;
+                start = DateTime.Now;
+            }
+            else
+            {
+                fadingOut = true;                  
             }
         }
     }
