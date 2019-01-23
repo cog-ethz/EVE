@@ -40,6 +40,13 @@ The menu is standardised to make expansion and use more simple
 
 - Add more documentation
 - Follow Reshaper recommendations on code design
+- Upgraded to MiddleVR 1.7.1.1 
+
+### Linux support
+EVE now runs on Ubuntu.
+
+- Large files are located at http://www.files.ethz.ch/cog/LargeFilesLinux.rar
+
 
 ### Community Request
 
