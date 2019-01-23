@@ -6,7 +6,7 @@ using System;
 public class GoToDestinations : MonoBehaviour
 {
     public GameObject DestinationParent;
-    public Transform[] destinations;
+    //public Transform[] destinations;
     public Text popUpText;
     public double infoDelay = 1.0;
 

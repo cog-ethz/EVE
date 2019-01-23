@@ -36,6 +36,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 _menuManager.ExperimentParameterList.Add(_experimentParameter);
                 _launchManager.SynchroniseExperimentParametersWithDatabase();
                 _log.CreateExperimentParameter(_launchManager.ExperimentSettings.Name, _experimentParameter);
+                _launchManager.UpdateParameters();
                 _menuManager.InstantiateAndShowMenu("Experiment Parameters Menu", "Launcher");
             }
         }

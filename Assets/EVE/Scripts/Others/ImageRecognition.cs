@@ -97,7 +97,7 @@ public class ImageRecognition : MonoBehaviour {
             {
                 Cursor.visible = true;
                 loading = true;
-                SceneManager.LoadScene("Loader");
+                SceneManager.LoadScene("Launcher");
             }
         }
 

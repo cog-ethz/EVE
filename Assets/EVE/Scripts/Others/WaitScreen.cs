@@ -23,14 +23,14 @@ public class WaitScreen : MonoBehaviour {
         if (!loading)
         {
             loading = true;
-            SceneManager.LoadScene("Loader");
+            SceneManager.LoadScene("Launcher");
         }
 
 
         Event e = Event.current;
         if (e.type == EventType.KeyDown && e.control && e.keyCode == KeyCode.End)
         {
-            SceneManager.LoadScene("Loader");
+            SceneManager.LoadScene("Launcher");
         }
     }
 	

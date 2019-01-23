@@ -53,7 +53,7 @@ public class MultipleInstructionsScreen : MonoBehaviour
                 pressedBttn = false;
                 if (currentScreen == Math.Max(Math.Max(text.Length, underImage.Length), InstImage.Length) - 1)
                 {
-                    SceneManager.LoadScene("Loader");
+                    SceneManager.LoadScene("Launcher");
                 }
                 else
                     currentScreen++;
@@ -72,7 +72,7 @@ public class MultipleInstructionsScreen : MonoBehaviour
         Event e = Event.current;
         if (e.type == EventType.KeyDown && e.control && e.keyCode == KeyCode.End)
         {
-            SceneManager.LoadScene("Loader");
+            SceneManager.LoadScene("Launcher");
         }
     }
 

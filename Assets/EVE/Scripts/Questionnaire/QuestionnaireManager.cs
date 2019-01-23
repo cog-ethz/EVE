@@ -128,7 +128,7 @@ namespace Assets.EVE.Scripts.Questionnaire
                 _oldAnswers = new Dictionary<int, string>();
 
             }
-            else if (_currentQuestion == _totalQuestions)
+            else if (_currentQuestion >= _totalQuestions)
             {
                 _log.InsertLiveSystemEvent("QuestionnaireSystem", "End Set", null, _questionSets[_questionSetIndex].Name);
                 if (_currentQuestionSet == _questionSets.Last())
@@ -174,6 +174,7 @@ namespace Assets.EVE.Scripts.Questionnaire
             _log.InsertLiveSystemEvent("QuestionnaireSystem", "Complete Questionnaire", null, _questionnaire.Name);
             _launchManager.MenuManager.CloseCurrentMenu();
             enabled = false;
+            _once = false;
             _launchManager.ManualContinueToNextScene();
         }
 

@@ -126,7 +126,7 @@ public class CheckPointAngle : MonoBehaviour {
         }
         if (Fader.isFadedOut())
         {
-            SceneManager.LoadScene("Loader");          
+            SceneManager.LoadScene("Launcher");          
         }
 	}
 
@@ -139,7 +139,7 @@ public class CheckPointAngle : MonoBehaviour {
         {
             if (_once) return;
             _once = true;
-            SceneManager.LoadScene("Loader");
+            SceneManager.LoadScene("Launcher");
         }
 
     }

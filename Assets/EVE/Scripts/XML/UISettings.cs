@@ -13,12 +13,15 @@ namespace Assets.EVE.Scripts.XML
         [XmlElement("Resolution")]
         public ReferenceResolution ResolutionToXml
         {
-            get => new ReferenceResolution
+            get
             {
-                X = ReferenceResolution.x,
-                Y = ReferenceResolution.y
-            };
-            set => ReferenceResolution = new Vector2(value.X, value.Y);
+                return new ReferenceResolution
+                {
+                    X = ReferenceResolution.x,
+                    Y = ReferenceResolution.y
+                };
+            }
+            set { ReferenceResolution = new Vector2(value.X, value.Y); }
         }
     }
 }

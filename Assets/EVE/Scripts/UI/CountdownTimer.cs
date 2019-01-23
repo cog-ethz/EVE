@@ -86,7 +86,7 @@ public class CountdownTimer : MonoBehaviour {
 
             if (_once) return;
             _once = true;
-            SceneManager.LoadScene("Loader");           
+            SceneManager.LoadScene("Launcher");           
         }
     }
 

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 public class ReachDestination : MonoBehaviour {
-
+    
 	private CrossOfElement _destinationlist;
 	private int _index;
     private bool _reached;
@@ -30,18 +30,18 @@ public class ReachDestination : MonoBehaviour {
 
     void OnTriggerEnter(Collider other){
 	    _reached = true;
-        if (other.tag == "Player")
+        if (other.tag == "Player" && _destinationlist != null)
 		{
 		    _destinationlist.StrikeOff(_index);
 		}
 	}
 
 	public void SetIndex(int i){
-		this._index = i;
+		_index = i;
 	}
 
 	public void SetDestinationList(CrossOfElement destinationList){
-		this._destinationlist = destinationList;
+		_destinationlist = destinationList;
 	}
 
     public bool IsReached()

@@ -63,7 +63,7 @@ public class LaunchManager : MonoBehaviour
     /// <summary>
     /// The name of the currently active experiment.
     /// </summary>
-    public string ExperimentName { get => ExperimentSettings.Name; set => ExperimentSettings.Name = value; }
+    public string ExperimentName { get { return ExperimentSettings.Name; } set { ExperimentSettings.Name = value; } }
 
     /// <summary>
     /// Access to the LoggingManager.
@@ -108,10 +108,10 @@ public class LaunchManager : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(this);
-            FirstPersonController = GameObject.FindGameObjectWithTag("Player");
+            FirstPersonController = GameObjectUtils.InstatiatePrefab("Prefabs/Player/FPSController");// GameObject.FindGameObjectWithTag("Player");
             FirstPersonController.SetActive(false);
             DontDestroyOnLoad(FirstPersonController);
-            MenuCanvas = GameObject.FindGameObjectWithTag("MenuCanvas");
+            MenuCanvas = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Canvas");GameObject.FindGameObjectWithTag("MenuCanvas");
             DontDestroyOnLoad(MenuCanvas); 
 
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -178,13 +178,13 @@ public class LaunchManager : MonoBehaviour
         _activeSceneName = SceneManager.GetActiveScene().name;
         var subSceneName = sceneList[_currentScene].Name;
         Debug.Log("Scene " + _currentScene  + ":" + subSceneName + " in " + _activeSceneName);
-        LoggingManager.InsertLiveSystemEvent("SceneFlow","switch",null, "Scene " + _currentScene + ":" + subSceneName + " in " + _activeSceneName);
-        
+        LoggingManager.InsertLiveSystemEvent("SceneFlow","switch",null, "Scene " + _currentScene + ":" + subSceneName.Substring(0, Math.Min(subSceneName.Length, 25)) + " in " + _activeSceneName.Substring(0, Math.Min(_activeSceneName.Length, 25)));
+
+        FirstPersonController.SetActive(false);
         if (_activeSceneName == "Launcher" && !_inQuestionnaire && !_configureLabchart)
         { //coming back from a scene
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            FirstPersonController.SetActive(false);
             LoggingManager.LogSceneEnd(subSceneName);
 
             if (isReplay)
@@ -266,6 +266,8 @@ public class LaunchManager : MonoBehaviour
                 break;
             case "Questionnaire":
                 _inQuestionnaire = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 QuestionnaireManager.enabled = true;
                 QuestionnaireManager.DisplayQuestionnaire();
                 ManualContinueToNextScene();
@@ -465,7 +467,7 @@ public class LaunchManager : MonoBehaviour
     /// This should be called whenever manually experiment parameters have been
     /// added within the EVE UI or within the Experiment Settings XML file.
     /// </summary>
-    private void UpdateParameters()
+    public void UpdateParameters()
     {
         var existingParams = LoggingManager.GetExperimentParameters(ExperimentSettings.Name);
         var requiredParams = ExperimentSettings.ParameterSettings.Parameters;
@@ -483,6 +485,7 @@ public class LaunchManager : MonoBehaviour
                 requiredParams.Add(param);
             }
         }
+        ExperimentSettings.ParameterSettings.Parameters = requiredParams;
         MenuManager.SetActiveParameters(requiredParams);
     }
 

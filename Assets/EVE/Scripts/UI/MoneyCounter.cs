@@ -96,7 +96,7 @@ public class MoneyCounter : MonoBehaviour {
         if (fadingOut)
         {
             fadingOut = false;
-            SceneManager.LoadScene("Loader");
+            SceneManager.LoadScene("Launcher");
         }
     }
 

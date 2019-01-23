@@ -44,7 +44,7 @@ public class CheckJRD : MonoBehaviour {
         var e = Event.current;
         if (e.type == EventType.KeyDown && e.control && e.keyCode == KeyCode.End)
         {
-            SceneManager.LoadScene("Loader");
+            SceneManager.LoadScene("Launcher");
         }
     }
 
@@ -80,7 +80,7 @@ public class CheckJRD : MonoBehaviour {
                 if (!_loading)
                 {
                     _loading = true;
-                    SceneManager.LoadScene("Loader");
+                    SceneManager.LoadScene("Launcher");
                 }
             }
         }

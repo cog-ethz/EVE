@@ -70,7 +70,7 @@ public class InstructionScreenWait : MonoBehaviour {
                     {
                         pressedBttn = false;
                         bttnreleased = true;
-                        SceneManager.LoadScene("Loader");
+                        SceneManager.LoadScene("Launcher");
 
                     }
                 }
@@ -89,7 +89,7 @@ public class InstructionScreenWait : MonoBehaviour {
                 if (!loading)
                 {
                     loading = true;
-                    SceneManager.LoadScene("Loader");
+                    SceneManager.LoadScene("Launcher");
                 }
 
             }
@@ -99,7 +99,7 @@ public class InstructionScreenWait : MonoBehaviour {
         Event e = Event.current;
         if (e.type == EventType.KeyDown && e.control && e.keyCode == KeyCode.End)
         {
-            SceneManager.LoadScene("Loader");
+            SceneManager.LoadScene("Launcher");
         }
     }
 

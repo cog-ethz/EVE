@@ -11,8 +11,8 @@ namespace Assets.EVE.Scripts.Questionnaire.XMLHelper
         [XmlElement("Text")]
         public System.Xml.XmlCDataSection TextToXml
         {
-            get => new System.Xml.XmlDocument().CreateCDataSection(Text);
-            set => Text = value.Value;
+            get { return new System.Xml.XmlDocument().CreateCDataSection(Text); }
+            set { Text = value.Value; }
         }
 
         [XmlIgnore]
@@ -21,8 +21,8 @@ namespace Assets.EVE.Scripts.Questionnaire.XMLHelper
         [XmlAttribute("Output")]
         public string OutputToXml
         {
-            get => (Output.HasValue) ? Output.ToString() : null;
-            set => Output = !string.IsNullOrEmpty(value) ? int.Parse(value) : (int?) null;
+            get { return (Output.HasValue) ? Output.ToString() : null; }
+            set { Output = !string.IsNullOrEmpty(value) ? int.Parse(value) : (int?)null; }
         }
 
         [XmlIgnore]
@@ -32,8 +32,8 @@ namespace Assets.EVE.Scripts.Questionnaire.XMLHelper
         [XmlAttribute("Answerable")]
         public string AnswerableToXml
         {
-            get => (Answerable.HasValue) ? Answerable.ToString() : null;
-            set => Answerable = !string.IsNullOrEmpty(value) && bool.Parse(value);
+            get { return (Answerable.HasValue) ? Answerable.ToString() : null; }
+            set { Answerable = !string.IsNullOrEmpty(value) && bool.Parse(value); }
         }
 
         [XmlAttribute]

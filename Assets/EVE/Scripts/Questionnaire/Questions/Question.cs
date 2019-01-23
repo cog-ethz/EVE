@@ -27,8 +27,8 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
         [XmlElement("Text")]
         public System.Xml.XmlCDataSection TextToXml
         {
-            get => new System.Xml.XmlDocument().CreateCDataSection(Text);
-            set => Text = value.Value;
+            get { return new System.Xml.XmlDocument().CreateCDataSection(Text); }
+            set { Text = value.Value; }
         }
 
         [XmlArray]
