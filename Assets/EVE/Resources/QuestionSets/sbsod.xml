@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="sbsod">
-  <Questions>    
+  <Questions>
     <InfoScreen Name="sbsodinfo" NColumns="1" NRows="1">
       <Text><![CDATA[<b><size=48>Santa Barbara Sense-of-direction scale</size></b>
-			
+
 
 You will be shown 15 questions regarding your spatial and navigational abilities. Please answer them as truthful as possible.]]></Text>
+      <ConfirmationRequirement Required="false" ConfirmationDelay="5" />
     </InfoScreen>
     <ChoiceQuestion Name="sbsod_p1" NColumns="7" NRows="5" Choice="Single">
       <Text><![CDATA[This questionnaire consists of several statements about your spatial and navigational abilities, preferences, and experiences. After each statement, you should circle a number to indicate your level of agreement with the statement. Circle "1" if you strongly agree that the statement applies to you, "7" if you strongly disagree, or some number in between if your agreement is intermediate. Circle "4" if you neither agree nor disagree."1+ to 3"]]></Text>
@@ -90,7 +91,7 @@ You will be shown 15 questions regarding your spatial and navigational abilities
         </Label>
         <Label>
           <Text><![CDATA[10. I don't remember routes very well while riding as a passenger in a car.]]></Text>
-        </Label>        
+        </Label>
       </RowLabels>
     </ChoiceQuestion>
 	<ChoiceQuestion Name="sbsod_p3" NColumns="7" NRows="5" Choice="Single">

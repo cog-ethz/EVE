@@ -18,8 +18,8 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             fields.Find("Experiment Parameters").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Experiment Parameters Menu", "Launcher"));
             fields.Find("Questionnaires").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Questionnaire Menu", "Launcher"));
             fields.Find("Scene Setup").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Scene Configuration Menu", "Launcher"));
-            fields.Find("Save ExperimentSettings").GetComponent<Button>().onClick.AddListener(SaveSettings);
-            fields.Find("Reload ExperimentSettings").GetComponent<Button>().onClick.AddListener(() => _launchManager.ReadExperimentSettings());
+            fields.Find("Save Settings").GetComponent<Button>().onClick.AddListener(SaveSettings);
+            fields.Find("Reload Settings").GetComponent<Button>().onClick.AddListener(() => _launchManager.ReadExperimentSettings());
             fields.Find("Return").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Main Menu", "Launcher"));
 
         }

@@ -67,5 +67,18 @@ Assets/Experiment/
 Assets/EVE/Resources/Videos/
 Assets/EVE/Resources/Terrains/
 
+\.idea/\.idea\.EVE_dev/\.idea/
+
+\.idea/\.idea\.EVE_dev/
+
+Assets/Plugins/Editor/JetBrains/
+
+Assets/Plugins/Editor/
+
+Assets/MiddleVR\.meta
+
+Assets/Plugins\.meta
+
+Assets/Plugins/Editor\.meta
 Assets/Plugins/
 Assets/Plugins.meta
