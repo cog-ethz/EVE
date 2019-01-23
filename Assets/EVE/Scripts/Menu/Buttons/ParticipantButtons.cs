@@ -4,6 +4,7 @@ using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace Assets.EVE.Scripts.Menu.Buttons
 {
@@ -44,20 +45,21 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             MenuUtils.ClearList(_dynamicField);
 
 
-            var envs = _log.GetListOfEnvironments(_sessionId);
+            var envs = _log.GetSceneNamesInOrder(_launchManager.ExperimentName);// _log.GetListOfEnvironments(_sessionId).Distinct().ToArray(); ;
             var timeSec = new TimeSpan[envs.Length];
 
-            var sceneDescription = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Lists/SceneEntry");
-            MenuUtils.PlaceElement(sceneDescription,_dynamicField);
 
             _fields.Find("SessionInformation").Find("SessionId").GetComponent<Text>().text = _sessionId.ToString();
             
             for (var k = 0; k < envs.Length; k++)
             {
+                var sceneDescription = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Lists/SceneEntry");
+                MenuUtils.PlaceElement(sceneDescription, _dynamicField);
+
                 sceneDescription.transform.Find("SceneInformation").Find("SceneLabel")
                         .GetComponent<Text>().text = "Scene " + k + ":";
                 sceneDescription.transform.Find("SceneInformation").Find("SceneValue")
-                        .GetComponent<Text>().text = envs[k];
+                        .GetComponent<Text>().text = envs[k].Name;
                 timeSec[k] = TimeSpan.FromSeconds(0);
                 var times = _log.GetSceneTime(k, _sessionId);
                 if (times[0] != null && times[1] != null)
@@ -86,12 +88,12 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                     var localSceneId = k;
                     var localSceneName = envs[k];
                     var localSessionId = _sessionId;
-                    replayButton.onClick.AddListener(() => Replay(localSceneId, localSessionId, localSceneName));
+                    replayButton.onClick.AddListener(() => Replay(localSceneId, localSessionId, localSceneName.Name));
 
                     //make show map button
                     _map = gameObject.GetComponent<PopUpEvaluationMap>();
                     var showMapButton = sceneDescription.transform.Find("Buttons").Find("ShowMapButton").GetComponent<Button>();
-                    showMapButton.onClick.AddListener(()=>ShowMap(localSceneId, localSessionId, localSceneName));
+                    showMapButton.onClick.AddListener(()=>ShowMap(localSceneId, localSessionId, localSceneName.Name));
                 }
             }
         }
@@ -110,7 +112,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             var sceneNames = _log.GetListOfEnvironments(sessionId);
             envNameMatrix[0][0] = sceneNames[sceneId];
 
-            _map = GameObject.Find("EvaluationMap").GetComponent<PopUpEvaluationMap>();
+            _map = GameObject.Find("EvaluationMap(Clone)").GetComponent<PopUpEvaluationMap>();
             _map.SetupMaps(envNameMatrix);
             _map.OpenPopUpMap(_log.GetPath(sessionId, sceneId), sceneName);
         }
