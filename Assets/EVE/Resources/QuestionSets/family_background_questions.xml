@@ -1,0 +1,554 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="family_background_questions">
+  <Questions>
+    <InfoScreen Name="family_background_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Family background questionnaire</size></b>
+
+Questions about your family and childhood background]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="socDem25" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Did you live with both your biological parents until you were 16?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem26" NColumns="1" NRows="5" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem29" Activator="FFFFT" />
+      </Jumps>
+      <Text><![CDATA[Who was the male head of your household for most of your childhood?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Biological father]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Adoptive father]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Stepfather (spouse/partner of mother)]]></Text>
+        </Label>
+        <Label Output="4" Answerable="true">
+          <Text><![CDATA[Other male (specify relation to you):]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No male in the household]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem27" NColumns="1" NRows="8" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem28" Activator="TFFFFFFF" />
+        <Jump Destination="socDem27_2" Activator="FFTFFFFF" />
+        <Jump Destination="socDem28" Activator="FFFTFFFF" />
+        <Jump Destination="socDem28" Activator="FFFFTFFF" />
+        <Jump Destination="socDem27_3" Activator="FFFFFTFF" />
+        <Jump Destination="socDem27_4" Activator="FFFFFFTF" />
+        <Jump Destination="socDem28" Activator="FFFFFFFT" />
+      </Jumps>
+      <Text><![CDATA[What is the highest level of education <b>your father</b> (biological, adoptive, stepfather, other) has completed?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[No training completed]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Compulsory education (Obligatorische Schule )]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Professional education]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Commercial middle school (Handelsmittelschule)]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[High school / Gymnasium / Kantonsschule (Matur)]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[University of applied sciences (Fachhochschule)]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[University degree]]></Text>
+        </Label>
+        <Label Output="7" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem27_1" NColumns="1" NRows="6" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem28" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What level of compulsory education did your father complete?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Primary (Primarschule)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Elementary (Realschule)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Upper elementary school (Sekundarschule)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Orientation year (10. Schuljahr)]]></Text>
+        </Label>
+        <Label Output="5" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem27_2" NColumns="1" NRows="10" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem28" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What level of professional education did your father complete?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Au-Pair year (Au-Pair Jahr)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Pre-apprenticeship (Anlehre)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Apprenticeship diploma (Lehrabschluss)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Commercial school (Handelsschule)]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Technical School (TS Technikerschule) or other technical school (e.g., HKG)]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Federal vocational baccalaureate (Lehrabschluss mit Berufsmaturität)]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Teacher Seminar (Lehrkräfteseminar)]]></Text>
+        </Label>
+        <Label Output="7">
+          <Text><![CDATA[Nursing degree (Krankenschwesterausbildung)]]></Text>
+        </Label>
+        <Label Output="8" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem27_3" NColumns="1" NRows="9" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem28" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What degree did your father get at the University of applied sciences?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Bachelor of Science FH]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Master of Science FH]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Certificate of Advanced Studies (CAS)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Diploma of Advanced Studies (DAS)]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Executive MBA]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Master of Advanced Studies (MAS)]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Seminar]]></Text>
+        </Label>
+        <Label Output="7" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem27_4" NColumns="1" NRows="7" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem28" Activator="FFFFFT" />
+      </Jumps>
+      <Text><![CDATA[What level of University did your father complete?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Diploma (e.g. Lic.phil., Lic.nat., Med.)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Bachelor]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Masters (M c., MA)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Ph.D.]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Dr. (e.g. Dr. med., Dr. med. dent., Dr. nat.)]]></Text>
+        </Label>
+        <Label Output="5" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem27_4_1" NColumns="1" NRows="8" Choice="Single">
+      <Text><![CDATA[Did your father pursue any Advanced Studies degree (Nachdiplomstudium)? If yes, what level?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Certificate of Advanced Studies (CAS)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Diploma of Advanced Studies (DAS)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Executive MBA]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Master of Advanced Studies (MAS)]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Seminars]]></Text>
+        </Label>
+        <Label Output="6" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don’t know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem28" NColumns="1" NRows="5" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem28_2" Activator="FFFTF" />
+        <Jump Destination="socDem28_2" Activator="FFFFT" />
+      </Jumps>
+      <Text><![CDATA[How much of your childhood did your father either work FOR PAY or work in a family business?]]></Text>
+      <RowLabels>
+        <Label Output="4">
+          <Text><![CDATA[All the time]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Most of the time]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Some time]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[A little]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Not at all]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="socDem28_1" NColumns="1" NRows="1">
+      <Jumps>
+        <Jump Destination="socDem29" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What was your father’s occupation?]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="socDem28_2" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[What was the main reason your father was not working for pay during most of your childhood years?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[To stay at home to raise children]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[A disability or injury]]></Text>
+        </Label>
+        <Label Output="2" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem29" NColumns="1" NRows="5" Choice="Single">
+      <Jumps>
+        <Jump Destination="*" Activator="FFFFT" />
+      </Jumps>
+      <Text><![CDATA[Who was the female head of your household for most of your childhood?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Biological mother]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Adoptive mother]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Stepmother (spouse/partner of father)]]></Text>
+        </Label>
+        <Label Output="4" Answerable="true">
+          <Text><![CDATA[Other female (specify relation to you):]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No female in the household]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem30" NColumns="1" NRows="8" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem31" Activator="TFFFFFFF" />
+        <Jump Destination="socDem30_2" Activator="FFTFFFFF" />
+        <Jump Destination="socDem31" Activator="FFFTFFFF" />
+        <Jump Destination="socDem31" Activator="FFFFTFFF" />
+        <Jump Destination="socDem30_3" Activator="FFFFFTFF" />
+        <Jump Destination="socDem30_4" Activator="FFFFFFTF" />
+        <Jump Destination="socDem31" Activator="FFFFFFFT" />
+      </Jumps>
+      <Text><![CDATA[What is the highest level of education <b>your mother</b> (biological, adoptive, stepmother, other) has completed?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[No training completed]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Compulsory education (Obligatorische Schule )]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Professional education]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Commercial middle school (Handelsmittelschule)]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[High school / Gymnasium / Kantonsschule (Matur)]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[University of applied sciences (Fachhochschule)]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[University degree]]></Text>
+        </Label>
+        <Label Output="7" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem30_1" NColumns="1" NRows="6" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem31" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What level of compulsory education did your mother complete?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Primary (Primarschule)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Elementary (Realschule)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Upper elementary school (Sekundarschule)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Orientation year (10. Schuljahr)]]></Text>
+        </Label>
+        <Label Output="4" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem30_2" NColumns="1" NRows="10" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem31" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What level of professional education did your mother complete?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Au-Pair year (Au-Pair Jahr)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Pre-apprenticeship (Anlehre)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Apprenticeship diploma (Lehrabschluss)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Commercial school (Handelsschule)]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Technical School (TS Technikerschule) or other technical school (e.g., HKG)]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Federal vocational baccalaureate (Lehrabschluss mit Berufsmaturität)]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Teacher Seminar (Lehrkräfteseminar)]]></Text>
+        </Label>
+        <Label Output="7">
+          <Text><![CDATA[Nursing degree (Krankenschwesterausbildung)]]></Text>
+        </Label>
+        <Label Output="8" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem30_3" NColumns="1" NRows="9" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem31" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What degree did your mother get at the University of applied sciences?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Bachelor of Science FH]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Master of Science FH]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Certificate of Advanced Studies (CAS)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Diploma of Advanced Studies (DAS)]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Executive MBA]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Master of Advanced Studies (MAS)]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Seminar]]></Text>
+        </Label>
+        <Label Output="7" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem30_4" NColumns="1" NRows="7" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem31" Activator="FFFFFT" />
+      </Jumps>
+      <Text><![CDATA[What level of University did your mother complete?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Diploma (e.g. Lic.phil., Lic.nat., Med.)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Bachelor]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Masters (M c., MA)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Ph.D.]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Dr. (e.g. Dr. med., Dr. med. dent., Dr. nat.)]]></Text>
+        </Label>
+        <Label Output="5" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem30_4_1" NColumns="1" NRows="8" Choice="Single">
+      <Text><![CDATA[Did your mother pursue any Advanced Studies degree (Nachdiplomstudium)? If yes, what level?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Certificate of Advanced Studies (CAS)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Diploma of Advanced Studies (DAS)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Executive MBA]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Master of Advanced Studies (MAS)]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Seminars]]></Text>
+        </Label>
+        <Label Output="6" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don’t know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem31" NColumns="1" NRows="5" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem31_2" Activator="FFFTF" />
+        <Jump Destination="socDem31_2" Activator="FFFFT" />
+      </Jumps>
+      <Text><![CDATA[How much of your childhood did your mother either work FOR PAY or work in a family business?]]></Text>
+      <RowLabels>
+        <Label Output="4">
+          <Text><![CDATA[All the time]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Most of the time]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Some time]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[A little]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Not at all]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="socDem31_1" NColumns="1" NRows="1">
+      <Jumps>
+        <Jump Destination="*" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What was your mother’s occupation?]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="socDem31_2" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[What was the main reason your mother was not working for pay during most of your childhood years?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[To stay at home to raise children]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[A disability or injury]]></Text>
+        </Label>
+        <Label Output="2" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

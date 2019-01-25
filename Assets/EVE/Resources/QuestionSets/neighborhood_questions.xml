@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="neighborhood_questions">
+  <Questions>
+    <InfoScreen Name="neighborhood_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Neighborhood questionnaire</size></b>
+
+Perception of the overall condition of the neighborhood]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_57" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[This neighborhood appears to be a safe place to live]]></Text>
+      <RowLabels>
+        <Label Output="4">
+          <Text><![CDATA[Definitely safe]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Fairly safe]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Unsure]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Fairly unsafe]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Definitely unsafe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_58" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[I would feel safe walking in this neighborhood at night]]></Text>
+      <RowLabels>
+        <Label Output="4">
+          <Text><![CDATA[Definitely safe]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Fairly safe]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Unsure]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Fairly unsafe]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Definitely unsafe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_59" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[What is the percentage of cars that appear to be high end luxury vehicles in this neighborhood (including parked cars)?]]></Text>
+      <RowLabels>
+        <Label Output="4">
+          <Text><![CDATA[75% or more of cars appear to be luxury vehicles.]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[50-74% of cars appear to be luxury vehicles.]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[1-49% of cars appear to be luxury vehicles.]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[0% (none) of cars appear to be luxury vehicles.]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No cars visible.]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_60" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How would you rate the quality of the majority of cars visible in the neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[High Quality]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderate Quality]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Low Quality]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No cars visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_61" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[This neighborhood appears to be best characterized by:]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[Wealth/prosperity]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Comfortably off]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Moderate means]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Poor]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Unsure]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_62" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[This is a neighborhood that I could live in:]]></Text>
+      <RowLabels>
+        <Label Output="4">
+          <Text><![CDATA[Strongly Agree]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Agree]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Undecided]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Disagree]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Strongly Disagree]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="sso_63" NColumns="1" NRows="1">
+      <Text><![CDATA[Please include any comments regarding the overall condition of the neighborhood and/or
+ the suitability of the neighborhood for families and children?]]></Text>
+    </TextQuestion>
+  </Questions>
+</QuestionSet>

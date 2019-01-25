@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="open_ended_questions">
+  <Questions>
+    <TextQuestion Name="open_realism" NColumns="1" NRows="1">
+      <Text><![CDATA[Can you comment on how realistic or unrealistic the virtual neighborhood seemed to you, and why you felt that way?]]></Text>
+    </TextQuestion>
+    <TextQuestion Name="open_feel_real" NColumns="1" NRows="1">
+      <Text><![CDATA[Did you ever feel like you were really there in the neighborhood? Why, or why not?]]></Text>
+    </TextQuestion>
+    <TextQuestion Name="open_disconcerting" NColumns="1" NRows="1">
+      <Text><![CDATA[Was there anything about the virtual neighborhood environment that seemed disconcerting, odd, or troublesome?]]></Text>
+    </TextQuestion>
+  </Questions>
+</QuestionSet>

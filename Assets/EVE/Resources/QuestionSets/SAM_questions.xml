@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="SAM_questions">
+  <Questions>
+    <InfoScreen Name="SAM_info_pleasure" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>SAM questions</size></b>
+
+This first SAM scale is the happy-unhappy scale, which ranges from a smile to a frown.
+
+At one extreme of the happy vs. unhappy scale, you might have felt happy, pleased, satisfied, contented, hopeful. If you felt completely happy while walking through the neighborhood, you can choose the figure at the right. The other end of the scale is if you felt completely unhappy, annoyed, unsatisfied, melancholic, despaired, bored. If you felt completely unhappy you can choose the figure at the left. If you felt completely neutral, neither happy nor unhappy, you can choose the figure in the middle. You can also make intermediate ratings by clicking between two pictures.]]></Text>
+    </InfoScreen>
+    <ScaleQuestion Name="SAM_pleasure" NColumns="9" NRows="1" Scale="Pleasure">
+      <Text><![CDATA[Please rate how happy-unhappy you actually felt while you were walking through the virtual neighborhood.]]></Text>
+      <LeftLabel>SAD</LeftLabel>
+      <RightLabel>CHEERFUL</RightLabel>
+    </ScaleQuestion>
+    <InfoScreen Name="SAM_info_arousal" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>SAM questions</size></b>
+
+This next SAM scale is the excited - calm scale.
+
+At one extreme of the scale you felt stimulated, excited, frenzied, jittery, wide-awake, aroused. If you felt completely aroused while walking through the neighborhood, you can choose the figure at the right. At the other end of the scale, you felt completely relaxed, calm, sluggish, dull, sleepy, unaroused. You can indicate you felt completely calm by choosing the figure at the extreme left of the scale. If you were not at all excited nor at all calm, you can choose the figure in the middle of the row. You can also make intermediate ratings by clicking between two pictures.]]></Text>
+    </InfoScreen>
+    <ScaleQuestion Name="SAM_arousal" NColumns="9" NRows="1" Scale="Arousal">
+      <Text><![CDATA[Please rate how excited - calm you actually felt while you were walking through the virtual neighborhood.]]></Text>
+      <LeftLabel>QUIET</LeftLabel>
+      <RightLabel>ACTIVE</RightLabel>
+    </ScaleQuestion>
+    <InfoScreen Name="SAM_info_dominance" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>SAM questions</size></b>
+
+The last SAM scale is the controlled vs. in-control dimension.
+
+At one end of the scale you feel unimportant or out of control, bullied, like someone else is the leader or in charge, or like you can't handle the situation. If you felt completely this way when you were walking through the neighborhood, like you couldn’t handle the situation, you can choose the figure at the left. At the other extreme of this scale, you felt in control, important, like you don’t need anyone's help and are able to handle the situation. You can indicate you felt completely in control and able to handle the situation by choosing the figure at the right of the row. If you did not feel either in control nor controlled, you can choose the figure in the middle of the row. As before, you can make intermediate ratings by clicking between two pictures.]]></Text>
+    </InfoScreen>
+    <ScaleQuestion Name="SAM_dominance" NColumns="9" NRows="1" Scale="Dominance">
+      <Text><![CDATA[Please rate how controlled vs. in-control you actually felt while you were walking through the virtual neighborhood.]]></Text>
+      <LeftLabel>DEPENDENT</LeftLabel>
+      <RightLabel>INDEPENDENT</RightLabel>
+    </ScaleQuestion>
+  </Questions>
+</QuestionSet>

@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="street_features_questions">
+  <Questions>
+    <InfoScreen Name="street_features_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Street features questionnaire</size></b>
+
+Perception of the road way]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_1" NColumns="1" NRows="6" Choice="Multiple">
+      <Text><![CDATA[Overall street pattern/layout (check all that apply)]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Residential street]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Country road]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[City street]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Parking or common area]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Highway / Motorway]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Other]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_2" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[Condition of the streets in the neighborhood]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[Good (NO sizable cracks, potholes, or broken curbs)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Fair (Sizable cracks, potholes, or broken curbs along SOME of the street)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Poor (Sizable cracks, potholes, or broken curbs along MOST or ALL of the street)]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Under Construction]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_3" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Is there outdoor lighting to illuminate the streets?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_4" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[Based on the characteristics of this neighborhood's street lights, estimate 
+the percentage of illumination on the streets of this neighborhood at night?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[75% or more of the neighborhood]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[50-74% of the neighborhood]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[1-49% of the neighborhood]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[0% (none) of the neighborhood]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Can't evaluate]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_5" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Are there any traffic calming measures visible on the streets?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_6" NColumns="2" NRows="5" Choice="Single">
+      <Text><![CDATA[Are any of these street features visible? For EACH feature please answer if they are "visible" or "not visible"]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Visible]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Not visible]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Speed limit signs]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Signs limiting traffic type (i.e., No trucks allowed)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Crosswalk or signs signaling to watch for pedestrians crossing street
+ (i.e., School crossing, elderly crossing)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Designated bike lane (sign or painted street markers)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Speed reducing humps]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

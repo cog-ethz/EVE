@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="commercial_land_use_questions">
+  <Questions>
+    <InfoScreen Name="commercial_land_use_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Commercial and business land use questionnaire</size></b>
+
+Perception of commercial and business land use]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_32" NColumns="2" NRows="7" Choice="Single">
+      <Text><![CDATA[Can any of these institutions or business be observed in this neighborhood? (answer yes or no for each type):]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Church or Community Center]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Elementary or Secondary School or Religious School]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Day care or preschool]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Library]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Health or social services]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Police department or fire department]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Leisure centre]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_33" NColumns="2" NRows="12" Choice="Single">
+      <Text><![CDATA[Can any of these businesses be observed in this neighborhood? (answer yes or no for each type):]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Organic grocer/Fresh food market/stand]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Corner stores]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Low end grocery stores]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[High end supermarket]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Liquor stores]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Fast food/Take out restaurant]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Local pub/bar]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Adult bookstore/entertainment]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Pound shops/Dollarstore]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Boutiques, independent shops]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Pawn shops]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Cafes]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_34" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[What type of bar/pub is visible?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Derelict (Dive bar) non-community pub]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Community pub/bar]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[High-end gastropub or microbrewery]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No pubs visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_35" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there any commercial or industrial properties that have bars/gratings on doors or windows?]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No commercial units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_36" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there any commercial or industrial properties that appear to be burned out, boarded up or abandoned?]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No commercial units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_37" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there any commercial or industrial properties that appear to have pull down
+metal security blinds (grills) or iron gates on the fronts of properties?]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No commercial units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_38" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there any commercial or industrial properties with metal fencing over head height?]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No commercial units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_39" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[In general, how would you rate the condition of MOST of the commercial or industrial units in this neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[The majority of units are in well kept/good condition]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[The majority of units are in fair condition]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[The majority of units are in poor condition or badly deteriorated]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No commercial units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_40" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there ANY commercial or industrial units in this neighborhood that appear to be in poor condition or badly deteriorated?]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No commercial units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>
