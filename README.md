@@ -1,6 +1,6 @@
 # Welcome to the EVE Framework
 
-The release of version 1.0.02 fixes some minor bugs, please find it on the [release page](https://github.com/cog-ethz/EVE/releases) and download `EVE_v1.1.0.2.zip`. Below you find the tutorial for your first experiment with EVE. If you decide to work with EVE, you can also join our Q&A site and read the paper below.
+The release of version 1.2 updates EVE to Unity 2018 and adds features we developed over the last year. Below you find the tutorial for your first experiment with EVE. If you decide to work with EVE, you can also join our Q&A site and read the paper below.
 
 ## Tutorials
 
