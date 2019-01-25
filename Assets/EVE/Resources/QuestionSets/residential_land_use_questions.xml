@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="residential_land_use_questions">
+  <Questions>
+    <InfoScreen Name="residential_land_use_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Residential land use questionnaire</size></b>
+
+Perception of residential land use]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_22" NColumns="2" NRows="8" Choice="Single">
+      <Text><![CDATA[The following types of residential housing units are present in this neighborhood (answer yes or no for each type):]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Detached (Single-family house)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Semi-Detached (duplex)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Terrace (townhouse)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Condominiums]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Apartment building]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Low-rise public housing projects]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[High-rise public housing projects]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Movable dwelling (e.g., RVs, trailers, tents)]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_23" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there any residential units that have bars/gratings on the doors or windows?]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No residential units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_24" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there any residential units that appear to be burned out, boarded up or abandoned?]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No residential units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_25" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there any residential units where the balconies are poorly kept or cluttered with personal effects?]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No residential units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_26" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[In general, how would you rate the condition of MOST of the residential units in the neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[The majority of residential units are in well kept/good condition]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[The majority of residential units are in fair condition]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[The majority of residential units are in poor condition or badly deteriorated]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No residential units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_27" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there ANY residential units in the neighborhood that appear to be in poor condition or badly deteriorated?]]></Text>
+      <RowLabels>
+        <Label Output="2">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No residential units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_28" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[In general, how would you rate the condition of MOST of the residential front yards/gardens in the neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="4">
+          <Text><![CDATA[The majority of front residential yards/gardens are in well kept/good condition]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[The majority of front residential yards/gardens are in fair condition]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[The majority of front residential yards/gardens are in poor condition or badly deteriorated]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No residential front yards/gardens visible]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No residential units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_29" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[Are there any residential front yards/gardens in the neighborhood that appear to have security measures,
+such as barbed wire or broken glass on walls?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No residential front yards/gardens visible]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No residential units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_30" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[Are there ANY residential front yards/gardens in the neighborhood that appear to be in poor/badly deteriorated condition?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No residential front yards/gardens visible]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No residential units visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_31" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[What is the percentage of residential units in this neighborhood that have private driveways?]]></Text>
+      <RowLabels>
+        <Label Output="4">
+          <Text><![CDATA[75% or more of residential units have private driveways.]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[50-74% of residential units have private driveways.]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[1-49% of residential units have private driveways.]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[0% (none) of residential units have private driveways.]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No residential units visible.]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

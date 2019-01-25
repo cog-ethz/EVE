@@ -1,0 +1,1 @@
+This file makes the folder visible in GIT and has no further functionality. It can be removed once another permanent file is added.

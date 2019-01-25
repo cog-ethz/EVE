@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="people_questions">
+  <Questions>
+    <InfoScreen Name="people_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>People questionnaire</size></b>
+
+Perception of people in the neighborhood]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_52" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Are people visible in the neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_53" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Are any children visible in the neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_54" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Is there any evidence of people (two or more) loitering on the streets (e.g., just hanging out or congregating for no apparent reason)?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_55" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Is there any evidence of kids participating in physical activities in the neighborhood (e.g., playing ball games, skateboarding)?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_56" NColumns="2" NRows="4" Choice="Single">
+      <Text><![CDATA[Visible people in the neighborhood appear to participating in the following activities? (answer yes or no for each activity):]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Walking to a destination]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[In front of a home (i.e., front garden or vehicle)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[In front of a business]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Waiting for a bus]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

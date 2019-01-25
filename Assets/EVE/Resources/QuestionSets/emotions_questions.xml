@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="emotions_questions">
+  <Questions>
+    <InfoScreen Name="emotions_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Emotion questionnaire</size></b>
+
+You will now be asked a series of questions about how much you felt particular emotions while you were walking through the neighborhood collecting gems. Please answer these questions by thinking about how you felt while walking through the neighborhood, not about how you feel right now. There are no right or wrong answers, so please respond as honestly as you can, to the best of your ability.
+
+If you have any questions, please ask at any time.]]></Text>
+    </InfoScreen>
+    <ScaleQuestion Name="amuesment_scale" NColumns="9" NRows="1" Scale="Line">
+      <Text><![CDATA[How much did you feel AMUSEMENT while you were walking through the virtual neighborhood?]]></Text>
+      <LeftLabel>Did not experience at all</LeftLabel>
+      <RightLabel>Strongest experience ever felt</RightLabel>
+    </ScaleQuestion>
+    <ScaleQuestion Name="anger_scale" NColumns="9" NRows="1" Scale="Line">
+      <Text><![CDATA[How much did you feel ANGER while you were walking through the virtual neighborhood?]]></Text>
+      <LeftLabel>Did not experience at all</LeftLabel>
+      <RightLabel>Strongest experience ever felt</RightLabel>
+    </ScaleQuestion>
+    <ScaleQuestion Name="contentment_happiness_scale" NColumns="9" NRows="1" Scale="Line">
+      <Text><![CDATA[How much did you feel CONTENTMENT/HAPPINESS while you were walking through the virtual neighborhood?]]></Text>
+      <LeftLabel>Did not experience at all</LeftLabel>
+      <RightLabel>Strongest experience ever felt</RightLabel>
+    </ScaleQuestion>
+    <ScaleQuestion Name="compassion_scale" NColumns="9" NRows="1" Scale="Line">
+      <Text><![CDATA[How much did you feel COMPASSION while you were walking through the virtual neighborhood?]]></Text>
+      <LeftLabel>Did not experience at all</LeftLabel>
+      <RightLabel>Strongest experience ever felt</RightLabel>
+    </ScaleQuestion>
+    <ScaleQuestion Name="disgust_scale" NColumns="9" NRows="1" Scale="Line">
+      <Text><![CDATA[How much did you feel DISGUST while you were walking through the virtual neighborhood?]]></Text>
+      <LeftLabel>Did not experience at all</LeftLabel>
+      <RightLabel>Strongest experience ever felt</RightLabel>
+    </ScaleQuestion>
+    <ScaleQuestion Name="enthusiasm _excitement_scale" NColumns="9" NRows="1" Scale="Line">
+      <Text><![CDATA[How much did you feel ENTHUSIASM/EXCITEMENT while you were walking through the virtual neighborhood?]]></Text>
+      <LeftLabel>Did not experience at all</LeftLabel>
+      <RightLabel>Strongest experience ever felt</RightLabel>
+    </ScaleQuestion>
+    <ScaleQuestion Name="fear _scale" NColumns="9" NRows="1" Scale="Line">
+      <Text><![CDATA[How much did you feel FEAR while you were walking through the virtual neighborhood?]]></Text>
+      <LeftLabel>Did not experience at all</LeftLabel>
+      <RightLabel>Strongest experience ever felt</RightLabel>
+    </ScaleQuestion>
+    <ScaleQuestion Name="sadness_scale" NColumns="9" NRows="1" Scale="Line">
+      <Text><![CDATA[How much did you feel SADNESS while you were walking through the virtual neighborhood?]]></Text>
+      <LeftLabel>Did not experience at all</LeftLabel>
+      <RightLabel>Strongest experience ever felt</RightLabel>
+    </ScaleQuestion>
+    <ScaleQuestion Name="surprise _scale" NColumns="9" NRows="1" Scale="Line">
+      <Text><![CDATA[How much did you feel SURPRISE while you were walking through the virtual neighborhood?]]></Text>
+      <LeftLabel>Did not experience at all</LeftLabel>
+      <RightLabel>Strongest experience ever felt</RightLabel>
+    </ScaleQuestion>
+  </Questions>
+</QuestionSet>

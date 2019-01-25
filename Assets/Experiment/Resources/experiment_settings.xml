@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Test">
+  <DatabaseSettings>
+    <Server>localhost</Server>
+    <Schema>eve</Schema>
+    <User>yourDBuser</User>
+    <Password>yourDBpassword</Password>
+  </DatabaseSettings>
+  <SensorSettings Labchart="false" H7Server="false" MiddleVR="false">
+    <Sensors />
+  </SensorSettings>
+  <ParameterSettings>
+    <Parameters />
+  </ParameterSettings>
+  <QuestionnaireSettings>
+    <Questionnaires>
+      <Questionnaire>ExampleQuestionnaire</Questionnaire>
+    </Questionnaires>
+  </QuestionnaireSettings>
+  <SceneSettings>
+    <Scenes>
+      <Scene Curtain="false" Name="ExampleQuestionnaire.xml" />
+    </Scenes>
+  </SceneSettings>
+  <LabchartSettings>
+    <Commenters>
+      <Sensor>QuestionnaireSystem</Sensor>
+      <Sensor>LabChart</Sensor>
+    </Commenters>
+    <Path>PathToLabchartFiles\\</Path>
+  </LabchartSettings>
+  <UISettings>
+    <Resolution X="1920" Y="1080" />
+  </UISettings>
+</ExperimentSettings>

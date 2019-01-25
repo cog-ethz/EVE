@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="buildings_questions">
+  <Questions>
+    <InfoScreen Name="building_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=25>Buildings questionnaire</size></b>
+
+<size=15>Perception of buildings</size>]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="land_use_estimation" NColumns="2" NRows="6" Choice="Multiple">
+      <Text><![CDATA[Based on street-level frontage appearance, is the land used in this neighborhood in any of the following ways (check all that apply):]]></Text>
+      <ColumnLabels>
+        <Label Output="0">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Residential]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Commercial/Business]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Industrial, Warehouse, Manufacturing]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Vacant Lots or Open Space]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Institutional (schools, churches, etc.)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Recreational Facilities, Parks or Playgrounds]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

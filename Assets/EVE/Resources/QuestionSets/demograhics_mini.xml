@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="demograhics_mini">
+  <Questions>
+    <InfoScreen Name="dm_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Introduction to experiment</size></b>
+
+Now you will be asked a series of questions. Specific instructions will follow before each question or set of questions.
+
+To answer all questions you will use the keyboard and mouse.
+
+After completing each question, please click “Next” to proceed to the following question. Press “Back” if you want to go to an earlier question to change your answer.
+
+Please complete these questions to the best of your ability. If you have any questions, please ask at any time.]]></Text>
+      <ConfirmationRequirement Required="false" ConfirmationDelay="5" />
+    </InfoScreen>
+    <ChoiceQuestion Name="dm_sex" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Sex?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Male]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Female]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="dm_age" NColumns="1" NRows="1">
+      <Text><![CDATA[Please enter your age in years:]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="dm_student" NColumns="1" NRows="2" Choice="Single">
+      <Jumps>
+        <Jump Destination="dm_occupation" Activator="FT" />
+      </Jumps>
+      <Text><![CDATA[Are you currently a student or postdoctoral fellow?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="dm_field" NColumns="1" NRows="1">
+      <Jumps>
+        <Jump Destination="sbsodinfo" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What is your field of study?]]></Text>
+    </TextQuestion>
+    <TextQuestion Name="dm_occupation" NColumns="1" NRows="1">
+      <Text><![CDATA[What is your occupation?]]></Text>
+    </TextQuestion>
+  </Questions>
+</QuestionSet>

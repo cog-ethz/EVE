@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="own_neighborhood_questions">
+  <Questions>
+    <InfoScreen Name="own_neighborhood__info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Neighborhood questionnaire</size></b>
+
+Questions about your perception of the neighborhood you currently reside in.]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="socDem37" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[How safe from crime do you consider your neighborhood to be?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[Extremely safe]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Quite safe]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Slightly safe]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Not at all safe]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem38" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[Overall, how would you rate your neighborhood as a place to live?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[Excellent]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Good]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Only fair]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Poor]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem39" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[How do you think your neighborhood compares to other neighborhoods in the city?]]></Text>
+      <RowLabels>
+        <Label Output="4">
+          <Text><![CDATA[Much better]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Better]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Same]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Worse]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Much worse]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

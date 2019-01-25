@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="sidewalk_features_questions">
+  <Questions>
+    <InfoScreen Name="sidewalk_features_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Sidewalk features questionnaire</size></b>
+
+Perception of the side walk]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_7" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[Condition of the sidewalks]]></Text>
+      <RowLabels>
+        <Label Output="4">
+          <Text><![CDATA[Good (NO holes, sizable cracks, or crumbling or uneven pavement on both sides of the street)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Fair (Holes, sizable cracks, or crumbling or uneven pavement along SOME of the side walk
+ on both sides of the street)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Poor (Holes, sizable cracks, or crumbling or uneven pavement along MOST or ALL of the  sidewalk
+ on both sides of the street)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Under construction]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No sidewalk present]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_8" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[Are there trees present in the neighborhood between the sidewalk and the street?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[On 75% or more of the neighborhood]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[On 50-74% of the neighborhood]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[On 1-49% of the neighborhood]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[On 0% (none) of the neighborhood]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Can't evaluate]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_9" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Are there dropped curbs in this neighborhood between the sidewalk and the street? (Dropped curbs allow vehicles to cross the pavement from the road to a driveway)]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Can't evaluate]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

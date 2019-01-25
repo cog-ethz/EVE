@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="rec_facilities_questions">
+  <Questions>
+    <InfoScreen Name="recreational_facilities_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Recreational facilities questionnaire</size></b>
+
+Perception of recreational facilitiese]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="sso_41" NColumns="2" NRows="9" Choice="Single">
+      <Text><![CDATA[What kinds of recreational facilities or equipment are in the neighborhood? (answer yes or no for each type):]]></Text>
+      <ColumnLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </ColumnLabels>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Park]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Playground equipment (i.e.,slide, swings)]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Sports/playing fields/courts]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Sports stands]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Pools or outdoor swimming area]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Recreation Center]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Tables and/or grills]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Outdoor seating in public areas]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Bike/walking trails]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="sso_42" NColumns="1" NRows="4" Choice="Single">
+      <Text><![CDATA[In general, how would you rate the condition of recreational facilities in this neighborhood?]]></Text>
+      <RowLabels>
+        <Label Output="3">
+          <Text><![CDATA[Well kept/good condition]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Fair condition]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Poor condition or badly deteriorated]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No recreational facilities visible]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

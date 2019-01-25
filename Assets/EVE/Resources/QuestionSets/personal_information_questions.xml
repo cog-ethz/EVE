@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="personal_information_questions">
+  <Questions>
+    <InfoScreen Name="general_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Introduction to experiment</size></b> 
+ 
+Now you will be asked a series of questions. Specific instructions will follow before each question or set of questions.
+ 
+To answer all questions you will use the keyboard and mouse.
+ 
+After completing each question, please click “Next” to proceed to the following question. Press “Back” if you want to go to an earlier question to change your answer.
+ 
+Please complete these questions to the best of your ability. If you have any questions, please ask at any time.]]></Text>
+    </InfoScreen>
+    <InfoScreen Name="personal_information_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Social Demographics Questionnaire</size></b> 
+ 
+You will now be asked a series of questions about your background, including your family background, your education and employment, where you live, and other similar questions.
+ 
+After completing each question, please click “Next” to proceed to the following question. Press “Back” if you want to go to an earlier question to change your answer.
+ 
+Please complete these questions to the best of your ability. If you have any questions, please ask at any time.]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="socDem1" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Sex?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Male]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Female]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="socDem2" NColumns="1" NRows="1">
+      <Text><![CDATA[Please enter your age in years:]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="dominant_hand" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Are you right handed or left handed?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Right handed]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Left handed]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem3" NColumns="1" NRows="5" Choice="Single">
+      <Text><![CDATA[What is your current marital status?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Married / Living with partner]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Widowed]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Separated]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Divorced]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Single]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="socDem4" NColumns="1" NRows="2">
+      <Text><![CDATA[Where were you born?]]></Text>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Country:]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[City:]]></Text>
+        </Label>
+      </RowLabels>
+    </TextQuestion>
+    <ChoiceQuestion Name="socDem5" NColumns="1" NRows="2" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem5_2" Activator="FT" />
+      </Jumps>
+      <Text><![CDATA[Do you live in Switzerland?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem5_1" NColumns="1" NRows="2" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem5_1_1" Activator="FT" />
+      </Jumps>
+      <Text><![CDATA[Do you know your postal code?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="socDem5_1_2" NColumns="1" NRows="1">
+      <Jumps>
+        <Jump Destination="socDem6" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[Please type your postal code?]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="socDem5_1_1" NColumns="1" NRows="3" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem6" Activator="FFT" />
+        <Jump Destination="socDem5_1_1_2" Activator="TFF" />
+        <Jump Destination="socDem5_1_1_1" Activator="FTF" />
+      </Jumps>
+      <Text><![CDATA[Do you know what Quartier or Kreis you live in?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[I know the name of my Quartier]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[I know the number of my Kreis]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[I don't know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="socDem5_1_1_2" NColumns="1" NRows="1">
+      <Jumps>
+        <Jump Destination="socDem6" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What Quartier do you live in?]]></Text>
+    </TextQuestion>
+    <TextQuestion Name="socDem5_1_1_1" NColumns="1" NRows="1">
+      <Jumps>
+        <Jump Destination="socDem6" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What Kreis do you live in?]]></Text>
+    </TextQuestion>
+    <TextQuestion Name="socDem5_2" NColumns="1" NRows="2">
+      <Text><![CDATA[Where do you currently live?]]></Text>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Country:]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[City:]]></Text>
+        </Label>
+      </RowLabels>
+    </TextQuestion>
+    <ChoiceQuestion Name="socDem6" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[In what country did you spend most of your childhood/adolescence?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Switzerland]]></Text>
+        </Label>
+        <Label Output="99" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem7" NColumns="1" NRows="4" Choice="Single">
+      <Jumps>
+        <Jump Destination="socDem7_3" Activator="TFFF" />
+        <Jump Destination="socDem7_2" Activator="FFFT" />
+        <Jump Destination="socDem7_1_2" Activator="FFTF" />
+      </Jumps>
+      <Text><![CDATA[Are you Swiss, a foreign national or do you have dual nationality (Swiss and foreign)?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Swiss]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Foreign national]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Dual nationality]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Stateless]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="socDem7_1_1" NColumns="1" NRows="1">
+      <Jumps>
+        <Jump Destination="socDem7_2" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What other nationalities do you have?]]></Text>
+    </TextQuestion>
+    <TextQuestion Name="socDem7_1_2" NColumns="1" NRows="1">
+      <Jumps>
+        <Jump Destination="socDem7_3" Activator="*" />
+      </Jumps>
+      <Text><![CDATA[What other nationalities do you have?]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="socDem7_2" NColumns="1" NRows="9" Choice="Single">
+      <Text><![CDATA[What type of residence permit do you have?]]></Text>
+      <RowLabels>
+        <Label Output="7">
+          <Text><![CDATA[Permit B (annual authorization)]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Permit C (permanent residence permit)]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Permit Ci (residence permit with gainful employment)]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Permit L (short-term residents)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Permit F (provisionally established foreign)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Permit N (for asylum seekers)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Permit S (people protection)]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[Permit G (border permit)]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Don’t know]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="socDem7_3" NColumns="1" NRows="1">
+      <Text><![CDATA[Since when have you been living in Switzerland? (Please type year with 4 numbers)]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="socDem8" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Do you currently live with your parents?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem8_1" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[Do you own your own home/apartment or owe a mortgage?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Own]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Rent]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Neither]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="socDem9" NColumns="1" NRows="6">
+      <Text><![CDATA[How many people live with you in your home right now, excluding yourself? Please specify the number of people in each of the following categories (enter 0 if there are no people of a certain group). 
+Do not include your children who are not living in your home right now (e.g., college students, children in custody of other parent, etc).]]></Text>
+      <RowLabels>
+        <Label>
+          <Text><![CDATA[Spouse / Partner]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Children]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Parents]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Other relatives]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Non-relatives]]></Text>
+        </Label>
+        <Label>
+          <Text><![CDATA[Roommate(s)]]></Text>
+        </Label>
+      </RowLabels>
+    </TextQuestion>
+  </Questions>
+</QuestionSet>

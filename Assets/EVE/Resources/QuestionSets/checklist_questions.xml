@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="checklist_questions">
+  <Questions>
+    <InfoScreen Name="checklist_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Checklist questionnaire</size></b>
+
+Reviewing previous answers]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="review" NColumns="1" NRows="12" Choice="Single">
+      <Text><![CDATA[What section of the survey would you like to go back and amend your response to?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Street Features]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Sidewalk Features]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Physical Disorder]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Amenities]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Types of Buildings]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Residential Land Use]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Business/Commercial Land Use]]></Text>
+        </Label>
+        <Label Output="7">
+          <Text><![CDATA[Recreational Facilities]]></Text>
+        </Label>
+        <Label Output="8">
+          <Text><![CDATA[Vacant Lots/Open Spaces]]></Text>
+        </Label>
+        <Label Output="9">
+          <Text><![CDATA[Neighborhood]]></Text>
+        </Label>
+        <Label Output="10">
+          <Text><![CDATA[Overall Condition of Neighborhood]]></Text>
+        </Label>
+        <Label Output="11">
+          <Text><![CDATA[Virtual Environment Characteristics]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>

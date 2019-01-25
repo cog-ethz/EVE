@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="blood_pressure_questions">
+  <Questions>
+    <InfoScreen Name="blood_pressure__info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Your activities</size></b> 
+ 
+Now we are going to ask you a couple of questions about your activities in the past 24 hours.]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="bp_act_1" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Did you have coffee, espresso, or another beverage containing caffeine in the past 24 hours?]]></Text>
+      <RowLabels>
+        <Label Output="1" Answerable="true">
+          <Text><![CDATA[If yes, how many hours ago]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No, I did not have any caffeine]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="bp_act_2" NColumns="1" NRows="2" Choice="Single">
+      <Jumps>
+        <Jump Destination="bp_act_4" Activator="FT" />
+      </Jumps>
+      <Text><![CDATA[Did you eat today?]]></Text>
+      <RowLabels>
+        <Label Output="1" Answerable="true">
+          <Text><![CDATA[If yes, how many hours ago]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No, I did not have anything to eat today]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="bp_act_3" NColumns="1" NRows="1">
+      <Text><![CDATA[What did you eat at that time?]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="bp_act_4" NColumns="1" NRows="2" Choice="Single">
+      <Text><![CDATA[Have you consumed any alcohol, including beer, wine, liquor, or other alcoholic beverages?]]></Text>
+      <RowLabels>
+        <Label Output="1" Answerable="true">
+          <Text><![CDATA[If yes, how many hours ago]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No, I did not have any alcohol]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="bp_act_5" NColumns="1" NRows="2" Choice="Single">
+      <Jumps>
+        <Jump Destination="bp_act_7" Activator="FT" />
+      </Jumps>
+      <Text><![CDATA[When was the last time that you exercised?]]></Text>
+      <RowLabels>
+        <Label Output="1" Answerable="true">
+          <Text><![CDATA[Hours since last exercise session]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[I did not exercise in the last week]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="bp_act_6" NColumns="1" NRows="1">
+      <Text><![CDATA[What type of exercise have you done]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="bp_act_7" NColumns="1" NRows="2" Choice="Single">
+      <Jumps>
+        <Jump Destination="bp_act_9" Activator="FT" />
+      </Jumps>
+      <Text><![CDATA[Do you smoke cigarettes or use any other form of tobacco?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="bp_act_8" NColumns="1" NRows="1">
+      <Text><![CDATA[How many hours ago did you smoke or used tobacco?]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="bp_act_9" NColumns="1" NRows="2" Choice="Single">
+      <Jumps>
+        <Jump Destination="bp_act_11" Activator="FT" />
+      </Jumps>
+      <Text><![CDATA[Have you taken any medication for cold or flu symptoms today?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="bp_act_10" NColumns="1" NRows="1">
+      <Text><![CDATA[Which medication(s)?]]></Text>
+    </TextQuestion>
+    <ChoiceQuestion Name="bp_act_11" NColumns="1" NRows="2" Choice="Single">
+      <Jumps>
+        <Jump Destination="*" Activator="FT" />
+      </Jumps>
+      <Text><![CDATA[Have you taken any anti-inflammatory medication today? These include ibuprofen (e.g. Advil/Motrin), naproxen (e.g. Alleve), aspirin, or other prescription or over-the-counter medications.]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <TextQuestion Name="bp_act_12" NColumns="1" NRows="1">
+      <Text><![CDATA[Which medication(s)?]]></Text>
+    </TextQuestion>
+  </Questions>
+</QuestionSet>

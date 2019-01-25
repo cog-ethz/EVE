@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuestionSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="employment_questions">
+  <Questions>
+    <InfoScreen Name="employment_info" NColumns="1" NRows="1">
+      <Text><![CDATA[<b><size=48>Employment questionnaire</size></b>
+
+Questions about your employment background]]></Text>
+    </InfoScreen>
+    <ChoiceQuestion Name="socDem13" NColumns="1" NRows="9" Choice="Single">
+      <Text><![CDATA[What best describes your employment status? 
+
+<i>If employment is a postdoctoral fellowship or a condition of being a graduate student, choose other and describe your position. If you're a student and also work at a job that is unrelated to school " (i.e., waiter, cashier) choose full-time or part-time. </i>]]></Text>
+      <RowLabels>
+        <Label Output="8">
+          <Text><![CDATA[Full-time current (>= 35 hours/week)]]></Text>
+        </Label>
+        <Label Output="7">
+          <Text><![CDATA[Part-time current (1-34 hours/week)]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[Unemployed and actively seeking employment]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[Unemployed and <b>not</b> actively seeking employment]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Retired]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Homemaker]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Public assistance / volunteer]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Disabled]]></Text>
+        </Label>
+        <Label Output="0" Answerable="true">
+          <Text><![CDATA[Other:]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem14" NColumns="1" NRows="11" Choice="Single">
+      <Text><![CDATA[Which best describes your gross yearly income before taxes (in CHF)?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[0-11999 (Corresponds to 12 monthly salaries of 0-999 CHF)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[12000-23999 (Corresponds to 12 monthly salaries of 1000-1999 CHF)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[24000-47999 (Corresponds to 12 monthly salaries of 2000-3999 CHF)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[48000-71999 (Corresponds to 12 monthly salaries of 4000-5999 CHF)]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[72000-95999 (Corresponds to 12 monthly salaries of 6000-7999 CHF)]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[96000-119999 (Corresponds to 12 monthly salaries of 8000-9999 CHF)]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[120000-143999 (Corresponds to 12 monthly salaries of 10000-11999 CHF)]]></Text>
+        </Label>
+        <Label Output="7">
+          <Text><![CDATA[144000-167999 (Corresponds to 12 monthly salaries of 12000-13999 CHF)]]></Text>
+        </Label>
+        <Label Output="8">
+          <Text><![CDATA[168000-191999 (Corresponds to 12 monthly salaries of 14000-15999 CHF)]]></Text>
+        </Label>
+        <Label Output="9">
+          <Text><![CDATA[192000 and more (Corresponds to 12 monthly salaries of 16000 and more CHF)]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Prefer not to say]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem16" NColumns="1" NRows="11" Choice="Single">
+      <Text><![CDATA[Which best describes your monthly family income (in CHF) before taxes <i> (including your income and your spouse's or partner's income. Note, roommates do not count as family members). If no one else contributes to your family income, please choose the same range as you selected for individual income.</i>]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[0-11999 (Corresponds to 12 monthly salaries of 0-999 CHF)]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[12000-23999 (Corresponds to 12 monthly salaries of 1000-1999 CHF)]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[24000-47999 (Corresponds to 12 monthly salaries of 2000-3999 CHF)]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[48000-71999 (Corresponds to 12 monthly salaries of 4000-5999 CHF)]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[72000-95999 (Corresponds to 12 monthly salaries of 6000-7999 CHF)]]></Text>
+        </Label>
+        <Label Output="5">
+          <Text><![CDATA[96000-119999 (Corresponds to 12 monthly salaries of 8000-9999 CHF)]]></Text>
+        </Label>
+        <Label Output="6">
+          <Text><![CDATA[120000-143999 (Corresponds to 12 monthly salaries of 10000-11999 CHF)]]></Text>
+        </Label>
+        <Label Output="7">
+          <Text><![CDATA[144000-167999 (Corresponds to 12 monthly salaries of 12000-13999 CHF)]]></Text>
+        </Label>
+        <Label Output="8">
+          <Text><![CDATA[168000-191999 (Corresponds to 12 monthly salaries of 14000-15999 CHF)]]></Text>
+        </Label>
+        <Label Output="9">
+          <Text><![CDATA[192000 and more (Corresponds to 12 monthly salaries of 16000 and more CHF)]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Prefer not to say]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem18" NColumns="1" NRows="6" Choice="Single">
+      <Text><![CDATA[If you lost all your current source(s) of household income (your paycheck, public assistance, or other forms of income for you and your spouse/partner), how long could you continue to live at your current address and standard of living?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Less than 1 month]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[1 to 2 months]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[3 to 6 months]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[7 to 12 months]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[More than 1 year]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Prefer not to say]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem19" NColumns="1" NRows="6" Choice="Single">
+      <Text><![CDATA[What is your level of satisfaction with your financial situation?]]></Text>
+      <RowLabels>
+        <Label Output="0">
+          <Text><![CDATA[Not at all satisfied]]></Text>
+        </Label>
+        <Label Output="1">
+          <Text><![CDATA[Somewhat dissatisfied]]></Text>
+        </Label>
+        <Label Output="2">
+          <Text><![CDATA[Moderately satisfied]]></Text>
+        </Label>
+        <Label Output="3">
+          <Text><![CDATA[Somewhat satisfied]]></Text>
+        </Label>
+        <Label Output="4">
+          <Text><![CDATA[Very satisfied]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Prefer not to say]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+    <ChoiceQuestion Name="socDem20" NColumns="1" NRows="3" Choice="Single">
+      <Text><![CDATA[In your youth, did your family have large financial difficulties?]]></Text>
+      <RowLabels>
+        <Label Output="1">
+          <Text><![CDATA[Yes]]></Text>
+        </Label>
+        <Label Output="0">
+          <Text><![CDATA[No]]></Text>
+        </Label>
+        <Label Output="99">
+          <Text><![CDATA[Prefer not to say]]></Text>
+        </Label>
+      </RowLabels>
+    </ChoiceQuestion>
+  </Questions>
+</QuestionSet>
