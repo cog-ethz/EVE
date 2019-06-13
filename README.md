@@ -1,5 +1,7 @@
 # Welcome to the EVE Framework
 
+The release of minor version 1.2.0.1 adds EVE to Zenodo: [![DOI](https://zenodo.org/badge/167457116.svg)](https://zenodo.org/badge/latestdoi/167457116)
+
 The release of version 1.2 updates EVE to Unity 2018 and adds features we developed over the last year. Below you find the tutorial for your first experiment with EVE. If you decide to work with EVE, you can also join our Q&A site and read the paper below.
 
 Warning: There may be a slight issue with the MySQL Database when trying to generate a build. Please contact us for further instructions in case you bump into issues there.
