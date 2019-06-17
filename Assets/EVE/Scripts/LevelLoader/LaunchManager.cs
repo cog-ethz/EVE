@@ -197,11 +197,13 @@ public class LaunchManager : MonoBehaviour
                 {
                     _currentScene++;
                     LoadCurrentScene();
+                    return;
                 }
                 else
                 {
                     MenuManager.InstantiateAndShowMenu("Finish Menu","Launcher");
                     SessionParameters.Clear();
+                    return;
                 }
             }
         }
