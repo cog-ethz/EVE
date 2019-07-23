@@ -16,20 +16,28 @@ public class MySqlConnector : DatabaseConnector
     private MySqlConnection _con = null; // connection object
     private MySqlCommand _cmd = null; // command object
     private MySqlDataReader _rdr = null;
+    private MySqlConnectionStringBuilder _sb  = null;
 
 
     public override void ConnectToServer(string server, string database, string user, string password)
     {
-        var constr = "Server=" + server + ";Database=" + database + ";User ID=" + user + ";Password=" + password + ";Pooling=true";
-        _con = new MySqlConnection(constr);
+        _sb = new MySqlConnectionStringBuilder
+        {
+            Server = server, Database = database, UserID = user, Password = password
+        };
+        _con = new MySqlConnection(_sb.ConnectionString);
         _con.Open();
         Debug.Log("Connection State: " + _con.State);
     }
 
     public override void ConnectToServer(string server, string user, string password)
     {
-        var constr = "Server=" + server + ";User ID=" + user + ";Password=" + password + ";Pooling=true";
-        _con = new MySqlConnection(constr);
+        
+        _sb = new MySqlConnectionStringBuilder
+        {
+            Server = server, UserID = user, Password = password
+        };
+        _con = new MySqlConnection(_sb.ConnectionString);
         _con.Open();
         Debug.Log("Connection State: " + _con.State);
     }
@@ -412,9 +420,11 @@ public class MySqlConnector : DatabaseConnector
         try
         {
             if (!_con.State.Equals(ConnectionState.Open)) _con.Open();
-            query = "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = 'sessions' AND table_schema = DATABASE( );";
-            _cmd = new MySqlCommand(query, _con);
+            _cmd = _con.CreateCommand();//new MySqlCommand(query, _con);
+            _cmd.CommandText = "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = 'sessions' AND table_schema = 'EVE';";
+           
             var result = _cmd.ExecuteScalar();
+            Debug.Log(result);
             if (result != null) nextId = int.Parse(result.ToString());
         }
         catch (Exception ex)
