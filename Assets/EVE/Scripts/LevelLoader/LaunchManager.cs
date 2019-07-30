@@ -112,6 +112,7 @@ public class LaunchManager : MonoBehaviour
             FirstPersonController.SetActive(false);
             DontDestroyOnLoad(FirstPersonController);
             MenuCanvas = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Canvas");GameObject.FindGameObjectWithTag("MenuCanvas");
+            MenuCanvas.GetComponent<Canvas>().worldCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
             DontDestroyOnLoad(MenuCanvas); 
 
             SceneManager.sceneLoaded += OnSceneLoaded;

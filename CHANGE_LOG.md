@@ -2,6 +2,16 @@
 
 Find an overview of all new additions.
 
+## EVE1.3
+
+###Database support for MySQL8
+
+Simplify database usage by upgrading to MySQL8.
+
+- Easier download of MySQL database as the version is no longer legacy.
+- Encrypted password exchange with database.
+- Safer DB use with Prepared queries.
+
 ## EVE1.2
 
 ### Energyscape & Globalscape integration
@@ -40,7 +50,7 @@ The menu is standardised to make expansion and use more simple
 
 - Add more documentation
 - Follow Reshaper recommendations on code design
-- Upgraded to MiddleVR 1.7.1.1 
+- Upgraded to MiddleVR 1.7.1.1
 
 ### Linux support
 EVE now runs on Ubuntu.
