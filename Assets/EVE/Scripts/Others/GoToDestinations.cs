@@ -7,7 +7,7 @@ public class GoToDestinations : MonoBehaviour
 {
     public GameObject DestinationParent;
     //public Transform[] destinations;
-    public Text popUpText;
+    private Text popUpText;
     public double infoDelay = 1.0;
 
     private Transform currentDestination;
@@ -20,18 +20,17 @@ public class GoToDestinations : MonoBehaviour
     private ReplayRoute rpl;
     private GameObject background;
 
-    // Use this for initialization
     void Start()
     {
-        launchManager = GameObject.FindGameObjectWithTag("LaunchManager").GetComponent<LaunchManager>();
-        currentDestination = DestinationParent.transform.GetChild(destIndex);//destinations[destIndex].transform;
-        gameObject.GetComponent<Text>().text = "Find the " + currentDestination.name;
+        fader = GameObject.FindGameObjectWithTag("Player").GetComponent<FadeOutScene>();
+        currentDestination = DestinationParent.transform.GetChild(destIndex);
+        popUpText = gameObject.GetComponent<Text>();
         currentDestination.transform.Find("Cylinder").gameObject.SetActive(true);
-        fader =launchManager.FirstPersonController.GetComponent<FadeOutScene>();
         start = DateTime.Now;
-        currentDestination = DestinationParent.transform.GetChild(destIndex);//destinations[destIndex].transform;
+        currentDestination = DestinationParent.transform.GetChild(destIndex);
         popUpText.text = "Find the " + currentDestination.name;
         background = popUpText.transform.parent.GetChild(0).gameObject;
+        changing = true;
     }
 
     void OnGUI()
@@ -41,7 +40,6 @@ public class GoToDestinations : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (fader == null)
@@ -51,10 +49,9 @@ public class GoToDestinations : MonoBehaviour
         if (changing)
         {
             if (!(DateTime.Now.Subtract(start).TotalSeconds > infoDelay)) return;
-            currentDestination = DestinationParent.transform.GetChild(destIndex);//destinations[destIndex].transform;
+            currentDestination = DestinationParent.transform.GetChild(destIndex);
             popUpText.text = "Find the " + currentDestination.name;
             gameObject.GetComponent<Text>().text = "Find the " + currentDestination.name;
-            //currentDestination.gameObject.SetActive(true);
             currentDestination.transform.Find("Cylinder").gameObject.SetActive(true);
             changing = false;
             background.SetActive(true);
@@ -69,7 +66,7 @@ public class GoToDestinations : MonoBehaviour
             if (currentDestination.transform.Find("Cylinder").gameObject.activeSelf) return;
             
             destIndex++;
-            if (destIndex < DestinationParent.transform.childCount)//destinations.Length)
+            if (destIndex < DestinationParent.transform.childCount)
             {
                 changing = true;
                 start = DateTime.Now;
