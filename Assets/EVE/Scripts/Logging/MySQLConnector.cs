@@ -435,7 +435,7 @@ public class MySqlConnector : DatabaseConnector
     {
         try
         {
-            var query = "INSERT INTO user_answers(session_id, questionnaire_id) VALUES(?session_id,(SELECT id FROM questionnaires WHERE name = ?questionnaireName))";
+            var query = "INSERT INTO EVE.user_answers(session_id, questionnaire_id) SELECT ?session_id, id FROM EVE.questionnaires WHERE name = ?questionnaireName";
             MysqlUtils.ReconnectIfNecessary(_con);
             using (_con)
             {
@@ -464,7 +464,7 @@ public class MySqlConnector : DatabaseConnector
         try
         {
             MysqlUtils.ReconnectIfNecessary(_con);
-            query = "SELECT scene_name FROM (SELECT * FROM experiment_scene_order WHERE experiment_id = ?experimentId) AS ex_order INNER JOIN scene ON ex_order.scenes_id = scene.id ORDER BY experiment_order ASC";
+            query = "SELECT scene_name FROM (SELECT * FROM EVE.experiment_scene_order WHERE experiment_id = 78) AS ex_order INNER JOIN EVE.scene ON ex_order.scenes_id = scene.id ORDER BY experiment_order ASC";
 
             using (_con)
             {
@@ -1666,9 +1666,10 @@ public class MySqlConnector : DatabaseConnector
 
     public override void AddSystemData(String originName, String outputDescription, String value, String time, int sessionId)
     {
+        value = value.Length > 45 ? value.Substring(0, 45) : value;
         try
         {
-            const string query = "INSERT INTO system_data (data_description_id, session_id, value,time) VALUES ((SELECT id FROM data_description WHERE device_id = (SELECT id FROM data_origin WHERE device_name = ?originName) AND  description = ?outputDescription),?sessionId,?value,?time)";
+            const string query = "INSERT INTO EVE.system_data (data_description_id, session_id, value,time) SELECT id,?sessionId,?value,?time FROM EVE.data_description WHERE device_id = (SELECT id FROM EVE.data_origin WHERE device_name = ?originName) AND  description = ?outputDescription";
             MysqlUtils.ReconnectIfNecessary(_con);
             using (_con)
             {
@@ -1687,7 +1688,8 @@ public class MySqlConnector : DatabaseConnector
             Debug.Log("Inserted System data: [" + originName + ", " + outputDescription + ", " + value + "]");
         }
         catch (Exception ex)
-        {
+        {            
+            Debug.Log("Tried insert System data: [" + originName + ", " + outputDescription + ", " + value + "]");
             Debug.LogError(ex.ToString());
         }
     }
