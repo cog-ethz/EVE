@@ -83,7 +83,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 var localSceneId = k;
                 var localSceneName = envs[k];
                 var localSessionId = _sessionId;
-                replayButton.onClick.AddListener(() => Replay(localSceneId, localSessionId, localSceneName.Name));
+                replayButton.onClick.AddListener(() => Replay(localSessionId, localSceneId, localSceneName.Name));
 
                 //make show map button
                 _map = gameObject.GetComponent<PopUpEvaluationMap>();
