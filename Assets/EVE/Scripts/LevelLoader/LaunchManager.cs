@@ -180,7 +180,8 @@ public class LaunchManager : MonoBehaviour
         var subSceneName = sceneList[_currentScene].Name;
         Debug.Log("Scene " + _currentScene  + ":" + subSceneName + " in " + _activeSceneName);
         LoggingManager.InsertLiveSystemEvent("SceneFlow","switch",null, "Scene " + _currentScene + ":" + subSceneName.Substring(0, Math.Min(subSceneName.Length, 25)) + " in " + _activeSceneName.Substring(0, Math.Min(_activeSceneName.Length, 25)));
-
+        FirstPersonController.transform.position = Vector3.zero;
+        FirstPersonController.transform.rotation = Quaternion.identity;
         FirstPersonController.SetActive(false);
         if (_activeSceneName == "Launcher" && !_inQuestionnaire && !_configureLabchart)
         { //coming back from a scene
