@@ -26,9 +26,6 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _menuManager = _launchManager.MenuManager;
             _log = _launchManager.LoggingManager;
 
-
-
-
             var fields = transform.Find("Panel").Find("Fields");
             fields.Find("BackButton").GetComponent<Button>().onClick.AddListener(() => { _menuManager.InstantiateAndShowMenu("Evaluation Menu", "Launcher"); });
 

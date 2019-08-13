@@ -80,6 +80,7 @@ public class PopUpEvaluationMap : MonoBehaviour
             if (GUI.Button(new Rect(left + mapWidth * 1.02f, top + mapHeight * -0.04f, 40f, 40f), closeX, GUIStyle.none))
             {
                 displayMapPopup = false;
+                Destroy(gameObject);
             }
         }
     }

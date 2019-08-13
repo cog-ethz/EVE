@@ -101,7 +101,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         public void ShowMap(int sessionId, int sceneId, string sceneName)
         {
-            _map = GameObject.Find("EvaluationMap(Clone)").GetComponent<PopUpEvaluationMap>();
+            _map = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Evaluation/EvaluationMap").GetComponent<PopUpEvaluationMap>();
             _map.SetupMaps(sceneName);
             _map.OpenPopUpMap(_log.GetPath(sessionId, sceneId), sceneName);
         }
