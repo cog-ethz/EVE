@@ -12,6 +12,20 @@ Simplify database usage by upgrading to MySQL8.
 - Encrypted password exchange with database.
 - Safer DB use with Prepared queries.
 
+###Move to LTS University
+
+Starting with this version, EVE always stays on the long-term support (LTS) Version of Unity, currently 2018.4.X.
+
+###Update tutorial
+
+The tutorial has been revamped and stream-lined based on the changes above.
+- Simplified some Prefabs.
+
+###Preparation for XR
+
+To make EVE more usable with XR, the camera in all menus has been moved to
+world space.  
+
 ## EVE1.2
 
 ### Energyscape & Globalscape integration
