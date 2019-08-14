@@ -70,7 +70,7 @@ namespace Assets.EVE.Scripts.Questionnaire.Questions
                 Name = q.QuestionName;
                 Text = q.QuestionText;
                 RowLabels = new List<Label>();
-                if (q.Labels == null)
+                if (q.Labels == null || q.Labels.Length == 0)
                 {
                     RowLabels = null;
                     return;

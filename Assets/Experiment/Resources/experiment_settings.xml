@@ -2,9 +2,9 @@
 <ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Test">
   <DatabaseSettings>
     <Server>localhost</Server>
-    <Schema>eve</Schema>
+    <Schema>EVE</Schema>
     <User>yourDBuser</User>
-    <Password>yourDBpassword</Password>
+    <Password>your.s4ve.DB.password</Password>
   </DatabaseSettings>
   <SensorSettings Labchart="false" H7Server="false" MiddleVR="false">
     <Sensors />

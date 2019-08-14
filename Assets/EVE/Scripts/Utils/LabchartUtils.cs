@@ -90,7 +90,7 @@ namespace Assets.EVE.Scripts.Utils
             {
                 for (var j = 0; j < events[0].Count; j++)
                 {
-                    AddCommentToLabChart(file, events[1][j], events[0][j], sessionId);
+                    AddCommentToLabChart(file, events[1][j] + " " +events[2][j], events[0][j], sessionId);
                 }
             }
         }

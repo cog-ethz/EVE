@@ -18,6 +18,8 @@ public class EvaluationMapGenerator : MonoBehaviour
     private string filePathRoot;
     private string sceneName;
 
+    public Camera Camera;
+
     // Use this for 
     void Start()
     {
@@ -46,15 +48,16 @@ public class EvaluationMapGenerator : MonoBehaviour
         }
         if (computeMapImage)
         {
-            Camera camera = GetComponent<Camera>();
-            camera.pixelRect = new Rect(0, 0, width, height);
+            Camera.enabled = true;
+            //Camera camera = GetComponent<Camera>();
+            Camera.pixelRect = new Rect(0, 0, width, height);
             RenderTexture rt = new RenderTexture(width, height, 24);
-            camera.targetTexture = rt;
+            Camera.targetTexture = rt;
             Texture2D screenShot = new Texture2D(width, height, TextureFormat.RGB24, false);
-            camera.Render();
+            Camera.Render();
             RenderTexture.active = rt;
             screenShot.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-            camera.targetTexture = null;
+            Camera.targetTexture = null;
             RenderTexture.active = null; // JC: added to avoid errors
             Destroy(rt);
             byte[] bytes = screenShot.EncodeToPNG();
@@ -66,12 +69,12 @@ public class EvaluationMapGenerator : MonoBehaviour
             ns.Add("", "");
             XmlWriterSettings settings = new XmlWriterSettings { Indent = true };
             
-            XmlSerializer xmls = new XmlSerializer(camera.worldToCameraMatrix.GetType());
+            XmlSerializer xmls = new XmlSerializer(Camera.worldToCameraMatrix.GetType());
             using (var stream = File.Open(filePathRoot + sceneName + "_worldToCameraMatrix.xml", FileMode.Create))
             {
                 using (var xmlWriter = XmlWriter.Create(stream, settings))
                 {
-                    xmls.Serialize(xmlWriter, camera.worldToCameraMatrix, ns);
+                    xmls.Serialize(xmlWriter, Camera.worldToCameraMatrix, ns);
                 }
             }
 
@@ -79,9 +82,11 @@ public class EvaluationMapGenerator : MonoBehaviour
             {
                 using (var xmlWriter = XmlWriter.Create(stream, settings))
                 {
-                    xmls.Serialize(xmlWriter, camera.projectionMatrix, ns);
+                    xmls.Serialize(xmlWriter, Camera.projectionMatrix, ns);
                 }
             }
+
+            Camera.enabled = false;
         }
         Destroy(this);
     }

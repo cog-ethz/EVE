@@ -112,6 +112,7 @@ public class LaunchManager : MonoBehaviour
             FirstPersonController.SetActive(false);
             DontDestroyOnLoad(FirstPersonController);
             MenuCanvas = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Canvas");GameObject.FindGameObjectWithTag("MenuCanvas");
+            MenuCanvas.GetComponent<Canvas>().worldCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
             DontDestroyOnLoad(MenuCanvas); 
 
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -179,7 +180,8 @@ public class LaunchManager : MonoBehaviour
         var subSceneName = sceneList[_currentScene].Name;
         Debug.Log("Scene " + _currentScene  + ":" + subSceneName + " in " + _activeSceneName);
         LoggingManager.InsertLiveSystemEvent("SceneFlow","switch",null, "Scene " + _currentScene + ":" + subSceneName.Substring(0, Math.Min(subSceneName.Length, 25)) + " in " + _activeSceneName.Substring(0, Math.Min(_activeSceneName.Length, 25)));
-
+        FirstPersonController.transform.position = Vector3.zero;
+        FirstPersonController.transform.rotation = Quaternion.identity;
         FirstPersonController.SetActive(false);
         if (_activeSceneName == "Launcher" && !_inQuestionnaire && !_configureLabchart)
         { //coming back from a scene
@@ -197,11 +199,13 @@ public class LaunchManager : MonoBehaviour
                 {
                     _currentScene++;
                     LoadCurrentScene();
+                    return;
                 }
                 else
                 {
                     MenuManager.InstantiateAndShowMenu("Finish Menu","Launcher");
                     SessionParameters.Clear();
+                    return;
                 }
             }
         }
