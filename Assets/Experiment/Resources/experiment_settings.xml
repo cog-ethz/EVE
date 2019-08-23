@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="Windows-1252"?>
-<ExperimentSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Test">
+<?xml version="1.0"?>
+<ExperimentSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="Test">
   <DatabaseSettings>
-    <Server>localhost</Server>
+    <Server>127.0.0.1</Server>
     <Schema>EVE</Schema>
     <User>yourDBuser</User>
     <Password>your.s4ve.DB.password</Password>
