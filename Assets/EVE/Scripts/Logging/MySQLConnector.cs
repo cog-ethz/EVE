@@ -415,11 +415,11 @@ public class MySqlConnector : DatabaseConnector
             {
                 using (_cmd = new MySqlCommand(query, _con))
                 {
-                    var nextId = -1;
-                    nextId = MysqlUtils.ExecuteAndGetInt(_cmd);
-                    if (nextId < 0) nextId = 1;
-                    Debug.Log("Next session will be " + nextId);
-                    return nextId;
+                    var maxId = -1;
+                    maxId = MysqlUtils.ExecuteAndGetInt(_cmd);
+                    if (maxId < 0) maxId = 1;
+                    Debug.Log("Next session will be " + maxId);
+                    return maxId + 1;
                 }
             }
             catch (Exception ex)

@@ -22,9 +22,9 @@ public class PopUpEvaluationMap : MonoBehaviour
     [Tooltip("Texture of the close button.")]
     public Texture closeX;
     [Tooltip("Map height on the evaluation screen.")]
-    public float mapHeight = 960;
+    public float mapHeight = 520;
     [Tooltip("Map width on the evaluation screen.")]
-    public float mapWidth = 960;
+    public float mapWidth = 520;
     [Tooltip("Width of the original map.")]
     public int ResolutionWidth = 2048;
     [Tooltip("Height of the original map.")]
@@ -103,7 +103,7 @@ public class PopUpEvaluationMap : MonoBehaviour
         {
             var worldLocation = new Vector3(xyz[0][i], xyz[1][i], xyz[2][i]);
             var screenPoint = projectionMatrix.MultiplyPoint(worldToCameraMatrix.MultiplyPoint(worldLocation));
-            var screenPixel = new Vector2(left + (screenPoint[0]*2+1.0f)* 0.5f * mapWidth, top + (-screenPoint[1] + 1.0f) * 0.5f * mapHeight);
+            var screenPixel = new Vector2(left + (screenPoint[0]+1.0f)* 0.5f * mapWidth, top + (-screenPoint[1] + 1.0f) * 0.5f * mapHeight);
 
             tempParticipantLocationsOnMap.Add(screenPixel);
         }
