@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `EVE`.`questions` (
   UNIQUE INDEX `name_UNIQUE` (`name` ASC))
 ENGINE = InnoDB
 AUTO_INCREMENT = 197
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -109,7 +109,8 @@ CREATE TABLE IF NOT EXISTS `EVE`.`sessions` (
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+AUTO_INCREMENT = 0
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -122,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `EVE`.`store_strings` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -160,7 +161,7 @@ CREATE TABLE IF NOT EXISTS `EVE`.`user_answers` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 386
-DEFAULT CHARACTER SET = latin1;
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -543,3 +544,4 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+

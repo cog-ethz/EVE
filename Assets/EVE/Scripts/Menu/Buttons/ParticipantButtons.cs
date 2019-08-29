@@ -10,7 +10,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 {
     public class ParticipantButtons : MonoBehaviour {
 
-        int _sessionId = -1;
+        private int _sessionId = -1;
         private MenuManager _menuManager;
         private LoggingManager _log;
         private PopUpEvaluationMap _map;
@@ -66,10 +66,6 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                     timeSec[k] = _log.TimeDifferenceTimespan(times[0], times[1]);
                 else if (times[0].Length > 0)
                 {
-                    //string abortTime = log.getAbortTime(sessionID, k);
-                    //if (abortTime.Length > 0)
-                    //    timeSec[k] = log.timeDifferenceTimespan(times[0], abortTime);
-                    //else
                     timeSec[k] = _log.TimeDifferenceTimespan(times[0], times[0]);
                 }
 
@@ -77,24 +73,22 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                     .GetComponent<Text>().text = timeSec[k].TotalSeconds.ToString();
 
                 var xyzTable = _log.GetPath(_sessionId, k);
-                if (xyzTable[0].Count > 0)
-                {
-                    var distance = MenuUtils.ComputeParticipantPathDistance(xyzTable);
-                    sceneDescription.transform.Find("Statistics").Find("DistanceInformation").Find("DistanceValue")
-                        .GetComponent<Text>().text = distance.ToString();
+                if (xyzTable[0].Count <= 0) continue;
+                var distance = MenuUtils.ComputeParticipantPathDistance(xyzTable);
+                sceneDescription.transform.Find("Statistics").Find("DistanceInformation").Find("DistanceValue")
+                    .GetComponent<Text>().text = distance.ToString();
 
-                    //make replay button
-                    var replayButton = sceneDescription.transform.Find("Buttons").Find("ReplayButton").GetComponent<Button>();
-                    var localSceneId = k;
-                    var localSceneName = envs[k];
-                    var localSessionId = _sessionId;
-                    replayButton.onClick.AddListener(() => Replay(localSceneId, localSessionId, localSceneName.Name));
+                //make replay button
+                var replayButton = sceneDescription.transform.Find("Buttons").Find("ReplayButton").GetComponent<Button>();
+                var localSceneId = k;
+                var localSceneName = envs[k];
+                var localSessionId = _sessionId;
+                replayButton.onClick.AddListener(() => Replay(localSessionId, localSceneId, localSceneName.Name));
 
-                    //make show map button
-                    _map = gameObject.GetComponent<PopUpEvaluationMap>();
-                    var showMapButton = sceneDescription.transform.Find("Buttons").Find("ShowMapButton").GetComponent<Button>();
-                    showMapButton.onClick.AddListener(()=>ShowMap(localSceneId, localSessionId, localSceneName.Name));
-                }
+                //make show map button
+                _map = gameObject.GetComponent<PopUpEvaluationMap>();
+                var showMapButton = sceneDescription.transform.Find("Buttons").Find("ShowMapButton").GetComponent<Button>();
+                showMapButton.onClick.AddListener(()=>ShowMap(localSessionId, localSceneId, localSceneName.Name));
             }
         }
         
@@ -107,13 +101,8 @@ namespace Assets.EVE.Scripts.Menu.Buttons
 
         public void ShowMap(int sessionId, int sceneId, string sceneName)
         {
-            var envNameMatrix = new string[1][];
-            envNameMatrix[0] = new string[1];
-            var sceneNames = _log.GetListOfEnvironments(sessionId);
-            envNameMatrix[0][0] = sceneNames[sceneId];
-
-            _map = GameObject.Find("EvaluationMap(Clone)").GetComponent<PopUpEvaluationMap>();
-            _map.SetupMaps(envNameMatrix);
+            _map = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Evaluation/EvaluationMap").GetComponent<PopUpEvaluationMap>();
+            _map.SetupMaps(sceneName);
             _map.OpenPopUpMap(_log.GetPath(sessionId, sceneId), sceneName);
         }
     }

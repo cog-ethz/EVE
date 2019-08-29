@@ -16,6 +16,9 @@ public class CheckPointAngle : MonoBehaviour {
     public FadeOutScene Fader;
     public Text InstructionTextLabel;
     public bool RandomizeOrder;
+    
+    
+    public int MaxRepetitions = -1;
 
     private bool _fadeOut, _first = true;
   
@@ -47,9 +50,11 @@ public class CheckPointAngle : MonoBehaviour {
         _fpc = this.GetComponent<JRD_FirstPersonController>();
 
         // Randomize order if needed
-        _usedOrder = RandomizeOrder?CreateRandomOrder(Order.Length): Enumerable.Range(0, Order.Length).ToArray(); 
-        
-	}
+        _usedOrder = RandomizeOrder?CreateRandomOrder(Order.Length): Enumerable.Range(0, Order.Length).ToArray();
+
+        MaxRepetitions = MaxRepetitions < 0 ? Order.Length : MaxRepetitions;
+
+    }
 
     private static int[] CreateRandomOrder(int count)
     {
@@ -100,14 +105,14 @@ public class CheckPointAngle : MonoBehaviour {
                     if (_log != null)
                     {
                         var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
-                        _log.InsertMeasurement("JRD", locations, "Degree", (Target.eulerAngles.y).ToString(), timestamp);
+                        _log.InsertMeasurement("JRD_2D", locations, "Degree", (Target.eulerAngles.y).ToString(), timestamp);
                     }             
 
                     Target.eulerAngles.Set(0, 0, 0);
                     _fpc.transform.rotation = Quaternion.Euler(0,0,0);
                     _fpc.ResetRotation();
                     _counter++;
-                    if (_counter < Order.Length)
+                    if (_counter < MaxRepetitions)
                     {                        
                         _first = true;
                         _fpc.enabled = true;
@@ -126,6 +131,8 @@ public class CheckPointAngle : MonoBehaviour {
         }
         if (Fader.isFadedOut())
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             SceneManager.LoadScene("Launcher");          
         }
 	}
@@ -139,6 +146,8 @@ public class CheckPointAngle : MonoBehaviour {
         {
             if (_once) return;
             _once = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             SceneManager.LoadScene("Launcher");
         }
 

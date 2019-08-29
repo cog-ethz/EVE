@@ -47,7 +47,8 @@ public class ReplayRoute : MonoBehaviour {
             launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
             evalCamera = GameObject.Find("EvaluationCamera");
         }
-
+        
+        launchManager.MenuCanvas.SetActive(false);
         launchManager.ReplaySessionId = sessionID;
         log = launchManager.LoggingManager;
         pos_logger.enabled = false;
@@ -100,9 +101,11 @@ public class ReplayRoute : MonoBehaviour {
                     // remove LineRenderer
                     Destroy(launchManager.FirstPersonController.GetComponent<LineRenderer>());
                     playbackCamera = "FirstPersonCharacter";
-                    evalCamera.GetComponent<Camera>().enabled = false;
+                    //evalCamera.GetComponent<Camera>().enabled = false;
                     launchManager.FirstPersonController.GetComponentInChildren<Camera>().enabled = true;
-                    SceneManager.LoadScene("Evaluation");
+                    
+                    launchManager.MenuCanvas.SetActive(true);
+                    SceneManager.LoadScene("Launcher");
                 }
             }
             if (playbackCamera == "FirstPersonCharacter")
@@ -110,7 +113,7 @@ public class ReplayRoute : MonoBehaviour {
                 if (GUI.Button(new Rect(5, 50, 120, 30), "Bird's Eye"))
                 {
                     playbackLineRenderer = launchManager.FirstPersonController.AddComponent(typeof(LineRenderer)) as LineRenderer;
-                    playbackLineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+                    playbackLineRenderer.material = new Material(Shader.Find("Legacy Shaders/Particles/Additive"));
                     var alpha = 1.0f;
                     var gradient = new Gradient();
                     gradient.SetKeys(
@@ -218,7 +221,7 @@ public class ReplayRoute : MonoBehaviour {
                 //replay input
                 // NOTE: This needs to be rewritten, since the takeglobalparameterscript no longer exists
                 //TODO Fix input imputation
-                if (_input[input_pointer] != null) input_pointer++;
+                //if (_input[input_pointer] != null) input_pointer++;
                 /*if (input_pointer < input[0].Count)
                 {
                     float nextInputTime = log.timeDifference(sceneTime[0], input[0][input_pointer]) / 1000000;	// in seconds
