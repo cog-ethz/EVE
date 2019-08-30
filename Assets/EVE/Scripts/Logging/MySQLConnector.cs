@@ -417,7 +417,7 @@ public class MySqlConnector : DatabaseConnector
                 {
                     var maxId = -1;
                     maxId = MysqlUtils.ExecuteAndGetInt(_cmd);
-                    if (maxId < 0) maxId = 1;
+                    if (maxId < 0) maxId = 0;
                     Debug.Log("Next session will be " + maxId);
                     return maxId + 1;
                 }
