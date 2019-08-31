@@ -84,7 +84,8 @@ public class CheckJRD : MonoBehaviour {
                 //record to database
                 if (_log != null)
                 {
-                    _log.InsertLiveMeasurement("JRD", _inFrontOf.name + "," + _lookAt.name + "," + _goalDir.name, "", (i + 1).ToString());
+                    var locations = Order[_usedOrder[_imageCounter]];
+                    _log.InsertLiveMeasurement("JRD_2D", locations, null, (i + 1).ToString());
                 }               
                 _answered = true;
             }

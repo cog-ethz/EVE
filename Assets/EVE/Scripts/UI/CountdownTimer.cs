@@ -14,6 +14,8 @@ public class CountdownTimer : MonoBehaviour {
     private float lerpTime;
     private Texture2D blackTexture;
 
+    private bool timePressure;
+
     private LaunchManager launchManager;
     private ReplayRoute rpl;
     private bool _once;
@@ -34,14 +36,22 @@ public class CountdownTimer : MonoBehaviour {
         if (rpl.isActivated())
         {
             maxDuration = int.Parse(launchManager.LoggingManager.GetParameterValue(launchManager.ReplaySessionId,"maxDuration"));
+            timePressure = launchManager.LoggingManager.GetParameterValue(launchManager.ReplaySessionId, "timePressure")
+                               .ToLower() == "yes";
         }
         else
         {
             maxDuration = int.Parse(launchManager.LoggingManager.GetParameterValue("maxDuration"));
+            timePressure = launchManager.LoggingManager.GetParameterValue("timePressure")
+                               .ToLower() == "yes";
         }
-
+    
         time = this.gameObject.GetComponentsInChildren<Text> ();        
         deltaTime = maxDuration;
+        if (!timePressure)
+        {
+            gameObject.SetActive(false);
+        }
     }
 	
 	// Update is called once per frame

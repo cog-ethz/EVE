@@ -49,6 +49,7 @@ public class EvaluationMapGenerator : MonoBehaviour
         if (computeMapImage)
         {
             Camera.enabled = true;
+            Camera.aspect = width / height;
             //Camera camera = GetComponent<Camera>();
             Camera.pixelRect = new Rect(0, 0, width, height);
             RenderTexture rt = new RenderTexture(width, height, 24);
@@ -85,7 +86,7 @@ public class EvaluationMapGenerator : MonoBehaviour
                     xmls.Serialize(xmlWriter, Camera.projectionMatrix, ns);
                 }
             }
-
+            Camera.ResetAspect();
             Camera.enabled = false;
         }
         Destroy(this);
