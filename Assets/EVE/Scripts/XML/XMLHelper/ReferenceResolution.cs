@@ -6,6 +6,8 @@ namespace Assets.EVE.Scripts.XML.XMLHelper
     [Serializable]
     public class ReferenceResolution
     {
+        [XmlAttribute] public bool ManuallySetResolution;
+        
         [XmlAttribute]
         public float X, Y;
     }

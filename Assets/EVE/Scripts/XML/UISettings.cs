@@ -6,8 +6,13 @@ using UnityEngine;
 namespace Assets.EVE.Scripts.XML
 {
     [Serializable]
-    public class UISettings {
+    public class UISettings
+    {
 
+
+        
+        [XmlIgnore] public bool ManuallySetResolution; 
+        
         [XmlIgnore]
         public Vector2 ReferenceResolution { get; set; }
         [XmlElement("Resolution")]
@@ -17,11 +22,16 @@ namespace Assets.EVE.Scripts.XML
             {
                 return new ReferenceResolution
                 {
+                    ManuallySetResolution = ManuallySetResolution,
                     X = ReferenceResolution.x,
                     Y = ReferenceResolution.y
                 };
             }
-            set { ReferenceResolution = new Vector2(value.X, value.Y); }
+            set
+            {
+                ReferenceResolution = new Vector2(value.X, value.Y);
+                ManuallySetResolution = value.ManuallySetResolution;
+            }
         }
     }
 }

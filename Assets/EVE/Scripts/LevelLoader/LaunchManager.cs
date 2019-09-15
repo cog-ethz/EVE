@@ -91,7 +91,7 @@ public class LaunchManager : MonoBehaviour
     /// <summary>
     /// Make the LaunchManager a singleton.
     /// </summary>
-    private static LaunchManager _instance;
+    private static LaunchManager _launchManager;
 
     private int _currentScene;
     private bool _initialized, _configureLabchart, _inQuestionnaire;
@@ -99,14 +99,15 @@ public class LaunchManager : MonoBehaviour
 
     void Awake()
     {
-        if (_instance)
+        if (_launchManager!=null)
         {
             DestroyImmediate(this.gameObject);
             return;
         }
-        else
+
+        if (_launchManager==null)
         {
-            _instance = this;
+            _launchManager = this;
             DontDestroyOnLoad(this);
             FirstPersonController = GameObjectUtils.InstatiatePrefab("Prefabs/Player/FPSController");// GameObject.FindGameObjectWithTag("Player");
             FirstPersonController.SetActive(false);
@@ -130,7 +131,8 @@ public class LaunchManager : MonoBehaviour
             dirInf.Create();
         }
         MenuManager = MenuCanvas.GetComponent<MenuManager>();
-        MenuCanvas.GetComponent<CanvasScaler>().referenceResolution = ExperimentSettings.UISettings.ReferenceResolution;
+        
+        MenuCanvas.GetComponent<CanvasScaler>().referenceResolution =ExperimentSettings.UISettings.ManuallySetResolution?ExperimentSettings.UISettings.ReferenceResolution:new Vector2(Screen.currentResolution.width,Screen.currentResolution.height);
         QuestionnaireManager = gameObject.GetComponent<QuestionnaireManager>();
 
         SessionParameters = new Dictionary<string, string>();

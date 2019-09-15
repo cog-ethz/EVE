@@ -30,6 +30,6 @@
     <Path>PathToLabchartFiles\\</Path>
   </LabchartSettings>
   <UISettings>
-    <Resolution X="1920" Y="1080" />
+    <Resolution ManuallySetResolution="false" X="1920" Y="1080" />
   </UISettings>
 </ExperimentSettings>

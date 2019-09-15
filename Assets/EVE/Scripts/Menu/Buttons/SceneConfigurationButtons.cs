@@ -23,6 +23,8 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _scenes = new List<SceneEntry>();
 
             _availableScenesList = transform.Find("Panel").Find("SceneSelection").Find("DynFieldsWithScrollbarRight").Find("DynFields");
+            MenuUtils.ClearList(_availableScenesList);
+            
             _choosenScenesList = transform.Find("Panel").Find("SceneSelection").Find("DynFieldsWithScrollbarLeft").Find("DynFields");
 
             var fields = transform.Find("Panel").Find("Folder Selection");
@@ -42,7 +44,10 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             var path = _launchManager.MenuManager.SceneFilePath;
             var filenames = Directory.GetFiles(path);
 
-            MenuUtils.ClearList(_availableScenesList);
+            if (!transform.Find("Panel").Find("KeepScenesButton").Find("Button").GetComponent<Toggle>().isOn)
+            {
+                MenuUtils.ClearList(_availableScenesList);
+            }
 
             foreach (var filename in filenames)
             {
@@ -56,12 +61,9 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 MenuUtils.PlaceElement(filenameObj, _availableScenesList);
 
                 var localFilename = filename;
-                filenameObj.transform.Find("AddButton").GetComponent<Button>().onClick.AddListener(()=>
-                {
-                    AddToChoosenScenes(localFilename);
-                });
-
-                filenameObj.transform.Find("SceneName").GetComponent<Text>().text = GetFileNameOnly(filename);
+                filenameObj.transform.Find("AddButton").GetComponent<Button>().onClick.AddListener(()=> { AddToChoosenScenes(localFilename); });
+                filenameObj.transform.Find("RemoveButton").GetComponent<Button>().onClick.AddListener(() => { Destroy(filenameObj); });
+                filenameObj.transform.Find("SceneName").GetComponent<Text>().text = RemovePathPrefix(filename);
             }
         }
 
@@ -78,10 +80,10 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 _menuManager.ActiveSceneId = scene.Name;
                 var filenameObj = GameObjectUtils.InstatiatePrefab("Prefabs/Menus/Lists/ChoosenSceneEntry");
                 MenuUtils.PlaceElement(filenameObj, _choosenScenesList);
-                filenameObj.transform.Find("SceneName").GetComponent<Text>().text = GetFileNameOnly(scene.Name);
+                filenameObj.transform.Find("SceneName").GetComponent<Text>().text = RemovePathPrefix(scene.Name);
                 filenameObj.transform.Find("MoveUpButton").GetComponent<Button>().onClick.AddListener(() => { MoveUpChoosenSceneEntry(filenameObj); });
                 filenameObj.transform.Find("EditButton").GetComponent<Button>().onClick.AddListener(() =>  _menuManager.InstantiateAndShowMenu("Scene Options Menu", "Launcher"));
-                filenameObj.transform.Find("RemoveButton").GetComponent<Button>().onClick.AddListener(() => { RemoveChoosenSceneEntry(filenameObj); });
+                filenameObj.transform.Find("RemoveButton").GetComponent<Button>().onClick.AddListener(() => { RemoveSceneEntry(filenameObj); });
                 
             }
         }
@@ -104,9 +106,13 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             transform.Find("Panel").Find("Folder Selection").Find("FolderAndField").Find("PathField").GetComponent<InputField>().text = scenePath;
         }
 
+        /// <summary>
+        /// Adds a scene from the choice list to the choosen list.
+        /// </summary>
+        /// <param name="fileName">Scene name to be added.</param>
         public void AddToChoosenScenes(string fileName)
         {
-            var filenameCropped = GetFileNameOnly(fileName);
+            var filenameCropped = RemovePathPrefix(fileName);
 
             if (!filenameCropped.Contains("xml"))
             {
@@ -131,49 +137,32 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             UpdateChosenScenes();
         }
 
-        public void RemoveChoosenSceneEntry(GameObject item)
+        /// <summary>
+        /// Deletes scene entry from list.
+        /// </summary>
+        /// <param name="sceneEntry">Item to be deleted</param>
+        public void RemoveSceneEntry(GameObject sceneEntry)
         {
-            var numberOfEntry = 0;
-            
-            var entriesObjects = new List<GameObject>();
-            foreach (Transform entry in _choosenScenesList) entriesObjects.Add(entry.gameObject);
-            var i = 0;
-            foreach (var entryObject in entriesObjects)
-            {
-                if (entryObject == item)
-                {
-                    numberOfEntry = i;
-                }
-                i++;
-            };
-
-            Destroy(item);
-
-            _menuManager.DeleteSceneEntry(numberOfEntry);
+            _menuManager.DeleteSceneEntry(GameObjectUtils.GetIndexOfGameObject(sceneEntry));
             UpdateChosenScenes();
         }
 
-        public void MoveUpChoosenSceneEntry(GameObject item)
+        /// <summary>
+        /// Moves a scene entry up in the list.
+        /// </summary>
+        /// <param name="sceneEntry">Item to be moved.</param>
+        public void MoveUpChoosenSceneEntry(GameObject sceneEntry)
         {
-            var numberOfEntry = 0;
-            var entriesObjects = new List<GameObject>();
-            foreach (Transform entry in _choosenScenesList) entriesObjects.Add(entry.gameObject);
-            var i = 0;
-            foreach (var entryObject in entriesObjects)
-            {
-                if (entryObject == item)
-                {
-                    numberOfEntry = i;
-                }
-                i++;
-            };
-
-            _menuManager.PromoteSceneEntry(numberOfEntry);
-
+            _menuManager.MoveUpSceneEntry(GameObjectUtils.GetIndexOfGameObject(sceneEntry));
             UpdateChosenScenes();
         }
 
-        private string GetFileNameOnly(string filePath)
+        /// <summary>
+        /// Removes any folder prefixes from file paths.
+        /// </summary>
+        /// <param name="filePath">Long file path.</param>
+        /// <returns>File name without prefix.</returns>
+        private string RemovePathPrefix(string filePath)
         {
             var filenameCropped = filePath;
             //extract only the name and the ending without the path
