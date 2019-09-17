@@ -22,7 +22,7 @@ namespace Assets.EVE.Scripts.XML
             {
                 return new ReferenceResolution
                 {
-                    ManuallySetResolution = ManuallySetResolution,
+                    ManuallySet= ManuallySetResolution,
                     X = ReferenceResolution.x,
                     Y = ReferenceResolution.y
                 };
@@ -30,7 +30,7 @@ namespace Assets.EVE.Scripts.XML
             set
             {
                 ReferenceResolution = new Vector2(value.X, value.Y);
-                ManuallySetResolution = value.ManuallySetResolution;
+                ManuallySetResolution = value.ManuallySet;
             }
         }
     }

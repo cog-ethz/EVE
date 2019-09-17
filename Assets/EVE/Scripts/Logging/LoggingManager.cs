@@ -7,6 +7,7 @@ using Assets.EVE.Scripts.XML;
 using Assets.EVE.Scripts.Questionnaire.XMLHelper;
 using Assets.EVE.Scripts.Questionnaire.Questions;
 using Assets.EVE.Scripts.XML.XMLHelper;
+using EVE.Scripts.Utils;
 
 // for lists
 
@@ -16,10 +17,9 @@ public class LoggingManager
 
     private string _currentQuestionnaireName;
     private string _labChartFilePath = "";
-
     private DatabaseConnector _dbConnector;
 
-	public List<SceneEntry> Scenes = new List<SceneEntry>();
+    private List<SceneEntry> _scenes;
 
     /// <summary>
     /// The logging manager takes care of all communications between the database and the framework.
@@ -27,78 +27,74 @@ public class LoggingManager
     public LoggingManager()
     {
         CurrentSessionId = 0;
+        _scenes = new List<SceneEntry>();
     }
+    
+    // ------------------------------------------------
+    //			Connect to EVE database
+    //-------------------------------------------------
 
+
+    /// <summary>
+    /// Connects to a server without the EVE scheme and creates a new scheme.
+    /// </summary>
+    /// <remarks>
+    /// BE CAREFUL: Drops all data in the schema if it is already present!
+    /// </remarks>
+    /// <param name="dbSettings"></param>
     public void ConnectToServerAndCreateSchema(DatabaseSettings dbSettings)
     {
-        ConnectToServer(dbSettings.Server, dbSettings.User, dbSettings.Password);
-        CreateSchema();
+        ConnectToServerWithoutSchema(dbSettings);
+        if (CheckSchemaExists(dbSettings.Schema)){ _dbConnector.DropSchema();}
+        _dbConnector.CreateSchema();
         ConnectToServer(dbSettings);
     }
 
-    public void ConnectToServerAndResetSchema(DatabaseSettings dbSettings)
-    {
-        ConnectToServer(dbSettings.Server, dbSettings.User, dbSettings.Password);
-        DropSchema();
-        CreateSchema();
-        ConnectToServer(dbSettings);
-    }
 
+    /// <summary>
+    /// Connects to a database with an EVE schema.
+    /// </summary>
+    /// <param name="settings">Settings for the database</param>
+    /// <returns>Whether the connection works.</returns>
     public bool ConnectToServer(DatabaseSettings settings)
     {
-        var success = false;
-        try
-        {
-            _dbConnector = new MySqlConnector();
-            _dbConnector.ConnectToServer(settings.Server, settings.Schema, settings.User, settings.Password);
-            CurrentSessionId = _dbConnector.GetNextSessionId();
-            success = true;
-        }
-        catch (MySql.Data.MySqlClient.MySqlException mysqlEx)
-        {
-            Debug.LogError(mysqlEx.ToString());
-            switch (mysqlEx.Number)
-            {                  
-                //http://dev.mysql.com/doc/refman/5.0/en/error-messages-server.html
-                case 1042: // Unable to connect to any of the specified MySQL hosts (Check Server,Port)
-                    CurrentSessionId = -2;
-                    break;
-                case 0: // Access denied (Check DB name,username,password)
-                    if (mysqlEx.Message.Contains("Unknown database"))
-                        CurrentSessionId = -4;
-                    else
-                        CurrentSessionId = -3;
-                    break;
-            }
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError(ex.ToString());
-            CurrentSessionId = -1;
-        }
-        return success;
+        _dbConnector = new MySqlConnector();
+        var errorId = _dbConnector.ConnectToServer(settings.Server, settings.Schema, settings.User, settings.Password);
+        CurrentSessionId = _dbConnector.GetNextSessionId();
+        CurrentSessionId = errorId >= 0 ? CurrentSessionId : errorId;
+        return errorId>=0;
     }
 
-    public void ConnectToServer(string server, string user, string password)
+    /// <summary>
+    /// Connects to a database without an EVE schema.
+    /// </summary>
+    /// <param name="settings">Settings for the database.</param>
+    private void ConnectToServerWithoutSchema(DatabaseSettings settings)
     {
-        try
-        {
-            _dbConnector = new MySqlConnector();
-            _dbConnector.ConnectToServer(server, user, password);
-            CurrentSessionId = _dbConnector.GetNextSessionId();
-        }
-        
-        catch (System.Exception ex)
-        {
-            Debug.LogError(ex.ToString());
-            CurrentSessionId = -1;
-        }
+        _dbConnector = new MySqlConnector();
+        var errorId = _dbConnector.ConnectToServer(settings.Server, settings.User, settings.Password);
+        CurrentSessionId = _dbConnector.GetNextSessionId();
+        CurrentSessionId = errorId >= 0 ? CurrentSessionId : errorId;
     }
-
 
     // ------------------------------------------------
     //			Store and retrieve question answers
     //-------------------------------------------------
+    
+    /// <summary>
+    /// Create a user answer for a given questionnaire.
+    /// </summary>
+    /// <remarks>
+    /// This step connects a specific session with a questionnaire.
+    /// This relation is used later to insert answers to specific
+    /// questions in a question set.
+    /// </remarks>
+    /// <param name="sessionId"> Internal id of the session</param>
+    /// <param name="questionnaireDescription"> Name of the questionnaire</param>
+    public void CreateUserAnswer(int sessionId, string questionnaireDescription)
+    {
+        _dbConnector.CreateUserAnswer(sessionId, questionnaireDescription);
+    }
 
     /// <summary>
     /// Insert the answer to a question into the database
@@ -111,32 +107,22 @@ public class LoggingManager
         _dbConnector.InsertAnswer(questionName, questionSetName, _currentQuestionnaireName, CurrentSessionId, selectedIndices);
     }
     
-    public int[] ReadAnswerIndex(int questionId)
-    {
-        return _dbConnector.readAnswerIndex(questionId, CurrentSessionId);        
-    }
-
+    /// <summary>
+    /// Returns the answer the current participant gave to a question.
+    /// </summary>
+    /// <param name="questionName">Question to be called.</param>
+    /// <returns>Answer the current participant gave.</returns>
     public Dictionary<int,string> ReadAnswer(string questionName)
     {
         return _dbConnector.readAnswer(questionName, CurrentSessionId);
     }
 
-    private object[] ReadAllAnswerValues(string valueTypeName, int questionId, int sessionId, int valueCount)
-    {
-        throw (new NotImplementedException());
-    }
-
-    public string[] ReadAllAnswersToQuestion(int questionId, int sessionId, int questionnaireId)
-    {
-        throw (new NotImplementedException());
-    }
-
     // -----------------------------------------
-    //			Log experiment data
+    //			Experiment meta data
     //------------------------------------------
 
     /// <summary>
-    /// Create an new experiment
+    /// Create an new experiment.
     /// </summary>
     /// <param name="experimentName"> Name of the experiment</param>
     public void LogExperiment(string experimentName)
@@ -145,18 +131,18 @@ public class LoggingManager
     }
 
     /// <summary>
-    /// Add scene to database
+    /// Add a scene to the database.
     /// </summary>
-    /// <param name="sceneName"> Name of the scene</param>
+    /// <param name="sceneName"> Name of the scene.</param>
     public void AddScene(SceneEntry sceneName)
     {
         _dbConnector.AddScene(sceneName);
     }
 
     /// <summary>
-    /// Remove scene to database
+    /// Remove a scene from thedatabase.
     /// </summary>
-    /// <param name="sceneName"> Name of the scene</param>
+    /// <param name="sceneName"> Name of the scene.</param>
     public void RemoveScene(SceneEntry sceneName)
     {
         _dbConnector.RemoveScene(sceneName);
@@ -164,34 +150,34 @@ public class LoggingManager
 
 	public List<SceneEntry> GetExperimentScenes(string experimentName){
 		var experimentId = _dbConnector.getExperimentId(experimentName);
-		Scenes = _dbConnector.GetExperimentScenes(experimentId);
-		return Scenes;
+		_scenes = _dbConnector.GetExperimentScenes(experimentId);
+		return _scenes;
 	}
 
     /// <summary>
-    /// Set the order of the scenes of the experiment
+    /// Set the order of the scenes of the experiment.
     /// </summary>
-    /// <param name="experimentName"> Name of the experiment</param>
+    /// <param name="experimentName">Experiment to be edited.</param>
     /// <param name="scenes">The scene names in order (can contain repetitions)</param>
-    public void SetExperimentSceneOrder(string experimentName, SceneEntry[] scenes)
+    public void SetExperimentSceneOrder(string experimentName, IEnumerable<SceneEntry> scenes)
     {
         _dbConnector.SetExperimentSceneOrder(experimentName,scenes.ToArray());
     }
 
      /// <summary>
-    /// Remove the saved scene order of the experiment
+    /// Remove the saved scene order of the experiment.
     /// </summary>
-    /// <param name="experimentName"> Name of the experiment</param>
+    /// <param name="experimentName">Experiment to be edited.</param>
     public void RemoveExperimentSceneOrder(string experimentName)
     {
         _dbConnector.RemoveExperimentSceneOrder(experimentName);
     }
     
     /// <summary>
-    /// Add a new parameter to an experiment
+    /// Add a new parameter to an experiment.
     /// </summary>
-    /// <param name="experimentName"> Name of the experiment</param>
-    /// <param name="parameterDescription"> Description of the parameter</param>
+    /// <param name="experimentName">Experiment to be edited.</param>
+    /// <param name="parameterDescription">Description of the parameter</param>
     public void CreateExperimentParameter(string experimentName, string parameterDescription)
     {
         _dbConnector.CreateExperimentParameter(experimentName, parameterDescription);
@@ -211,18 +197,6 @@ public class LoggingManager
         _dbConnector.AddSession(experimentName, subjectId);
     }
 
-    // -----------------------------------------
-    //			Log Session data
-    //------------------------------------------
-
-    /// Create a user answer for a given questionnaire
-    /// </summary>
-    /// <param name="sessionId"> Internal id of the session</param>
-    /// <param name="questionnaireDescription"> Name of the questionnaire</param>
-    public void CreateUserAnswer(int sessionId, string questionnaireDescription)
-    {
-        _dbConnector.CreateUserAnswer(sessionId, questionnaireDescription);
-    }
 
     /// <summary>
     /// Log a parameter used in a session
@@ -243,49 +217,74 @@ public class LoggingManager
         _dbConnector.AddLabchartFileName(CurrentSessionId, fileName);
     }
 
+    /// <summary>
+    /// The time labchart starts recording.
+    /// </summary>
     public void RecordLabChartStartTime()
     {
-        // NEW NAME AddLabchartStartTime
-        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
-
-        _dbConnector.AddLabchartStartTime(CurrentSessionId, timestamp);
+        _dbConnector.AddLabchartStartTime(CurrentSessionId, TimeUtils.GetDbTimeStamp());
     }
 
-    private int GetNextSessionId()
-    {
-        return _dbConnector.GetNextSessionId();
-    }
-
+    /// <summary>
+    /// Gets parameter value for a particular session.
+    /// </summary>
+    /// <param name="sessionId">Session to be looked at</param>
+    /// <param name="parameterDescription">parameter to be returned</param>
+    /// <returns></returns>
     public string GetParameterValue(int sessionId, string parameterDescription)
     {
         return _dbConnector.GetSessionParameter(sessionId, parameterDescription);
     }
 
+    /// <summary>
+    /// Gets parameter value for the current session.
+    /// </summary>
+    /// <param name="sessionId">Session to be looked at</param>
+    /// <param name="parameterDescription">parameter to be returned</param>
+    /// <returns></returns>
     public string GetParameterValue(string parameterDescription)
     {
-        return _dbConnector.GetSessionParameter(this.CurrentSessionId, parameterDescription);
+        return _dbConnector.GetSessionParameter(CurrentSessionId, parameterDescription);
     }
 
     // -----------------------------------------
-    //			Log Questions
+    //	   Insert Questions Meta Data
     //------------------------------------------
 
+    /// <summary>
+    /// Inserts a new question into the database.
+    /// </summary>
+    /// <param name="question">Question data.</param>
     public void InsertQuestionToDb(QuestionData question)
     {
         _dbConnector.InsertQuestion(question);
     }
 
+    /// <summary>
+    /// Creates a question set in the database.
+    /// </summary>
+    /// <param name="name">Name of the new question set.</param>
+    /// <returns></returns>
     public bool CreateQuestionSet(string name)
     {
         return _dbConnector.CreateQuestionSet(name);
     }
 
+    /// <summary>
+    /// Adds a jump to a question in a question set.
+    /// </summary>
+    /// <param name="q">Question to be edited.</param>
+    /// <param name="questionSet">Question set to be used.</param>
     public void AddQuestionJumps(Question q, string questionSet)
     {
         _dbConnector.AddJumps(q,questionSet);
     }
 
-
+    /// <summary>
+    /// Return the jumps of a question.
+    /// </summary>
+    /// <param name="questionData">Question data to be used.</param>
+    /// <returns>List of jumps for a question.</returns>
     public List<Jump> GetJumps(QuestionData questionData)
     {
         var id = _dbConnector.GetQuestionIdByName(questionData.QuestionName);
@@ -298,54 +297,52 @@ public class LoggingManager
         return jumps.Count>0?jumps:null;
     }
 
-    public bool[,] GetJumpConditions(List<int> jumpIds)
-    {
-        return _dbConnector.GetJumpConditions(jumpIds);
-    }
-
-    public List<int> GetQuestionsOfSet(string questionSetName)
-    {
-        return _dbConnector.GetQuestionsOfSet(questionSetName);
-    }
-
+    /// <summary>
+    /// Obtain question set id from database.
+    /// </summary>
+    /// <param name="questionSetName">Name of the question set.</param>
+    /// <returns>Id of the question set.</returns>
     public int GetQuestionSetId(string questionSetName)
     {
         return _dbConnector.GetQuestionSetId(questionSetName);
     }
 
-    public List<int> GetJumpIds(int questionId)
-    {
-        return _dbConnector.GetJumpIds(questionId);
-    }
-
-    public int GetJumpDest(int jumpId)
-    {
-        return _dbConnector.GetJumpDest(jumpId);
-    }
-
+    /// <summary>
+    /// Adds a questionnaire to the database.
+    /// </summary>
+    /// <param name="description">Name of new questionnaire.</param>
     public void AddQuestionnaire(string description)
     {
         _dbConnector.AddQuestionnaire(description);
     }
 
-    public void SetupQuestionnaire(string description, string questionSetName)
+    /// <summary>
+    /// Adds a question set to a questionnaire.
+    /// </summary>
+    /// <param name="questionnaireName">Questionnaire to be used.</param>
+    /// <param name="questionSetName">Question set to be used.</param>
+    public void SetupQuestionnaire(string questionnaireName, string questionSetName)
     {
-        _dbConnector.SetupQuestionnaire(description, questionSetName);
+        _dbConnector.SetupQuestionnaire(questionnaireName, questionSetName);
     }
 
+    /// <summary>
+    /// All question sets associated to a questionnaire.
+    /// </summary>
+    /// <param name="questionnaireName">Questionnaire to be used.</param>
+    /// <returns>List of all associated question sets.</returns>
     public List<string> GetQuestionSets(string questionnaireName)
     {
         return _dbConnector.GetQuestionSets(questionnaireName);
     }
 
+    /// <summary>
+    /// A list of all questionnaires in the database.
+    /// </summary>
+    /// <returns>List of questionnaires.</returns>
     public List<string> GetQuestionnaireNames()
     {
         return _dbConnector.GetAllQuestionnaireNames();
-    }
-
-    public List<string> GetQuestionSets(int questionnaireId)
-    {
-        return _dbConnector.GetQuestionSets(questionnaireId);
     }
 
     /// <summary>
@@ -353,7 +350,7 @@ public class LoggingManager
     /// </summary>
     /// <param name="questionSet">Name of the set to be retrieved.</param>
     /// <returns>List of QuestionData objects to be parsed</returns>
-    public List<QuestionData> GetQuestionSetContent(string questionSet)
+    public IEnumerable<QuestionData> GetQuestionSetContent(string questionSet)
     {
         var qIds = _dbConnector.GetQuestionsOfSet(questionSet);
         var qDataList = new List<QuestionData>();
@@ -375,51 +372,93 @@ public class LoggingManager
     //			Log Scenes
     //------------------------------------------
 
-    public void LogSceneStart(String name)
+    /// <summary>
+    /// Inserts into database start of scene.
+    /// </summary>
+    /// <param name="name">Scene to be started.</param>
+    public void LogSceneStart(string name)
     {
-        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
-        InsertSystemEvent("Scene", "start", null, name, timestamp);
+        InsertLiveSystemEvent("Scene", "start", null, name);
     }
 
-    public void LogSceneEnd(String name)
+    /// <summary>
+    /// Inserts nto database end of scene.
+    /// </summary>
+    /// <param name="name">Scene to be ended.</param>
+    public void LogSceneEnd(string name)
     {
-        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
-        InsertSystemEvent("Scene", "end", null, name, timestamp);
+        InsertLiveSystemEvent("Scene", "end", null, name);
     }
 
-    public string[] GetSceneTime(int sceneNumber, int sessionId)
+    /// <summary>
+    /// Gets the start and end time of a scene.
+    /// </summary>
+    /// <param name="sceneId">Scene to be retrieved.</param>
+    /// <param name="sessionId">Session to be retrieved.</param>
+    /// <returns>Start and end time.</returns>
+    public string[] GetSceneTime(int sceneId, int sessionId)
     {
         var result = new string[2];
 
         var sceneTimesList = _dbConnector.GetSystemData("Scene", sessionId);
 
-        if (sceneTimesList[2].Count <= 2 * sceneNumber) return null;
-        result[0] = sceneTimesList[2][2 * sceneNumber];
-        if (sceneTimesList[2].Count > 2 * sceneNumber + 1)
-            result[1] = sceneTimesList[2][2 * sceneNumber + 1];
+        if (sceneTimesList[2].Count <= 2 * sceneId) return null;
+        result[0] = sceneTimesList[2][2 * sceneId];
+        if (sceneTimesList[2].Count > 2 * sceneId + 1)
+            result[1] = sceneTimesList[2][2 * sceneId + 1];
+        return result;
+    }
+    
+    /// <summary>
+    /// Gets the start and end time of a scene.
+    /// </summary>
+    /// <param name="sceneName"></param>
+    /// <param name="sessionId"></param>
+    /// <returns></returns>
+    public string[] GetSceneTime(string sceneName, int sessionId)
+    {
+        var result = new string[2];
+
+        var sceneTimesList = _dbConnector.GetSystemData("Scene", sessionId);
+
+        for (var index = 0; index < sceneTimesList[0].Count; index++)
+        {
+            if (sceneTimesList[1][index] != sceneName) {continue;}
+            if (sceneTimesList[0][index] == "start") {result[0] = sceneTimesList[2][index];}
+            else if (sceneTimesList[0][index] == "end")
+            {
+                result[1] = sceneTimesList[2][index];
+                break;
+            }
+        }
         return result;
     }
 
-    public string GetLabchartStarttime(int sessionId)
+    /// <summary>
+    /// Returns the time LabChart started running.
+    /// </summary>
+    /// <param name="sessionId">Session to be checked.</param>
+    /// <returns></returns>
+    public string GetLabChartStartTime(int sessionId)
     {
         return _dbConnector.GetLabChartStartTime(sessionId);
     }
 
-    public int GetNumberOfScenes(int sessionId)
-    {
-        var experimentId = _dbConnector.getExperimentId(sessionId);
-        var result = _dbConnector.GetExperimentScenes(experimentId).Count;
-
-        return result;
-
-    }
-
+    /// <summary>
+    /// Removes session.
+    /// </summary>
+    /// <param name="sessionId">Session to be removed.</param>
     public void RemoveSession(int sessionId)
     {
-        _dbConnector.removeSession(sessionId);
+        _dbConnector.RemoveSession(sessionId);
     }
 
-    public SceneEntry[] GetSceneNamesInOrder(string experimentName)
+    /// <summary>
+    /// All the scenes in the experiment.
+    /// </summary>
+    /// <param name="experimentName">Experiment to be taken.</param>
+    /// <returns>List of scene names.</returns>
+    public SceneEntry[] GetSceneNames(string experimentName)
     {
         return _dbConnector.GetExperimentScenes(_dbConnector.getExperimentId(experimentName)).ToArray();
     }
@@ -428,32 +467,44 @@ public class LoggingManager
     //			Log Position, View and Input
     //------------------------------------------
 
+    /// <summary>
+    /// Logs both the orientation and position.
+    /// </summary>
+    /// <param name="x">Position X.</param>
+    /// <param name="y">Position Y.</param>
+    /// <param name="z">Position Z.</param>
+    /// <param name="ex">Orientation X.</param>
+    /// <param name="ey">Orientation Y.</param>
+    /// <param name="ez">Orientation Z.</param>
     public void LogPositionAndView(float x, float y, float z, float ex, float ey, float ez)
     {
-        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+        var timestamp = TimeUtils.GetDbTimeStamp();
         Insert3DMeasurement("Player", "position", null, x.ToString(), y.ToString(), z.ToString(),timestamp);
         Insert3DMeasurement("Player", "euler_angles", null, ex.ToString(), ey.ToString(), ez.ToString(), timestamp);
-
     }
 
+    /// <summary>
+    /// List of scenes visited by the participant.
+    /// </summary>
+    /// <param name="sessionId">Session to be retrieved.</param>
+    /// <returns>List of scenes.</returns>
     public string[] GetListOfEnvironments(int sessionId)
     {
-        var result = new List<string>();
-
         var data = _dbConnector.GetSystemDataByTime("Scene", "start", sessionId);
-        var dataKeys = new List<DateTime>(data.Keys);
-        var dataSorted = SortDatesAscending(dataKeys);
+        var dataSorted = TimeUtils.SortDatesAscending(new List<DateTime>(data.Keys));
 
-        for (var i = 0; i < dataSorted.Count; i++)
-        {
-            result.Add(data[dataSorted[i]]["start"]);
-        }
-        return result.ToArray();
+        return dataSorted.Select(t => data[t]["start"]).ToArray();
     }
 
-    public List<float>[] GetPath(int sessionId, int sceneNumber)
+    /// <summary>
+    /// Participants' path and orientation data from a specific scene.
+    /// </summary>
+    /// <param name="sessionId">Session to be used.</param>
+    /// <param name="sceneId">Scene Id to be used.</param>
+    /// <returns>Returns path [0:2], orientation [3:5] and time [6] in seconds since scene start.</returns>
+    public List<float>[] GetPath(int sessionId, int sceneId)
     {
-        var xyz = new List<float>[6];
+        var xyz = new List<float>[7];
 
         xyz[0] = new List<float>();
         xyz[1] = new List<float>();
@@ -461,110 +512,63 @@ public class LoggingManager
         xyz[3] = new List<float>();
         xyz[4] = new List<float>();
         xyz[5] = new List<float>();
+        xyz[6] = new List<float>();
 
-        var sceneTime = GetSceneTime(sceneNumber, sessionId);
+        var sceneTime = GetSceneTime(sceneId, sessionId);
 
         if (sceneTime == null) return xyz;
 
         var dataPosition = _dbConnector.Get3DMeasuredDataByTime("Player", "position", sessionId);
         var dataView = _dbConnector.Get3DMeasuredDataByTime("Player", "euler_angles", sessionId);
         var dataKeys = new List<DateTime>(dataPosition.Keys);
-        var dataSorted = SortDatesAscending(dataKeys);
+        var dataSorted = TimeUtils.SortDatesAscending(dataKeys);
 
-        if (dataSorted.Count > 0)
-        {
-            var sceneStart = Convert.ToDateTime(sceneTime[0]);
-            var sceneEnd = dataSorted[dataSorted.Count - 1];
-            if (sceneTime[1] != null)
-            {
-                sceneEnd = Convert.ToDateTime(sceneTime[1]);
-            }
-
-            for (var j = 0; j < dataSorted.Count; j++)
-            {
-                if (dataSorted[j] > sceneStart)
-                {
-                    if (dataSorted[j] < sceneEnd)
-                    {
-                        xyz[0].Add(float.Parse(dataPosition[dataSorted[j]][0]));
-                        xyz[1].Add(float.Parse(dataPosition[dataSorted[j]][1]));
-                        xyz[2].Add(float.Parse(dataPosition[dataSorted[j]][2]));
-                        xyz[3].Add(float.Parse(dataView[dataSorted[j]][0]));
-                        xyz[4].Add(float.Parse(dataView[dataSorted[j]][1]));
-                        xyz[5].Add(float.Parse(dataView[dataSorted[j]][2]));
-                    }
-                    else
-                        break;
-                }
-            }
-        }
+        if (dataSorted.Count <= 0) return xyz;
         
-        return xyz;
-    }
-
-    public List<float>[] GetPath(int sessionId)
-    {   
-        var environments = GetListOfEnvironments(sessionId);
-        var result = new List<float>[6];
-        result[0] = new List<float>();
-        result[1] = new List<float>();
-        result[2] = new List<float>();
-        result[3] = new List<float>();
-        result[4] = new List<float>();
-        result[5] = new List<float>();
-
-        var envIdx = 0;
-        for (var i = 0; i < environments.Length; i++)
-        {
-            var tmp = GetPath(sessionId, i);
-            result[0].AddRange(tmp[0]);
-            result[1].AddRange(tmp[1]);
-            result[2].AddRange(tmp[2]);
-            result[3].AddRange(tmp[3]);
-            result[4].AddRange(tmp[4]);
-            result[5].AddRange(tmp[5]);
-            envIdx++;
-        }
-        return result;
-    }
-
-    public List<string> GetPathAndTime(int sessionId, int sceneNumber)
-    {
-        var xyzT = new List<string>();
-        
-        var sceneTime = GetSceneTime(sceneNumber, sessionId);
-
-        var dataPosition = _dbConnector.Get3DMeasuredDataByTime("Player", "position", sessionId);
-        var dataKeys = new List<DateTime>(dataPosition.Keys);
-        var dataSorted = SortDatesAscending(dataKeys);
-
         var sceneStart = Convert.ToDateTime(sceneTime[0]);
         var sceneEnd = dataSorted[dataSorted.Count - 1];
         if (sceneTime[1] != null)
         {
             sceneEnd = Convert.ToDateTime(sceneTime[1]);
         }
+
         for (var j = 0; j < dataSorted.Count; j++)
         {
-            if (dataSorted[j] > sceneStart)
+            if (dataSorted[j] <= sceneStart) continue;
+            
+            if (dataSorted[j] < sceneEnd)
             {
-                if (dataSorted[j] < sceneEnd)
-                {
-                    xyzT.Add(dataSorted[j].ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                }
-                else
-                    break;
+                xyz[0].Add(float.Parse(dataPosition[dataSorted[j]][0]));
+                xyz[1].Add(float.Parse(dataPosition[dataSorted[j]][1]));
+                xyz[2].Add(float.Parse(dataPosition[dataSorted[j]][2]));
+                xyz[3].Add(float.Parse(dataView[dataSorted[j]][0]));
+                xyz[4].Add(float.Parse(dataView[dataSorted[j]][1]));
+                xyz[5].Add(float.Parse(dataView[dataSorted[j]][2]));
+                xyz[6].Add((float)(dataSorted[j]-sceneStart).TotalSeconds);
             }
+            else
+                break;
         }
-        return xyzT;
+
+        return xyz;
     }
 
+    /// <summary>
+    /// Logs participant inputs for replay.
+    /// </summary>
+    /// <param name="input">Input key to be logged.</param>
     public void LogInput(string input)
     {
         InsertLiveSystemEvent("Player", "input", null, input);
     }
 
-    public List<string>[] GetAllInput(int sessionId, int sceneNumber)
+    /// <summary>
+    /// Returns all input users made.
+    /// </summary>
+    /// <param name="sessionId">Session to be retrieved.</param>
+    /// <param name="sceneId">Scene to be used.</param>
+    /// <returns></returns>
+    public List<string>[] GetAllInput(int sessionId, int sceneId)
     {
         var result = new List<string>[2];
         result[0] = new List<string>();
@@ -572,114 +576,109 @@ public class LoggingManager
 
         var input = _dbConnector.GetSystemData("Player", "input", sessionId);
 
-        if (input[0] != null) {             
-
-            for (var i = 0; i < input[0].Count; i++)
-            {
-                var time1Dt = Convert.ToDateTime(input[1][i]);
-                result[0].Add(time1Dt.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                result[1].Add(input[1][i]);
-            }         
+        if (input[0] == null) {return result;}
+        for (var i = 0; i < input[0].Count; i++)
+        {
+            var time1Dt = Convert.ToDateTime(input[1][i]);
+            result[0].Add(time1Dt.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+            result[1].Add(input[1][i]);
         }
         return result;
     }
 
-    public string GetAbortTime(int sessionId, int sceneId)
-    {
-
-        var timestamps = GetPathAndTime(sessionId, sceneId);
-
-        if (timestamps.Count > 0)
-            return timestamps[timestamps.Count - 1];
-        else
-            return string.Empty;
-    }
-
-    public float TimeDifference(string time1, string time2)
-    {
-        // time difference in microseconds
-
-        var time1Dt = Convert.ToDateTime(time1);
-        var time2Dt = Convert.ToDateTime(time2);
-
-        var difference = time2Dt - time1Dt;
-
-        return (float)difference.TotalMilliseconds * 1000;
-    }
-
-    public TimeSpan TimeDifferenceTimespan(string time1, string time2)
-    {
-        // time difference in microseconds
-
-        var time1Dt = Convert.ToDateTime(time1);
-        var time2Dt = Convert.ToDateTime(time2);
-
-        var difference = time2Dt - time1Dt;
-
-        return difference;
-    }
-
     // -----------------------------------------
-    //			Get data for export
+    //			Session data 
     //------------------------------------------
 
 
+    /// <summary>
+    /// Returns all session data in experiment.
+    /// </summary>
+    /// <param name="experimentName">Experiment to be called.</param>
+    /// <returns>Session data.</returns>
     public string[][] GetAllSessionsData(string experimentName)
     {
         return _dbConnector.GetAllSessionsData(experimentName);
     }
 
+    /// <summary>
+    /// Gets session data of a single session.
+    /// </summary>
+    /// <param name="sessionId">Sessin to be called.</param>
+    /// <returns>Session data.</returns>
     public string[] GetSessionData(int sessionId)
     {
         return _dbConnector.GetSessionData(sessionId);
     }
 
-    public int[] GetQuestionnaireIds(int[] sessions)
-    {
-        return _dbConnector.GetAnsweredQuestionnaireIds(sessions);
-    }
-
-    public List<int>[] GetAnswerIDs(int[] questionnaires, int[] sessions)
-    {
-        return _dbConnector.GetAnswerIds(questionnaires, sessions);
-    }
-
-
     // -----------------------------------------
-    //			Measured data
+    //			Insert measured data
     //------------------------------------------
 
 
-    public void InsertMeasurement(String deviceName, String outputDescription, String unit, String value, String time)
+    /// <summary>
+    /// Inserts a measure for a particular sensor of a device into the database.
+    /// </summary>
+    /// <param name="deviceName">Device producing the data</param>
+    /// <param name="outputDescription">Parameter to me inserted</param>
+    /// <param name="unit">Unit used in device</param>
+    /// <param name="value">Value of parameter.</param>
+    /// <param name="time">Time of measurement</param>
+    public void InsertMeasurement(string deviceName, string outputDescription, string unit, string value, string time)
     {
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
         _dbConnector.AddSensorData(deviceName, outputDescription, value, time, CurrentSessionId);
     }
-
-    public void InsertLiveMeasurement(String deviceName, String[] outputDescriptions, String[] units, String[] values)
+    
+    /// <summary>
+    /// Inserts measures for multiple sensors of a device into the database.
+    /// </summary>
+    /// <remarks>
+    /// This inserts multiple outputs for one device at once.
+    /// </remarks>
+    /// <param name="deviceName">Device producing the data</param>
+    /// <param name="outputDescriptions">Parameter to me inserted</param>
+    /// <param name="units">Unit used in device</param>
+    /// <param name="values">Value of parameter.</param>
+    public void InsertLiveMeasurements(string deviceName, string[] outputDescriptions, string[] units, string[] values)
     {
-        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
         _dbConnector.AddDataOrigin(deviceName);
         for (var i =0; i< outputDescriptions.Length; i++)
         {
             _dbConnector.AddDataOutput(deviceName, outputDescriptions[i]);
             _dbConnector.AddDataUnit(deviceName, outputDescriptions[i], units[i]);
-            _dbConnector.AddSensorData(deviceName, outputDescriptions[i], values[i], timestamp, CurrentSessionId);
+            _dbConnector.AddSensorData(deviceName, outputDescriptions[i], values[i], TimeUtils.GetDbTimeStamp(), CurrentSessionId);
         }              
     }
-
-    public void InsertLiveMeasurement(String deviceName, String outputDescription, String unit, String value)
+        
+    /// <summary>
+    /// Inserts a measure for a particular sensor of a device into the database.
+    /// </summary>
+    /// <param name="deviceName">Device producing the data</param>
+    /// <param name="outputDescription">Parameter to me inserted</param>
+    /// <param name="unit">Unit used in device</param>
+    /// <param name="value">Value of parameter.</param>
+    public void InsertLiveMeasurement(string deviceName, string outputDescription, string unit, string value)
     {
-        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
-        _dbConnector.AddSensorData(deviceName, outputDescription, value, timestamp, CurrentSessionId);
+        _dbConnector.AddSensorData(deviceName, outputDescription, value, TimeUtils.GetDbTimeStamp(), CurrentSessionId);
     }
 
-    public void Insert3DMeasurement(String deviceName, String outputDescription, String unit, String valueX, String valueY, String valueZ, String time)
+    /// <summary>
+    /// Inserts a 3D measure for a particular sensor of a device into the database.
+    /// </summary>
+    /// <param name="deviceName">Device producing the data</param>
+    /// <param name="outputDescription">Parameter to me inserted</param>
+    /// <param name="unit">Unit used in device</param>
+    /// <param name="valueX">Value of X parameter.</param>
+    /// <param name="valueY">Value of Y parameter.</param>
+    /// <param name="valueZ">Value of Z parameter.</param>
+    /// <param name="time">Time of insertion.</param>
+    public void Insert3DMeasurement(string deviceName, string outputDescription, string unit, string valueX, string valueY, string valueZ, string time)
     {
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
@@ -687,16 +686,33 @@ public class LoggingManager
         _dbConnector.AddSensorData(deviceName, outputDescription, valueX, valueY, valueZ, time, CurrentSessionId);
     }
 
-    public void InsertLive3DMeasurement(String deviceName, String outputDescription, String unit, String valueX, String valueY, String valueZ)
+    /// <summary>
+    /// Inserts a 3D measure for a particular sensor of a device into the database.
+    /// </summary>
+    /// <param name="deviceName">Device producing the data</param>
+    /// <param name="outputDescription">Parameter to me inserted</param>
+    /// <param name="unit">Unit used in device</param>
+    /// <param name="valueX">Value of X parameter.</param>
+    /// <param name="valueY">Value of Y parameter.</param>
+    /// <param name="valueZ">Value of Z parameter.</param>
+    public void InsertLive3DMeasurement(string deviceName, string outputDescription, string unit, string valueX, string valueY, string valueZ)
     {
-        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+        var timestamp = TimeUtils.GetDbTimeStamp();
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
         _dbConnector.AddSensorData(deviceName, outputDescription, valueX, valueY, valueZ, timestamp, CurrentSessionId);
     }
 
-    public void InsertSystemEvent(String deviceName, String outputDescription, String unit, String value, String time)
+    /// <summary>
+    /// Inserts a measure for a particular system sensor of a device into the database.
+    /// </summary>
+    /// <param name="deviceName">Device producing the data</param>
+    /// <param name="outputDescription">Parameter to me inserted</param>
+    /// <param name="unit">Unit used in device</param>
+    /// <param name="value">Value of parameter.</param>
+    /// <param name="time">Time of insertion.</param>
+    public void InsertSystemEvent(string deviceName, string outputDescription, string unit, string value, string time)
     {
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
@@ -704,21 +720,42 @@ public class LoggingManager
         _dbConnector.AddSystemData(deviceName, outputDescription, value, time, CurrentSessionId);
     }
 
-    public void InsertLiveSystemEvent(String deviceName, String outputDescription, String unit, String value)
+    /// <summary>
+    /// Inserts a measure for a particular system sensor of a device into the database.
+    /// </summary>
+    /// <param name="deviceName">Device producing the data</param>
+    /// <param name="outputDescription">Parameter to me inserted</param>
+    /// <param name="unit">Unit used in device</param>
+    /// <param name="value">Value of parameter.</param>
+    public void InsertLiveSystemEvent(string deviceName, string outputDescription, string unit, string value)
     {
-        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
         _dbConnector.AddDataOrigin(deviceName);
         _dbConnector.AddDataOutput(deviceName, outputDescription);
         if (unit != null) _dbConnector.AddDataUnit(deviceName, outputDescription, unit);
-        _dbConnector.AddSystemData(deviceName, outputDescription, value, timestamp, CurrentSessionId);
+        _dbConnector.AddSystemData(deviceName, outputDescription, value, TimeUtils.GetDbTimeStamp(), CurrentSessionId);
     }
 
     // -----------------------------------------
     //			Blood pressure measurements
     //------------------------------------------
+    
+    /// <summary>
+    /// Inserts a blood pressure measure into the database.
+    /// </summary>
+    /// <param name="nbPs">nbPs of participant.</param>
+    /// <param name="nbPd">nbPd of participant.</param>
+    /// <param name="nbPm">nbPm of participant.</param>
+    /// <param name="sp02">sp02 of participant.</param>
+    /// <param name="hrPulse">Pulse of participant.</param>
+    /// <param name="nbPsUnit">Unit of nbPs</param>
+    /// <param name="nbPdUnit">Unit of nbPd.</param>
+    /// <param name="nbPmUnit">Unit of nbPm.</param>
+    /// <param name="sp02Unit">Unit of sp02.</param>
+    /// <param name="hrPulseUnit">Unit of pulse.</param>
+    /// <param name="time">Time of insertion.</param>
     public void InsertBpMeasurement(string nbPs, string nbPd, string nbPm, string sp02, string hrPulse, string nbPsUnit, string nbPdUnit, string nbPmUnit, string sp02Unit, string hrPulseUnit, string time)
     {
-        var deviceName = "Blood pressure machine";
+        const string deviceName = "Blood pressure machine";
         if (nbPs != null)
             InsertMeasurement(deviceName, "NBPs", nbPsUnit, nbPs, time);
         if (nbPd != null)
@@ -731,46 +768,79 @@ public class LoggingManager
             InsertMeasurement(deviceName, "HR_pulse", hrPulseUnit, hrPulse, time);
     }
 
-    public Dictionary<DateTime, Dictionary<string, string>> GetMeasurementsByTime(string originName, int sessionId)
+    /// <summary>
+    /// Returns all measures from a Device.
+    /// </summary>
+    /// <param name="originName">Device to be called.</param>
+    /// <param name="sessionId">Session to be retrieved.</param>
+    /// <returns>All measures on device.</returns>
+    public List<string>[] GetSessionMeasurementsAsString(string originName, int sessionId)
     {
-        return _dbConnector.GetMeasuredDataByTime(originName, sessionId);
+		return _dbConnector.GetMeasurementsDataAsString(originName, sessionId);
     }
-
-    public List<string>[] GetSessionMeasurmentsAsString(string originName, int sessionId)
-    {
-		return _dbConnector.GetMeasurmentsDataAsString(originName, sessionId);
-    }
-
-    public bool CheckSchemaExists(string schemaName)
+    
+    /// <summary>
+    /// Queries the database whether an EVE schema exists.
+    /// </summary>
+    /// <param name="schemaName">Name of the schema.</param>
+    /// <returns>Whether the schema exists.</returns>
+    private bool CheckSchemaExists(string schemaName)
     {
         return _dbConnector.CheckSchemaExists(schemaName);
     }
 
+    /// <summary>
+    /// Queries whether a questionnaire exists.
+    /// </summary>
+    /// <param name="questionnaireName">Questionnaire to be checked.</param>
+    /// <returns>Whether questionnaire exists.</returns>
     public bool CheckQuestionnaireExists(string questionnaireName)
     {
         return _dbConnector.CheckQuestionnaireExists(questionnaireName);
     }
 
+    /// <summary>
+    /// Removes an experiment parameter.
+    /// </summary>
+    /// <param name="parameterName">Parameter to be removed.</param>
+    /// <param name="experimentName">Experiment to be called.</param>
     public void RemoveExperimentParameter(string parameterName, string experimentName)
     {
         _dbConnector.RemoveExperimentParameter(parameterName, experimentName);
     }
 
+    /// <summary>
+    /// Get all parameters in an experiment.
+    /// </summary>
+    /// <param name="experimentName">Experiment to be called.</param>
+    /// <returns>All defined parameters.</returns>
     public List<string> GetExperimentParameters(string experimentName)
     {
         return _dbConnector.GetExperimentParameters(experimentName);
     }
 
+    /// <summary>
+    /// Adds a sensor to the database.
+    /// </summary>
+    /// <param name="deviceName">Sensors to be added.</param>
     public void AddSensor(string deviceName)
     {
         _dbConnector.AddDataOrigin(deviceName);
     }
 
+    /// <summary>
+    /// Removes a sensor from the database.
+    /// </summary>
+    /// <param name="deviceName">Sensor to be removed.</param>
     public void RemoveSensor(string deviceName)
     {
         _dbConnector.RemoveDataOrigin(deviceName);
     }
 
+    /// <summary>
+    /// Gets the sensors that are user set.
+    /// </summary>
+    /// <returns>List of sensors.</returns>
     public List<string> GetSensors()
     {
         var origins = _dbConnector.GetDataOrigins();
@@ -781,25 +851,13 @@ public class LoggingManager
         origins.Remove("CharacterPlacement");
         return origins;
     }
-
-    public void CreateSchema()
+    
+    /// <summary>
+    /// Restarts the experiment.
+    /// </summary>
+    public void ResetExperiment()
     {
-        _dbConnector.CreateSchema();
-    }
-
-    public void DropSchema()
-    {
-        _dbConnector.DropSchema();
-    }
-
-
-    // -----------------------------------------
-    //			Update Parameters
-    //------------------------------------------
-    public void UpdateParameters()
-    {
-        //same as in setup in constructor
-        CurrentSessionId = GetNextSessionId();
+        CurrentSessionId = _dbConnector.GetNextSessionId();
     }
 
     // -----------------------------------------
@@ -818,34 +876,36 @@ public class LoggingManager
     /// 
     /// -4 = unknown schema
     /// -3 = other database error
-    /// -2 = no mysql connection
-    /// -1 = not mysql related error
+    /// -2 = no connection
+    /// -1 = not database related error
     /// </remarks>
     public int CurrentSessionId { get; private set; }
 
-    public void SetLabChartFileName(string path)
+    /// <summary>
+    /// Sets the path for LabChart files.
+    /// </summary>
+    /// <param name="path">Location for files.</param>
+    public void SetLabChartFilePath(string path)
     {
         _labChartFilePath = path;
         LogLabChartFileName(path);
     }
 
-    public string GetLabChartFileName()
+    /// <summary>
+    /// Returns the LabChart files.
+    /// </summary>
+    /// <returns>Path to LabChart files.</returns>
+    public string GetLabChartFilePath()
     {
         return _labChartFilePath;
     }
 
+    /// <summary>
+    /// Sets which questionnaire is active.
+    /// </summary>
+    /// <param name="name">Questionnaire to be set active.</param>
     public void SetQuestionnaireName(string name)
     {
-        this._currentQuestionnaireName = name;
-    }
-
-    // -----------------------------------------
-    //			Helper functions
-    //------------------------------------------
-
-    static List<DateTime> SortDatesAscending(List<DateTime> list)
-    {
-        list.Sort((a, b) => a.CompareTo(b));
-        return list;
+        _currentQuestionnaireName = name;
     }
 }

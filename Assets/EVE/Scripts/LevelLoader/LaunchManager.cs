@@ -181,7 +181,13 @@ public class LaunchManager : MonoBehaviour
         _activeSceneName = SceneManager.GetActiveScene().name;
         var subSceneName = sceneList[_currentScene].Name;
         Debug.Log("Scene " + _currentScene  + ":" + subSceneName + " in " + _activeSceneName);
-        LoggingManager.InsertLiveSystemEvent("SceneFlow","switch",null, "Scene " + _currentScene + ":" + subSceneName.Substring(0, Math.Min(subSceneName.Length, 25)) + " in " + _activeSceneName.Substring(0, Math.Min(_activeSceneName.Length, 25)));
+        if (!isReplay)
+        {
+            LoggingManager.InsertLiveSystemEvent("SceneFlow", "switch", null,
+                "Scene " + _currentScene + ":" + subSceneName.Substring(0, Math.Min(subSceneName.Length, 25)) + " in " +
+                _activeSceneName.Substring(0, Math.Min(_activeSceneName.Length, 25)));
+        }
+
         FirstPersonController.transform.position = Vector3.zero;
         FirstPersonController.transform.rotation = Quaternion.identity;
         FirstPersonController.SetActive(false);
@@ -189,7 +195,6 @@ public class LaunchManager : MonoBehaviour
         { //coming back from a scene
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            LoggingManager.LogSceneEnd(subSceneName);
 
             if (isReplay)
             {
@@ -197,6 +202,7 @@ public class LaunchManager : MonoBehaviour
             }
             else
             {
+                LoggingManager.LogSceneEnd(subSceneName);
                 if (_currentScene < sceneList.Count - 1)
                 {
                     _currentScene++;
@@ -238,7 +244,7 @@ public class LaunchManager : MonoBehaviour
     /// </summary>
     public void SetCompletedAndReset() {
         _currentScene = 0;
-        LoggingManager.UpdateParameters();
+        LoggingManager.ResetExperiment();
         SessionId = LoggingManager.CurrentSessionId;
     }
     
@@ -319,7 +325,7 @@ public class LaunchManager : MonoBehaviour
                 {
                     LoggingManager.LogSession(ExperimentSettings.Name, _participantId);
                     if (SessionParameters.ContainsKey("Labchart File Name"))
-                        LoggingManager.SetLabChartFileName(SessionParameters["Labchart File Name"]);
+                        LoggingManager.SetLabChartFilePath(SessionParameters["Labchart File Name"]);
 
                     if (LoggingManager.GetSensors().Contains("HL7Server"))
                         this.gameObject.GetComponent<HL7ServerStarter>().enabled = true;
@@ -419,7 +425,7 @@ public class LaunchManager : MonoBehaviour
     {
         if (LoggingManager.CurrentSessionId > -1)
         {
-            ExperimentSettings.SceneSettings.Scenes = new List<SceneEntry>(LoggingManager.GetSceneNamesInOrder(ExperimentSettings.Name));
+            ExperimentSettings.SceneSettings.Scenes = new List<SceneEntry>(LoggingManager.GetSceneNames(ExperimentSettings.Name));
         }
         else
         {

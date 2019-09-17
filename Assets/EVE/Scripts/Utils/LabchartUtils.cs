@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using EVE.Scripts.Utils;
 using UnityEngine;
 
 namespace Assets.EVE.Scripts.Utils
@@ -85,7 +86,7 @@ namespace Assets.EVE.Scripts.Utils
         
         private void AddSensorToLabChart(string sensorName, int sessionId, string file)
         {
-            var events = _log.GetSessionMeasurmentsAsString(sensorName, sessionId);
+            var events = _log.GetSessionMeasurementsAsString(sensorName, sessionId);
             if (events != null)
             {
                 for (var j = 0; j < events[0].Count; j++)
@@ -102,18 +103,13 @@ namespace Assets.EVE.Scripts.Utils
             var nScenes = sceneNames.Length;
             for (var k = 0; k < nScenes; k++)
             {
-                var sceneTime = _log.GetSceneTime(k, sessionId);
+                var sceneTime = _log.GetSceneTime(sceneNames[k], sessionId);
                 if (sceneTime != null)
                 {
                     AddCommentToLabChart(file, "Scene " + sceneNames[k] + k + " start", sceneTime[0], sessionId);
                     if (sceneTime[1].Length > 0)
-                        AddCommentToLabChart(file, "End of scene " + sceneNames[k] + k, sceneTime[1], sessionId);
-                    else
                     {
-                        // Needs to be fixed, currently gets time from store postitions (which only works for virtual environments
-                        var abortTime = _log.GetAbortTime(sessionId, k);
-                        if (abortTime.Length > 0)
-                            AddCommentToLabChart(file, "End of scene " + sceneNames[k] + k + "-stopped Manually", abortTime, sessionId);
+                        AddCommentToLabChart(file, "End of scene " + sceneNames[k] + k, sceneTime[1], sessionId);
                     }
                 }
             }
@@ -123,8 +119,8 @@ namespace Assets.EVE.Scripts.Utils
         {
             var filePath = _path + fileName + ".adicht";
         
-            var labchartStart = _log.GetLabchartStarttime(session);
-            var ms = (int)_log.TimeDifference(labchartStart, timestamp) / 1000;
+            var labchartStart = _log.GetLabChartStartTime(session);
+            var ms = (int)TimeUtils.TimeDifference(labchartStart, timestamp) / 1000;
         
             var args = filePath + " \"" + comment + "\" " + ms;
 

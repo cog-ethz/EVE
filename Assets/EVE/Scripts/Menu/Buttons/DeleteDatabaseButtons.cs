@@ -23,7 +23,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         }
 
         public void ResetDatabase() {
-            _log.ConnectToServerAndResetSchema(_launchManager.ExperimentSettings.DatabaseSettings);
+            _log.ConnectToServerAndCreateSchema(_launchManager.ExperimentSettings.DatabaseSettings);
             _log.LogExperiment(_launchManager.ExperimentName);
             _launchManager.SessionId = _log.CurrentSessionId;
             _launchManager.LoadSettingsIntoDatabase();
