@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Xml.Linq;
+using EVE.Scripts.LevelLoader;
 using EVE.Scripts.Utils;
 
 public class MiddleVRLogger : MonoBehaviour {

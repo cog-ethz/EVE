@@ -4,6 +4,7 @@ using Assets.EVE.Scripts.Questionnaire.Enums;
 using Assets.EVE.Scripts.Questionnaire.Questions;
 using Assets.EVE.Scripts.Questionnaire.XMLHelper;
 using Assets.EVE.Scripts.XML;
+using EVE.Scripts.XML;
 using VisualStimuliEnums = Assets.EVE.Scripts.Questionnaire.Enums.VisualStimuli;
 
 namespace Assets.EVE.Scripts.Utils

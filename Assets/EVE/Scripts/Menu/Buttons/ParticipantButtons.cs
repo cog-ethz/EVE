@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
+using EVE.Scripts.LevelLoader;
 using EVE.Scripts.Utils;
 
 namespace Assets.EVE.Scripts.Menu.Buttons

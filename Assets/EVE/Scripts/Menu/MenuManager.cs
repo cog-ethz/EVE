@@ -5,6 +5,8 @@ using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using Assets.EVE.Scripts.XML;
 using Assets.EVE.Scripts.XML.XMLHelper;
+using EVE.Scripts.LevelLoader;
+using EVE.Scripts.XML;
 
 /// <summary>
 /// this class manages everything related to menus but also keeps state and important information

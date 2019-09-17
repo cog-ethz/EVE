@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Assets.EVE.Scripts.XML
+namespace EVE.Scripts.XML
 {
     /// <summary>
     /// Stores experiment baseline settings
@@ -11,8 +11,13 @@ namespace Assets.EVE.Scripts.XML
     {
         [XmlAttribute]
         public string Name;
+
+        [XmlAttribute]
+        public string EVEVersion;
     
         public DatabaseSettings DatabaseSettings;
+
+        public MenuSettings MenuSettings;
 
         public SensorSettings SensorSettings;
 

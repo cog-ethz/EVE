@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 using Assets.EVE.Scripts.XML.XMLHelper;
 using UnityEngine;
 
-namespace Assets.EVE.Scripts.XML
+namespace EVE.Scripts.XML
 {
     [Serializable]
     public class UISettings

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Assets.EVE.Scripts.XML
+namespace EVE.Scripts.XML
 {
     /// <summary>
-    /// Stores database settings
+    /// Stores sensor settings.
     /// </summary>
     [Serializable]
     public class SensorSettings

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using EVE.Scripts.LevelLoader;
 using UnityEngine.UI;
 
 public class trainingVideoControl : MonoBehaviour {

@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using UnityEngine;
 using System.Collections.Generic;
+using EVE.Scripts.LevelLoader;
 using UnityEngine.SceneManagement;
 
 public class ImageRecognition : MonoBehaviour {

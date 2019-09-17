@@ -8,6 +8,7 @@ using Assets.EVE.Scripts.Questionnaire.XMLHelper;
 using Assets.EVE.Scripts.Questionnaire.Questions;
 using Assets.EVE.Scripts.XML.XMLHelper;
 using EVE.Scripts.Utils;
+using EVE.Scripts.XML;
 
 // for lists
 
