@@ -6,7 +6,7 @@
     <User>yourDBuser</User>
     <Password>your.s4ve.DB.password</Password>
   </DatabaseSettings>
-  <MenuSettings FirstMenu = "Startup Menu" />
+  <MenuSettings FirstMenu="Startup Menu" />
   <SensorSettings Labchart="false" H7Server="false" MiddleVR="false">
     <Sensors />
   </SensorSettings>
