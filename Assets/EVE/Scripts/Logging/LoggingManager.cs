@@ -61,8 +61,7 @@ public class LoggingManager
     {
         _dbConnector = new MySqlConnector();
         var errorId = _dbConnector.ConnectToServer(settings.Server, settings.Schema, settings.User, settings.Password);
-        CurrentSessionId = _dbConnector.GetNextSessionId();
-        CurrentSessionId = errorId >= 0 ? CurrentSessionId : errorId;
+        CurrentSessionId = errorId >= 0 ? _dbConnector.GetNextSessionId() : errorId;
         return errorId>=0;
     }
 
@@ -74,8 +73,7 @@ public class LoggingManager
     {
         _dbConnector = new MySqlConnector();
         var errorId = _dbConnector.ConnectToServer(settings.Server, settings.User, settings.Password);
-        CurrentSessionId = _dbConnector.GetNextSessionId();
-        CurrentSessionId = errorId >= 0 ? CurrentSessionId : errorId;
+        CurrentSessionId = errorId >= 0 ? _dbConnector.GetNextSessionId() : errorId;
     }
 
     // ------------------------------------------------
