@@ -16,6 +16,7 @@ namespace EVE.Scripts.Menu.Buttons
             _menuManager = _launchManager.MenuManager;
 
             var fields = transform.Find("Panel").Find("Fields");
+            fields.Find("Data Explorer Button").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Data Explorer Menu", "Launcher"));
             fields.Find("Participants Button").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Participants Menu", "Launcher"));
             fields.Find("Back Button").GetComponent<Button>().onClick.AddListener(() => _menuManager.InstantiateAndShowMenu("Main Menu", "Launcher"));
         }
