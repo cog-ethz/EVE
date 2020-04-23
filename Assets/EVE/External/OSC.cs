@@ -27,6 +27,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -372,25 +373,26 @@ public class UDPPacketIO
 
   public delegate void OscMessageHandler( OscMessage oscM );
 
-  /// <summary>
-  /// The Osc class provides the methods required to send, receive, and manipulate OSC messages.
-  /// Several of the helper methods are static since a running Osc instance is not required for 
-  /// their use.
-  /// 
-  /// When instanciated, the Osc class opens the PacketIO instance that's handed to it and 
-  /// begins to run a reader thread.  The instance is then ready to service Send OscMessage requests 
-  /// and to start supplying OscMessages as received back.
-  /// 
-  /// The Osc class can be called to Send either individual messages or collections of messages
-  /// in an Osc Bundle.  Receiving is done by delegate.  There are two ways: either submit a method
-  /// to receive all incoming messages or submit a method to handle only one particular address.
-  /// 
-  /// Messages can be encoded and decoded from Strings via the static methods on this class, or
-  /// can be hand assembled / disassembled since they're just a string (the address) and a list 
-  /// of other parameters in Object form. 
-  /// 
-  /// </summary>
-  public class OSC : MonoBehaviour
+/// <summary>
+/// The Osc class provides the methods required to send, receive, and manipulate OSC messages.
+/// Several of the helper methods are static since a running Osc instance is not required for 
+/// their use.
+/// 
+/// When instanciated, the Osc class opens the PacketIO instance that's handed to it and 
+/// begins to run a reader thread.  The instance is then ready to service Send OscMessage requests 
+/// and to start supplying OscMessages as received back.
+/// 
+/// The Osc class can be called to Send either individual messages or collections of messages
+/// in an Osc Bundle.  Receiving is done by delegate.  There are two ways: either submit a method
+/// to receive all incoming messages or submit a method to handle only one particular address.
+/// 
+/// Messages can be encoded and decoded from Strings via the static methods on this class, or
+/// can be hand assembled / disassembled since they're just a string (the address) and a list 
+/// of other parameters in Object form. 
+/// 
+/// </summary>
+[InitializeOnLoad]
+public class OSC : MonoBehaviour
   {
 
     public int inPort  = 6969;
@@ -419,7 +421,7 @@ public class UDPPacketIO
 		// This method is run whenever the playmode state is changed.
 		
 		#if UNITY_EDITOR
-			paused = UnityEditor.EditorApplication.isPaused;
+			paused = EditorApplication.isPaused;
 			//print ("editor paused "+paused);
 			// do stuff when the editor is paused.
 		#endif
@@ -445,10 +447,10 @@ public class UDPPacketIO
 		ReadThread.Start();
 
 		#if UNITY_EDITOR
-		UnityEditor.EditorApplication.playmodeStateChanged = HandleOnPlayModeChanged;
-		#endif
+		EditorApplication.playModeStateChanged += delegate {HandleOnPlayModeChanged();};
+#endif
 
-	}
+    }
 
 	void OnDestroy() {
 		Close();
