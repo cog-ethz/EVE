@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using UnityEngine;
 using System.Collections.Generic;
+using EVE.Scripts.LevelLoader;
 using UnityEngine.SceneManagement;
 
 public class ImageRecognition : MonoBehaviour {
@@ -62,7 +63,7 @@ public class ImageRecognition : MonoBehaviour {
                 String[] names = { images[imageCounter].name, images[imageCounter].name };
                 String[] units = { "Answer", "miliseconds" };
                 String[] values = { "2", time.ToString() };
-                log.InsertLiveMeasurement("Recall", names, units, values);
+                log.InsertLiveMeasurements("Recall", names, units, values);
                 imageCounter++;
                 start = DateTime.Now;
                 display.sprite = images[imageCounter];               
@@ -73,7 +74,7 @@ public class ImageRecognition : MonoBehaviour {
                 String[] names = { images[imageCounter].name, images[imageCounter].name };
                 String[] units = { "Filename", "miliseconds" };
                 String[] values = { "0", time.ToString() };
-                log.InsertLiveMeasurement("Recall", names, units, values);
+                log.InsertLiveMeasurements("Recall", names, units, values);
                 imageCounter++;
                 if (imageCounter < images.Length)
                     display.sprite = images[imageCounter];
@@ -85,7 +86,7 @@ public class ImageRecognition : MonoBehaviour {
                 String[] names = { images[imageCounter].name, images[imageCounter].name };
                 String[] units = { "Filename", "miliseconds" };
                 String[] values = { "1", time.ToString() };
-                log.InsertLiveMeasurement("Recall", names, units, values);
+                log.InsertLiveMeasurements("Recall", names, units, values);
                 imageCounter++;
                 if (imageCounter < images.Length)
                     display.sprite = images[imageCounter];

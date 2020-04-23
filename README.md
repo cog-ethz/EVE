@@ -1,11 +1,7 @@
 [![DOI](https://zenodo.org/badge/167457116.svg)](https://zenodo.org/badge/latestdoi/167457116)
 # Welcome to the EVE Framework
 
-The release of version 1.3 updates EVE to run on a Long-Term Support version of Unity. This allows us to get updates to Unity when things on their side break without it breaking EVE.
-
-We also upgraded the aging MySQL database in the backend to the current state-of-the-art MySQL8.
-
-Lastly, the tutorial below has also been updated and now you will be able to get things started much quicker!
+The release of version 1.3.2 updates EVE to run on the curren Long-Term Support version of Unity (as of April 2020). We also removed the some deprecated code and we cleaned up some code. The menu has been overhauled a bit and lets you glimpse and exciting features for data analysis to come with the next major update!
 
 ## Tutorials
 

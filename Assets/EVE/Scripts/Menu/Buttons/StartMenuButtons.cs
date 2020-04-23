@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using EVE.Scripts.LevelLoader;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.EVE.Scripts.Menu.Buttons
+namespace EVE.Scripts.Menu.Buttons
 {
     public class StartMenuButtons : MonoBehaviour {
 

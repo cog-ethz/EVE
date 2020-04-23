@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
-<ExperimentSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="Test">
+<ExperimentSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="Test" EVEVersion="1.4">
   <DatabaseSettings>
     <Server>127.0.0.1</Server>
     <Schema>EVE</Schema>
     <User>yourDBuser</User>
     <Password>your.s4ve.DB.password</Password>
   </DatabaseSettings>
+  <MenuSettings FirstMenu="Startup Menu" />
   <SensorSettings Labchart="false" H7Server="false" MiddleVR="false">
     <Sensors />
   </SensorSettings>
@@ -30,6 +31,6 @@
     <Path>PathToLabchartFiles\\</Path>
   </LabchartSettings>
   <UISettings>
-    <Resolution X="1920" Y="1080" />
+    <Resolution ManuallySet="false" X="1920" Y="1080" />
   </UISettings>
 </ExperimentSettings>

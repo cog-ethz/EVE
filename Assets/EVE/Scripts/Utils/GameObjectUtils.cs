@@ -55,5 +55,25 @@ namespace Assets.EVE.Scripts.Utils
             }
             return dynf;
         }
+        
+        /// <summary>
+        /// Gets the index of a game object within its parent.
+        /// </summary>
+        /// <param name="gameObject">GameObject to be found.</param>
+        /// <returns>Index of GameObject.</returns>
+        public static int GetIndexOfGameObject(GameObject gameObject)
+        {
+            var parent = gameObject.transform.parent;
+            var numberOfEntry = -1;
+            for (var index = 0; index < parent.childCount; index++)
+            {
+                var entryObject = parent.GetChild(index);
+                if (entryObject.gameObject == gameObject)
+                {
+                    numberOfEntry = index;
+                }
+            }
+            return numberOfEntry;
+        }
     }
 }

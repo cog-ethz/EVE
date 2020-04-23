@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using System;
+using UnityEngine.Networking;
 
 /// <summary>
 ///   The pop up evalaution map allows experiments to quickly view participants paths
@@ -162,11 +163,15 @@ public class PopUpEvaluationMap : MonoBehaviour
         var path = "file:///" + Application.persistentDataPath + "/maps/" + mapName + "_" + width + "x" + height +
                    ".png";
         
-        Debug.Log(path);
-        var www = new WWW(path);
-        yield return www;
-        var tmpTex = new Texture2D(2, 2);
-        www.LoadImageIntoTexture(tmpTex);
-        mapTexture = tmpTex;
+        var uwr = new UnityWebRequest(path);
+        yield return uwr.SendWebRequest();
+        if (uwr.isNetworkError || uwr.isHttpError)
+        {
+            Debug.Log(uwr.error);
+        }
+        else
+        {
+            mapTexture = DownloadHandlerTexture.GetContent(uwr);
+        }
     }
 }

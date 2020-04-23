@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
+using EVE.Scripts.LevelLoader;
+using EVE.Scripts.Utils;
 
 namespace Assets.EVE.Scripts.Menu.Buttons
 {
@@ -45,7 +47,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             MenuUtils.ClearList(_dynamicField);
 
 
-            var envs = _log.GetSceneNamesInOrder(_launchManager.ExperimentName);// _log.GetListOfEnvironments(_sessionId).Distinct().ToArray(); ;
+            var envs = _log.GetSceneNames(_launchManager.ExperimentName);// _log.GetListOfEnvironments(_sessionId).Distinct().ToArray(); ;
             var timeSec = new TimeSpan[envs.Length];
 
 
@@ -63,10 +65,10 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 timeSec[k] = TimeSpan.FromSeconds(0);
                 var times = _log.GetSceneTime(k, _sessionId);
                 if (times[0] != null && times[1] != null)
-                    timeSec[k] = _log.TimeDifferenceTimespan(times[0], times[1]);
+                    timeSec[k] = TimeUtils.TimeSpanDifference(times[0], times[1]);
                 else if (times[0].Length > 0)
                 {
-                    timeSec[k] = _log.TimeDifferenceTimespan(times[0], times[0]);
+                    timeSec[k] = TimeUtils.TimeSpanDifference(times[0], times[0]);
                 }
 
                 sceneDescription.transform.Find("Statistics").Find("TimeInformation").Find("TimeValue")

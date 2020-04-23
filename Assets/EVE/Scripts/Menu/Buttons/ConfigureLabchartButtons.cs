@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using EVE.Scripts.LevelLoader;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,7 +36,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         /// </summary>
         private void StartLabChart()
         {
-            var fileName = _path + _log.GetLabChartFileName() + ".adicht";
+            var fileName = _path + _log.GetLabChartFilePath() + ".adicht";
             try
             {
                 var foo = new Process

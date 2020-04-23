@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using Assets.EVE.Scripts.XML.XMLHelper;
-using UnityEngine;
 
-namespace Assets.EVE.Scripts.XML
+namespace EVE.Scripts.XML
 {
     /// <summary>
     /// Stores questionnaires names for synchronisation with DB.

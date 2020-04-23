@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.EVE.Scripts.Utils;
+using EVE.Scripts.LevelLoader;
 using UnityEngine;
 using UnityEngine.UI;
 using Debug = System.Diagnostics.Debug;
@@ -96,8 +97,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
                 _menuManager.RemoveExperimentParameter("Labchart File Name");
                 _launchManager.ExperimentSettings.SensorSettings.Labchart = false;
                 _launchManager.SynchroniseScenesWithDatabase();
-                _menuManager.DeleteSceneEntry(
-                    _launchManager.ExperimentSettings.SceneSettings.Scenes.FindIndex(entry => entry.Name == "LabchartStartScene"));
+                _menuManager.DeleteSceneEntry("LabchartStartScene");
                 _log.RemoveSensor("Labchart");
             }
             else if (!scenes.Exists(entry => entry.Name == "LabchartStartScene"))//Contains(()=>"LabchartStartScene"))

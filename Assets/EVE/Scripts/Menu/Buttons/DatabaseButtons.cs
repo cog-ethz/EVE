@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Assets.EVE.Scripts.Questionnaire;
 using Assets.EVE.Scripts.XML;
+using EVE.Scripts.LevelLoader;
+using EVE.Scripts.XML;
 using UnityEngine;
 using UnityEngine.UI;
 

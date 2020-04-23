@@ -20,7 +20,7 @@ public abstract class DatabaseConnector
     /// <param name="database">database name</param>
     /// <param name="user">user name</param>
     /// <param name="password">user password</param>
-    public abstract void ConnectToServer(string server, string database, string user, string password);
+    public abstract int ConnectToServer(string server, string database, string user, string password);
 
     /// <summary>
     /// Opens a connection to a server with no database selected.
@@ -28,7 +28,7 @@ public abstract class DatabaseConnector
     /// <param name="server">server address</param>
     /// <param name="user">user name</param>
     /// <param name="password">user password</param>
-    public abstract void ConnectToServer(string server, string user, string password);
+    public abstract int ConnectToServer(string server, string user, string password);
 
     /// <summary>
     /// Insert the answer to a question into the database
@@ -111,7 +111,7 @@ public abstract class DatabaseConnector
     /// Remove a session from the database
     /// </summary>
     /// <param name="sessionId"> internal id of the session</param>
-    public abstract void removeSession(int sessionId);
+    public abstract void RemoveSession(int sessionId);
 
     /// <summary>
     /// Add scene to database
@@ -456,7 +456,7 @@ public abstract class DatabaseConnector
     /// <param name="originName"> Name of the data origin</param>
     /// <param name="sessionId">  Id the of the session the data belongs to</param>
     /// <returns> Data measured (Format: Timestamp -> (output description -> value))</returns>
-    public abstract List<string>[] GetMeasurmentsDataAsString(string originName, int sessionId);
+    public abstract List<string>[] GetMeasurementsDataAsString(string originName, int sessionId);
 
     /// <summary>
     /// Get the system data of a specific origin 
