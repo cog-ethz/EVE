@@ -1,11 +1,7 @@
 [![DOI](https://zenodo.org/badge/167457116.svg)](https://zenodo.org/badge/latestdoi/167457116)
 # Welcome to the EVE Framework
 
-The release of minor version 1.2.0.1 adds EVE to Zenodo. Now you can link to the specific version of EVE you use in your experiment!
-
-The release of version 1.2 updates EVE to Unity 2018 and adds features we developed over the last year. Below you find the tutorial for your first experiment with EVE. If you decide to work with EVE, you can also join our Q&A site and read the paper below.
-
-Warning: There may be a slight issue with the MySQL Database when trying to generate a build. Please contact us for further instructions in case you bump into issues there.
+The release of version 1.3.2 updates EVE to run on the curren Long-Term Support version of Unity (as of April 2020). We also removed the some deprecated code and we cleaned up some code. The menu has been overhauled a bit and lets you glimpse and exciting features for data analysis to come with the next major update!
 
 ## Tutorials
 
@@ -33,7 +29,13 @@ It can also be found with the doi: [10.1007/978-3-319-68189-4_10](https://doi.or
 
 Soon you can watch our [video journal contribution on JoVE](https://www.jove.com/video/58318/virtual-reality-experiments-with-physiological-measures) and cite it as:
 
-Weibel R.P., Grübel J., Zhao H., Thrash T., Meloni D., Hölscher C., Schinazi V.R. (In Press) Virtual Reality Experiments with Physiological Measures. JoVE
+Weibel, R. P., Grübel, J., Zhao, H., Thrash, T., Meloni, D., Hölscher, C., & Schinazi, V. R. (2018). Virtual Reality Experiments with Physiological Measures. JoVE (Journal of Visualized Experiments), (138), e58318.
+
+### EVE used in research
+
+Below you will find work that has used EVE to produce results. Feel free to read through these publications to see what you can do with EVE:
+
+Hackman, D. A., Robert, S. A., Grübel, J., Weibel, R. P., Anagnostou, E., Hölscher, C., & Schinazi, V. R. (2019). Neighborhood environments influence emotion and physiological reactivity. Scientific reports, 9(1), 9498.
 
 
 ## Contact
