@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Assets.EVE.Scripts.Menu;
 using Assets.EVE.Scripts.Menu.Buttons;
 using Assets.EVE.Scripts.Utils;
 using UnityEngine;
 using Assets.EVE.Scripts.XML;
 using Assets.EVE.Scripts.XML.XMLHelper;
-using UnityEngine.UI;
+using EVE.Scripts.LevelLoader;
+using EVE.Scripts.XML;
 
 /// <summary>
 /// this class manages everything related to menus but also keeps state and important information
@@ -129,7 +128,23 @@ public class MenuManager : MonoBehaviour {
             _log.SetExperimentSceneOrder(_launchManager.ExperimentName, _sceneSettings.Scenes.ToArray());
         }
     }
+
+    /// <summary>
+    /// Removes a scene from the list of scenes.
+    /// </summary>
+    /// <remarks>
+    /// Does not work when more than one scene of the same name is present.
+    /// </remarks>
+    /// <param name="sceneName">Name of the scene.</param>
+    public void DeleteSceneEntry(string sceneName)
+    {
+        DeleteSceneEntry(_sceneSettings.Scenes.FindIndex(entry => entry.Name == sceneName));
+    }
     
+    /// <summary>
+    /// Removes a scene from the list of scenes.
+    /// </summary>
+    /// <param name="i">Index location of the scene.</param>
     public void DeleteSceneEntry(int i) {
         var removedScene = _sceneSettings.Scenes[i];
         _sceneSettings.Scenes.RemoveAt(i);
@@ -139,7 +154,11 @@ public class MenuManager : MonoBehaviour {
         _log.SetExperimentSceneOrder(_launchManager.ExperimentName, _sceneSettings.Scenes.ToArray());
     }
 
-    public void PromoteSceneEntry(int i) {
+    /// <summary>
+    /// Moves up a scene in the list of scenes.
+    /// </summary>
+    /// <param name="i">Index location of the scene to be moved.</param>
+    public void MoveUpSceneEntry(int i) {
         if (i != 0) {
             var scene = _sceneSettings.Scenes[i];
             _sceneSettings.Scenes.RemoveAt(i);

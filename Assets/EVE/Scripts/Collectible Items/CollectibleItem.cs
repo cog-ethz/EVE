@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using EVE.Scripts.LevelLoader;
 
 public class CollectibleItem : MonoBehaviour {
 

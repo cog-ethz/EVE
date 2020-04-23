@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Threading;
 using System;
+using EVE.Scripts.LevelLoader;
 
 public class BPDelayCurtain : MonoBehaviour
 {

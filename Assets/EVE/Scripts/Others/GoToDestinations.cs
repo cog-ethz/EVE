@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using EVE.Scripts.LevelLoader;
 
 public class GoToDestinations : MonoBehaviour
 {

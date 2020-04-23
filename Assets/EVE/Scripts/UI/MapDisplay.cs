@@ -4,6 +4,8 @@ using System;
 using UnityEngine.SceneManagement;
 using System.Xml.Serialization;
 using System.IO;
+using EVE.Scripts.LevelLoader;
+using UnityEngine.Networking;
 
 public class MapDisplay : MonoBehaviour
 {
@@ -238,13 +240,18 @@ public class MapDisplay : MonoBehaviour
 
     private IEnumerator LoadMap(string mapName, int width, int height)
     {
-        string path = "file:///" + Application.persistentDataPath + "/maps/" + mapName + "_" + width + "x" + height + ".png";
-
-        WWW www = new WWW(path);
-        yield return www;
-        Texture2D tmpTex = new Texture2D(2, 2);
-        www.LoadImageIntoTexture(tmpTex);
-        mapTexture = tmpTex;
+        var path = "file:///" + Application.persistentDataPath + "/maps/" + mapName + "_" + width + "x" + height + ".png";
+        
+        var uwr = new UnityWebRequest(path);
+        yield return uwr.SendWebRequest();
+        if (uwr.isNetworkError || uwr.isHttpError)
+        {
+            Debug.Log(uwr.error);
+        }
+        else
+        {
+            mapTexture = DownloadHandlerTexture.GetContent(uwr);
+        }
     }
 
     /// <summary>

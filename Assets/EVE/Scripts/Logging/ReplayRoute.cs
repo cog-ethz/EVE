@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using EVE.Scripts.LevelLoader;
+using EVE.Scripts.Utils;
 using UnityEngine.SceneManagement;
 
 public class ReplayRoute : MonoBehaviour {
@@ -13,9 +15,8 @@ public class ReplayRoute : MonoBehaviour {
     private float timeSpent;
 	private LoggingManager log;
 	private List<float>[] xyz;
-	private List<string> xyzT;
 	private List<string>[] _input;
-	private int input_pointer = 0;
+	//private int input_pointer = 0; //TODO Implement input replay
 	private int pos_pointer = 0, start_pointer;
 	private string[] sceneTime;
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController movementControls;
@@ -32,8 +33,9 @@ public class ReplayRoute : MonoBehaviour {
 
 
     private float pos_x = 0, pos_y = 0, pos_z = 0, view_x = 0, view_y = 0, view_z = 0;
+    private int xyzCount;
 
-	// Use this for initialization
+    // Use this for initialization
 	void Start () {
         playbackCamera = "FirstPersonCharacter";
 	    launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
@@ -53,9 +55,9 @@ public class ReplayRoute : MonoBehaviour {
         log = launchManager.LoggingManager;
         pos_logger.enabled = false;
         xyz = log.GetPath(sessionID, sceneID);
-        xyzT = log.GetPathAndTime(sessionID, sceneID);
+        xyzCount = xyz[0].Count - 1;
         _input = log.GetAllInput(sessionID, sceneID);
-        sceneTime = log.GetSceneTime(sceneID, sessionID);
+        sceneTime = log.GetSceneTime(sceneName, sessionID);
 
         movementControls = player.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         movementControls.enabled = false;
@@ -68,8 +70,8 @@ public class ReplayRoute : MonoBehaviour {
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            currentSliderValue = GUI.HorizontalSlider(new Rect(130, 20, 300, 30), currentSliderValue, 0, (xyzT.Count - 1));
-            GUI.Label(new Rect(440, 15, 100, 30), (int)currentSliderValue + "/" + (xyzT.Count - 1));
+            currentSliderValue = GUI.HorizontalSlider(new Rect(130, 20, 300, 30), currentSliderValue, 0, xyzCount);
+            GUI.Label(new Rect(440, 15, 100, 30), (int)currentSliderValue + "/" + xyzCount);
             if (playbackMode == "playing")
             {
                 if (GUI.Button(new Rect(5, 10, 120, 30), "Stop"))
@@ -169,10 +171,10 @@ public class ReplayRoute : MonoBehaviour {
 
                 pos_pointer = (int)currentSliderValue;
                 // replay position and view
-                if (pos_pointer < xyzT.Count - 2)
+                if (pos_pointer < xyzCount - 1)
                 {
-                    timeSpent = (float)((DateTime.Now.Subtract(playStart)).TotalSeconds) + log.TimeDifference(sceneTime[0], xyzT[start_pointer]) / 1000000;
-                    var nextPosTime = log.TimeDifference(sceneTime[0], xyzT[pos_pointer + 1]) / 1000000;  // in seconds
+                    timeSpent = (float)DateTime.Now.Subtract(playStart).TotalSeconds + xyz[6][start_pointer];
+                    var nextPosTime = xyz[6][pos_pointer + 1];  // in seconds
                     var t = timeSpent - nextPosTime;
                     float p = 0;
 
@@ -181,16 +183,16 @@ public class ReplayRoute : MonoBehaviour {
                         currentSliderValue++;
                         pos_pointer++;
                         // pos_pointer was increased by one therefore pos_pointer + 1 is now one step more!
-                        var nextNextPosTime = log.TimeDifference(sceneTime[0], xyzT[pos_pointer + 1]) / 1000000;  // in seconds
-                        p = (float)pos_pointer + (timeSpent - nextPosTime) / (nextNextPosTime - nextPosTime);
+                        var nextNextPosTime = xyz[6][pos_pointer + 1];  // in seconds
+                        p = pos_pointer + (timeSpent - nextPosTime) / (nextNextPosTime - nextPosTime);
                     }
                     else
                     {
-                        var oldPosTime = log.TimeDifference(sceneTime[0], xyzT[pos_pointer]) / 1000000;   // in seconds
+                        var oldPosTime = xyz[6][pos_pointer];   // in seconds
                         p = pos_pointer + (timeSpent - oldPosTime) / (nextPosTime - oldPosTime);
                     }
                     
-                    if (p >= 0 && p < xyzT.Count - 1)
+                    if (p >= 0 && p < xyzCount)
                     {
                         pos_x = xyz[0][(int)Mathf.Floor(p)] + (xyz[0][(int)Mathf.Ceil(p)] - xyz[0][(int)Mathf.Floor(p)]) * (p % 1);
                         pos_y = xyz[1][(int)Mathf.Floor(p)] + (xyz[1][(int)Mathf.Ceil(p)] - xyz[1][(int)Mathf.Floor(p)]) * (p % 1);
@@ -204,43 +206,17 @@ public class ReplayRoute : MonoBehaviour {
                 player.transform.position = new Vector3(pos_x, pos_y, pos_z);
                 player.transform.eulerAngles = new Vector3(view_x, view_y, view_z);
 
-                if (playbackLineRenderer != null)
+                if (playbackLineRenderer == null) return;
+                playbackLineRenderer.positionCount = pos_pointer;
+                var i = 0;
+                while (i < pos_pointer)
                 {
-                    playbackLineRenderer.positionCount = pos_pointer;
-                    var i = 0;
-                    while (i < pos_pointer)
-                    {
-                        playbackLineRenderer.SetPosition(i, new Vector3(xyz[0][i], xyz[1][i], xyz[2][i]));
-                        i++;
-                    }
+                    playbackLineRenderer.SetPosition(i, new Vector3(xyz[0][i], xyz[1][i], xyz[2][i]));
+                    i++;
                 }
-
-                
-                //player.transform.forward = new Vector3(view_x, view_y, view_z);
-
-                //replay input
-                // NOTE: This needs to be rewritten, since the takeglobalparameterscript no longer exists
-                //TODO Fix input imputation
-                //if (_input[input_pointer] != null) input_pointer++;
-                /*if (input_pointer < input[0].Count)
-                {
-                    float nextInputTime = log.timeDifference(sceneTime[0], input[0][input_pointer]) / 1000000;	// in seconds
-
-                    if (Time.timeSinceLevelLoad > nextInputTime)
-                    {
-                        parameters.fake_input = true;
-                        parameters.input = input[1][input_pointer];
-                        input_pointer++;
-                    }
-                }*/
             }
         }
        
-    }
-
-    public string getInput()
-    {
-        return null;
     }
 
     private void StopPlayback() {

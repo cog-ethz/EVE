@@ -20,29 +20,66 @@ public class MySqlConnector : DatabaseConnector
     private MySqlConnectionStringBuilder _sb  = null;
 
 
-    public override void ConnectToServer(string server, string database, string user, string password)
+    public override int ConnectToServer(string server, string database, string user, string password)
     {
-        _sb = new MySqlConnectionStringBuilder
+        var returnId = 0;
+        try
         {
-            Server = server, Database = database, UserID = user, Password = password
-        };
-        _con = new MySqlConnection(_sb.ConnectionString);
-        _con.Open();
-        Debug.Log("Connection State: " + _con.State);
-        _con.Close();
+            _sb = new MySqlConnectionStringBuilder
+            {
+                Server = server, Database = database, UserID = user, Password = password
+            };
+            _con = new MySqlConnection(_sb.ConnectionString);
+            _con.Open();
+            Debug.Log("Connection State: " + _con.State);
+            _con.Close();
+        }
+        catch (MySqlException mysqlEx)
+        {
+            Debug.LogError(mysqlEx.ToString());
+            switch (mysqlEx.Number)
+            {
+                //http://dev.mysql.com/doc/refman/5.0/en/error-messages-server.html
+                case 1042: // Unable to connect to any of the specified MySQL hosts (Check Server,Port)
+                    returnId = -2;
+                    break;
+                case 0: // Access denied (Check DB name,username,password)
+                    if (mysqlEx.Message.Contains("Unknown database"))
+                        returnId = -4;
+                    else
+                        returnId = -3;
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex.ToString());
+            returnId = -1;
+        }
+        return returnId;
+        
     }
 
-    public override void ConnectToServer(string server, string user, string password)
+    public override int ConnectToServer(string server, string user, string password)
     {
-        
-        _sb = new MySqlConnectionStringBuilder
+        var returnId = 0;
+        try
         {
-            Server = server, UserID = user, Password = password
-        };
-        _con = new MySqlConnection(_sb.ConnectionString);
-        _con.Open();
-        Debug.Log("Connection State: " + _con.State);
-        _con.Close();
+            _sb = new MySqlConnectionStringBuilder
+            {
+                Server = server, UserID = user, Password = password
+            };
+            _con = new MySqlConnection(_sb.ConnectionString);
+            _con.Open();
+            Debug.Log("Connection State: " + _con.State);
+            _con.Close();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex.ToString());
+            returnId = -1;
+        }
+        return returnId;
     }
 
     public override void InsertAnswer(string questionName, string questionSetName, string questionnaireName, int sessionId, Dictionary<int,string> selectedIndices)
@@ -192,7 +229,7 @@ public class MySqlConnector : DatabaseConnector
         TryInsert1Value(experimentName, "experiment", "experiment_name");
     }
 
-    public override void removeSession(int sessionId)
+    public override void RemoveSession(int sessionId)
     {
         try
         {
@@ -1241,8 +1278,6 @@ public class MySqlConnector : DatabaseConnector
         try
         {
             // Get output codes from database
-            var i = 0;
-
             MysqlUtils.ReconnectIfNecessary(_con);
             using (_con)
             {
@@ -1954,7 +1989,7 @@ public class MySqlConnector : DatabaseConnector
         return null;
     }
 
-    public override List<string>[] GetMeasurmentsDataAsString(string originName, int sessionId)
+    public override List<string>[] GetMeasurementsDataAsString(string originName, int sessionId)
     {
         const string query = "SELECT * FROM (SELECT output_w_unit.id, description, device_name, unit FROM(SELECT output_w_sensor.id, description, device_name FROM data_description AS output_w_sensor INNER JOIN(data_origin) ON(data_origin.id = output_w_sensor.device_id)) AS output_w_unit LEFT JOIN(data_units) ON(data_units.description_id = output_w_unit.id) WHERE output_w_unit.device_name = ?originName) AS data_w_desc INNER JOIN (sensor_data)ON(sensor_data.data_description_id = data_w_desc.id) WHERE session_id =?sessionId";
         try

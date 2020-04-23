@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using Assets.EVE.Scripts.XML;
+using EVE.Scripts.XML;
 using UnityEngine;
 
 namespace Assets.EVE.Scripts.Questionnaire

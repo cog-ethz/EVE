@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Assets.EVE.Scripts.Utils;
+using EVE.Scripts.LevelLoader;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.EVE.Scripts.Menu.Buttons
+namespace EVE.Scripts.Menu.Buttons
 {
     public class ParticipantsButtons : MonoBehaviour {
         //answer vars
@@ -15,6 +13,7 @@ namespace Assets.EVE.Scripts.Menu.Buttons
         private int[] session_ids;
         private string[] participant_ids;
 
+        private LabchartUtils _labchart;
         private LaunchManager _launchManager;
         private MenuManager _menuManager;
         private Transform _dynFields;
@@ -25,8 +24,10 @@ namespace Assets.EVE.Scripts.Menu.Buttons
             _launchManager = GameObject.FindWithTag("LaunchManager").GetComponent<LaunchManager>();
             _menuManager = _launchManager.MenuManager;
             _log = _launchManager.LoggingManager;
+            _labchart = _launchManager.gameObject.GetComponent<LabchartUtils>();
 
             var fields = transform.Find("Panel").Find("Fields");
+            fields.Find("Labchart Button").GetComponent<Button>().onClick.AddListener(() => _labchart.AddLabchartCommentsToAll());
             fields.Find("BackButton").GetComponent<Button>().onClick.AddListener(() => { _menuManager.InstantiateAndShowMenu("Evaluation Menu", "Launcher"); });
 
             _dynFields = fields.Find("DynFieldsWithScrollbar").Find("DynFields");

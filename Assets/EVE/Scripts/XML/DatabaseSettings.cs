@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Xml.Serialization;
 
-namespace Assets.EVE.Scripts.XML
+namespace EVE.Scripts.XML
 {
     /// <summary>
     /// Stores database settings
