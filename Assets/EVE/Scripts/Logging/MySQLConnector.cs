@@ -1278,8 +1278,6 @@ public class MySqlConnector : DatabaseConnector
         try
         {
             // Get output codes from database
-            var i = 0;
-
             MysqlUtils.ReconnectIfNecessary(_con);
             using (_con)
             {

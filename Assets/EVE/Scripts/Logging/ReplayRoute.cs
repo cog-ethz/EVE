@@ -16,7 +16,7 @@ public class ReplayRoute : MonoBehaviour {
 	private LoggingManager log;
 	private List<float>[] xyz;
 	private List<string>[] _input;
-	private int input_pointer = 0;
+	//private int input_pointer = 0; //TODO Implement input replay
 	private int pos_pointer = 0, start_pointer;
 	private string[] sceneTime;
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController movementControls;
