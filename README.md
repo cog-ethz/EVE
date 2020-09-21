@@ -1,7 +1,7 @@
 [![DOI](https://zenodo.org/badge/167457116.svg)](https://zenodo.org/badge/latestdoi/167457116)
 # Welcome to the EVE Framework
 
-The release of version 1.3.2 updates EVE to run on the curren Long-Term Support version of Unity (as of April 2020). We also removed the some deprecated code and we cleaned up some code. The menu has been overhauled a bit and lets you glimpse and exciting features for data analysis to come with the next major update!
+The release of version 1.3.2 updates EVE to run on the curren Long-Term Support version of Unity (as of April 2020). We also removed some deprecated code and we cleaned up some code. The menu has been overhauled a bit and lets you glimpse and exciting features for data analysis to come with the next major update!
 
 ## Tutorials
 
@@ -33,15 +33,15 @@ Weibel, R. P., Grübel, J., Zhao, H., Thrash, T., Meloni, D., Hölscher, C., & S
 
 ### EVE used in research
 
-Below you will find work that has used EVE to produce results. Feel free to read through these publications to see what you can do with EVE:
+Below you will find work that has used EVE in different application fields. Feel free to read through these publications to see what you can do with EVE:
 
-Hackman, D. A., Robert, S. A., Grübel, J., Weibel, R. P., Anagnostou, E., Hölscher, C., & Schinazi, V. R. (2019). Neighborhood environments influence emotion and physiological reactivity. Scientific reports, 9(1), 9498.
+[Hackman, D. A., Robert, S. A., Grübel, J., Weibel, R. P., Anagnostou, E., Hölscher, C., & Schinazi, V. R. (2019). Neighborhood environments influence emotion and physiological reactivity. Scientific reports, 9(1), 9498.](https://www.nature.com/articles/s41598-019-45876-8)
+
+[Fischer, J., Wissen Hayek, U., Galleguillos Torres, M., Weibel, B., & Grêt-Regamey, A. (2020). Investigating Effects of Animated 3D Point Cloud Simulations on Emotional Responses. Journal of Digital Landscape Architecture, 5, 295-304.](https://gispoint.de/fileadmin/user_upload/paper_gis_open/DLA_2020/537690031.pdf)
 
 
 ## Contact
 
 The EVE framework is developped, coordinated and maintained by the [Chair of Cognitive Science](http://www.cog.ethz.ch/). You can visit our lab page on the project: [Chair of Cognitive Science EVE Page](http://www.cog.ethz.ch/the-lab/eve).
 
-For technical questions you can contact [Jascha Grübel](http://www.cog.ethz.ch/people/jascha-gruebel-phd-candidate.html).
-
-If your lab is considering using EVE, you can contact either [Jascha Grübel](http://www.cog.ethz.ch/people/jascha-gruebel-phd-candidate.html) or [Victor Schinazi](http://www.cog.ethz.ch/people/dr--victor-schinazi.html)
+For technical questions and when you are considering using EVE you can contact [Jascha Grübel](http://www.cog.ethz.ch/people/jascha-gruebel-phd-candidate.html).
