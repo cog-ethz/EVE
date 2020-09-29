@@ -35,9 +35,12 @@ Weibel, R. P., Grübel, J., Zhao, H., Thrash, T., Meloni, D., Hölscher, C., & S
 
 Below you will find work that has used EVE in different application fields. Feel free to read through these publications to see what you can do with EVE:
 
-[Hackman, D. A., Robert, S. A., Grübel, J., Weibel, R. P., Anagnostou, E., Hölscher, C., & Schinazi, V. R. (2019). Neighborhood environments influence emotion and physiological reactivity. Scientific reports, 9(1), 9498.](https://www.nature.com/articles/s41598-019-45876-8)
+[Spielhofer, R., Thrash, T., Hayek, U. W., Grêt-Regamey, A., Salak, B., Grübel, J. & Schinazi, V. (2021). Physiological and behavioral reactions to renewable energy systems in various landscape types.Renewableand Sustainable Energy Reviews,135, 110410](https://www.sciencedirect.com/science/article/pii/S1364032120306985)
 
 [Fischer, J., Wissen Hayek, U., Galleguillos Torres, M., Weibel, B., & Grêt-Regamey, A. (2020). Investigating Effects of Animated 3D Point Cloud Simulations on Emotional Responses. Journal of Digital Landscape Architecture, 5, 295-304.](https://gispoint.de/fileadmin/user_upload/paper_gis_open/DLA_2020/537690031.pdf)
+
+[Hackman, D. A., Robert, S. A., Grübel, J., Weibel, R. P., Anagnostou, E., Hölscher, C., & Schinazi, V. R. (2019). Neighborhood environments influence emotion and physiological reactivity. Scientific reports, 9(1), 9498.](https://www.nature.com/articles/s41598-019-45876-8)
+
 
 
 ## Contact
